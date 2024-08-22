@@ -8,6 +8,6 @@
     }
 
     .dark html {
-        @apply bg-text-light, text-text-dark font-mono;
+        @apply bg-text-light text-text-dark font-mono;
     }
 }

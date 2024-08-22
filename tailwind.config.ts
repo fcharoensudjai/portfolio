@@ -14,15 +14,18 @@ const config: Config = {
         mono: ["Roboto Mono", "monospace"],
       },
       fontSize: {
-        xs: "0.8rem", // extra small
-        sm: "1rem", // small
-        md: "1.25rem", // paragraph / body
-        lg: "1.563rem", // h6
-        xl: "1.953rem", // h5
-        "2xl": "2.441rem", // h4
-        "3xl": "3.052rem", // h3
-        "4xl": "3.815rem", // h2
-        "5xl": "4.063rem", // h1 (slightly adjusted to match the original px size more closely)
+        xxs: "0.64rem", // extra extra small (10.24px)
+        xs: "0.8rem", // extra small (12.8px)
+        sm: "1rem", // small (16px)
+        md: "1.25rem", // paragraph / body (20px)
+        lg: "1.563rem", // h6 (25px)
+        xl: "1.953rem", // h5 (31.25px)
+        "2xl": "2.441rem", // h4 (39.06px)
+        "3xl": "3.052rem", // h3 (48.83px)
+        "4xl": "3.815rem", // h2 (61.04px)
+        "5xl": "4.688rem", // h1 (75px)
+        "6xl": "6.125rem", // tablet title (98px) – Adjusted from 4.688rem
+        "7xl": "8.125rem", // desktop title (130px)
       },
       colors: {
         transparent: "transparent",
