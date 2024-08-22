@@ -6,7 +6,7 @@
 
 @layer base {
     html {
-        @apply font-mono dark:text-text-dark dark:bg-text-light;
+        @apply font-mono dark:bg-text-light;
     }
 }
 

@@ -3,6 +3,7 @@
 import React from "react";
 import { Title } from "@/components/title";
 import Link from "next/link";
+import Clock from "react-live-clock"
 
 
 export default function Home() {
@@ -18,6 +19,8 @@ export default function Home() {
                     <p className="text-md text-text-light dark:text-text-dark">
                         [ scroll to explore ]
                     </p>
+
+                    <div className={"bg-text-light dark:bg-text-dark min-h-full w-min-[2rem]"}> <span /> </div>
                 </div>
 
                 <div>
@@ -39,14 +42,21 @@ export default function Home() {
                         </ul>
                     </div>
 
-                    <div>
-                        <p className="md:text-md lg:text-sm absolute bottom-4 left-4"> [ local time | ] </p>
+                    <div className="md:text-md lg:text-md text-xs absolute bottom-2 left-3 md:bottom-4 md:left-4 flex flex-row justify-between md:space-x-2 space-x-1">
+                        <p> [ local time (GB) |</p>
+                        <Clock
+                            timezone={"GB"}
+                            format={"H:mm:ss"}
+                            ticking={true}
+                        />
+                        <p> ] </p>
                     </div>
-
                 </div>
-
-
             </div>
+
+
+
+
             <footer className={"text-4xl"}>footer yayay</footer>
         </div>
 
