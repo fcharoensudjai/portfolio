@@ -1,25 +1,26 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import React from "react";
+
+import { Header } from "@/components/header";
 import "./globals.css";
 
-const inter = Inter ({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "fuzzch | portfolio",
-  description: "welcome to my portfolio!",
+    title: "fuzzch | portfolio",
+    description: "welcome to my portfolio!",
 };
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en">
-      <body className={inter.className}>{children}
-      
-
-      </body>
-    </html>
-  );
+                                       children,
+                                   }: {
+    children: React.ReactNode;
+}) {
+    return (
+        <html lang="en">
+        <body>
+        <Header />
+        {children}
+        </body>
+        </html>
+    );
 }

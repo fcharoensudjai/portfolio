@@ -1,10 +1,8 @@
 export default function Home() {
   return (
-    <main>
-       <div>
-        <p className={"font-mono"}> pipopipopipopipo
-        </p>
-       </div>
-    </main>
+    <div>
+        <main> welcome to my home page!</main>
+        <footer> footer yayay </footer>
+    </div>
   );
 }

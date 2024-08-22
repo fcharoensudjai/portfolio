@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    html {
+        @apply bg-main-light text-text-light font-mono;
+    }
+
+    .dark html {
+        @apply bg-text-light, text-text-dark font-mono;
+    }
+}
