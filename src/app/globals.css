@@ -2,12 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
 @layer base {
     html {
-        @apply bg-main-light text-text-light font-mono;
+        @apply font-mono dark:text-text-dark dark:bg-text-light;
     }
+}
 
-    .dark html {
-        @apply bg-text-light text-text-dark font-mono;
-    }
+
+.text-responsive {
+    font-size: clamp(1rem, 4vw, 3rem);
+}
+
+.fixed-line-spacing {
+    line-height: 1.2;
+}
+
+* {
+    margin: 0;
+    padding: 0;
 }

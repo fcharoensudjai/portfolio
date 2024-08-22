@@ -1,11 +1,30 @@
 import React from "react";
+import { cva } from "class-variance-authority"
 
-export const Title = () => {
+interface TitleProps {
+    children: React.ReactNode;
+    size?: "extraSmall" | "small" | "medium" | "large" | "extraLarge";
+}
+
+const titleVariants = cva("font-sans dark:text-text-dark text-text-light", {
+    variants: {
+        size: {
+            extraSmall: "text-lg",
+            small: "text-xl",
+            medium: "text-3xl",
+            large: "text-4xl",
+            extraLarge: "text-4xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-[10rem] 2xl:text-[12rem]",
+        },
+    },
+    defaultVariants: {
+        size: "medium",
+    },
+});
+
+export const Title = ({ children, size = "medium" }: TitleProps) => {
     return (
-        <div className="h-full xl:text-7xl md:text-6xl sm:text-2xl text-2xl lg:ps-16 sm:ps-12 ps-4">
-            <p>
-                fasai <br /> charoensudjai
-            </p>
+        <div className={titleVariants({ size })}>
+            {children}
         </div>
-    )
+    );
 }

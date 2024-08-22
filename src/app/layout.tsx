@@ -3,7 +3,7 @@ import React from "react";
 
 import { Header } from "@/components/header";
 import "./globals.css";
-
+import {Provider, ThemeProvider} from "@/app/providers";
 
 export const metadata: Metadata = {
     title: "fuzzch | portfolio",
@@ -16,11 +16,13 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en">
-        <body>
-        <Header />
-        {children}
-        </body>
+        <html lang="en" suppressHydrationWarning={true}>
+            <body className={"bg-main-light dark:bg-text-light text-text-light dark:text-text-dark"}>
+                <Provider>
+                     <Header />
+                    {children}
+                </Provider>
+            </body>
         </html>
     );
 }

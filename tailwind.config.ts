@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  darkMode: 'class', // Enable dark mode if needed
+  darkMode: 'class', // enable dark mode
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -57,8 +57,14 @@ const config: Config = {
         14: "5.6rem",
         15: "6rem",
         16: "6.4rem",
+        17: "7.2rem",
+        18: "7.6rem",
+        19: "8rem",
+        20: "8.4rem",
         "navigation-height": "var(--navigation-height)",
       },
+
+
     },
   },
   plugins: [],
