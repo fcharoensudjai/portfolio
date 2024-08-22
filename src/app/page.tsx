@@ -3,30 +3,30 @@
 import React from "react";
 import { Title } from "@/components/title";
 import Link from "next/link";
-import Clock from "react-live-clock"
+import Clock from "react-live-clock";
+import BlinkingCaret from "@/components/blinkingcaret/blinkingcaret";
 
 
 export default function Home() {
     return (
-        <div className="flex flex-col items-start lg:ps-20 md:ps-10 sm:ps-6 ps-6 text-text-light dark:text-text-dark">
+        <div className="flex flex-col items-start lg:ps-20 md:ps-10 sm:ps-6 ps-6 text-text-light dark:text-text-dark min-h-screen">
             <div className="flex flex-grow flex-col items-start justify-center text-left px-4 min-h-screen">
                 <Title size="extraLarge" className="leading-normal">
                     <div className="fixed-line-spacing">
                         fasai <br/> charoensudjai
                     </div>
                 </Title>
-                <div className="mt-4">
-                    <p className="text-md text-text-light dark:text-text-dark">
+                <div className="flex flex-row justify-center items-center my-4 space-x-2">
+                    <div className="text-md flex items-center">
                         [ scroll to explore ]
-                    </p>
-
-                    <div className={"bg-text-light dark:bg-text-dark min-h-full w-min-[2rem]"}> <span /> </div>
+                        <BlinkingCaret className="p-0" />
+                    </div>
                 </div>
 
                 <div>
                     <div
-                        className="lg:absolute lg:bottom-4 lg:right-4 invisible md:visible md:absolute md:bottom-4 md:right-4 text-text-light dark:text-text-dark">
-                        <ul className="flex text-md space-x-3">
+                        className="lg:absolute lg:bottom-5 lg:right-4 invisible md:visible md:absolute md:bottom-5 md:right-4 text-text-light dark:text-text-dark space-x-4">
+                        <ul className="flex text-md space-x-4">
                             <li>
                                 <a href="#"> linkedin </a>
                             </li>
@@ -42,7 +42,7 @@ export default function Home() {
                         </ul>
                     </div>
 
-                    <div className="md:text-md lg:text-md text-xs absolute bottom-2 left-3 md:bottom-4 md:left-4 flex flex-row justify-between md:space-x-2 space-x-1">
+                    <div className="md:text-md lg:text-md text-xs absolute bottom-5 left-5 md:left-5 flex flex-row justify-between md:space-x-2 space-x-1">
                         <p> [ local time (GB) |</p>
                         <Clock
                             timezone={"GB"}
@@ -57,7 +57,7 @@ export default function Home() {
 
 
 
-            <footer className={"text-4xl"}>footer yayay</footer>
+            <footer className={"text-4xl mt-auto"}>footer yayay</footer>
         </div>
 
     );

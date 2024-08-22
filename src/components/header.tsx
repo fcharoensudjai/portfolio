@@ -28,8 +28,13 @@ export const Header = () => {
     const path = usePathname();
     const { theme } = useTheme();
 
+    const headerbg = isNavOpen
+        ? (isDarkMode ? 'bg-middle-colour' : 'bg-transparent')
+        : (isDarkMode ? 'bg--text-dark' : 'bg-transparent');
+
     return (
-        <header className={`fixed top-0 left-0 right-0 bg-transparent backdrop-blur-sm z-50 dark:text-text-dark text-text-light ${isDarkMode ? 'bg-transparent text-text-dark' : 'bg-transparent'}`}>
+
+        <header className={`fixed top-0 left-0 right-0 bg-transparent backdrop-blur-sm z-50 dark:text-text-dark text-text-light ${isNavOpen ? (isDarkMode ? 'bg-middle-colour' : 'bg-text-dark') : "bg-transparent" }`}>
             <div className="flex items-center justify-between px-4 py-2">
                 <Link href="/">
                     <Image
@@ -84,7 +89,8 @@ export const Header = () => {
                     <ThemeSwitch/>
                     <button onClick={toggleNav} aria-label="toggle navigation">
                         <Image
-                            src="/icons/hamburger.svg"
+
+                            src={theme === "dark" ? "/icons/hamburgerdark.svg" : "/icons/hamburger.svg"}
                             alt="hamburger"
                             width={40}
                             height={40}
@@ -97,7 +103,7 @@ export const Header = () => {
 
             {/* mobile dropdown nav*/}
             <div
-                className={`fixed inset-x-0 top-[calc(6rem)] h-[calc(100vh-6rem)] md:hidden ${isNavOpen ? 'visible' : 'invisible'} ${isDarkMode ? 'bg-text-dark text-text-light' : 'bg-text-dark text-text-light'}`}>
+                className={`fixed inset-x-0 top-[calc(6rem)] h-[calc(100vh-6rem)] md:hidden bg-text-dark dark:bg-middle-colour ${isNavOpen ? 'visible' : 'invisible'}`}>
                 <nav className="flex h-full justify-center items-center text-end">
                     <ul className="flex flex-col space-y-4 text-2xl font-sans items-center"
                         onClick={handleNavItemClick}>

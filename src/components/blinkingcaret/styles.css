@@ -1,0 +1,15 @@
+/* styles.css */
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.blinking-caret {
+    display: inline-block;
+    width: 1rem; /* Adjust the width to your liking */
+    height: 1.5rem; /* Adjust the height to your liking */
+    background-color: currentColor; /* Use current text color */
+    animation: blink 1s step-start infinite;
+    margin-left: 0.75rem;
+}
