@@ -1,8 +1,6 @@
 import Clock from "react-live-clock";
 import React from "react";
 
-
-
 export const LocalTime = () => {
     return (
         <div

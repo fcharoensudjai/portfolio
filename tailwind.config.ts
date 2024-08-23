@@ -63,7 +63,9 @@ const config: Config = {
         20: "8.4rem",
         "navigation-height": "var(--navigation-height)",
       },
-
+      height: {
+        'screen-dvh': '100dvh', // Adds the new `screen-dvh` class
+      },
 
     },
   },

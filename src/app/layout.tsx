@@ -4,6 +4,7 @@ import React from "react";
 import { Header } from "@/components/header";
 import "./globals.css";
 import {Provider} from "@/app/providers";
+import {Footer} from "@/components/footer";
 
 export const metadata: Metadata = {
     title: "fuzzch | portfolio",
@@ -21,6 +22,7 @@ export default function RootLayout({
                 <Provider>
                      <Header />
                     {children}
+                    <Footer />
                 </Provider>
             </body>
         </html>

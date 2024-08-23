@@ -8,7 +8,7 @@ export const LogoButton = () => {
 
     return (
         <Link href="/">
-            <div className="relative w-32 h-[49.9px] md:w-56 md:h-[77.63px]">
+            <div className="relative w-32 h-[49.9px] lg:w-56 lg:h-[77.63px]">
                 <Image
                     src={theme === "dark" ? "/icons/dark/logodark.svg" : "/icons/light/logo.svg"}
                     alt="logo"
