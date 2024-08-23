@@ -49,7 +49,7 @@ export default function Home() {
                 </Title>
             </div>
 
-            <Footer />
+            {/*<Footer />*/}
         </div>
 
     );
