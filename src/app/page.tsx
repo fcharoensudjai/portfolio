@@ -5,13 +5,16 @@ import { Title } from "@/components/title";
 import Link from "next/link";
 import Clock from "react-live-clock";
 import BlinkingCaret from "@/components/blinkingcaret/blinkingcaret";
-
+import { useTheme } from "next-themes"
 
 export default function Home() {
+
+    const { theme } = useTheme();
+
     return (
-        <div className="flex flex-col items-start lg:ps-20 md:ps-10 sm:ps-6 ps-6 text-text-light dark:text-text-dark min-h-screen">
+        <div className={`flex flex-col items-start lg:ps-20 md:ps-10 sm:ps-6 ps-6 ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"} min-h-screen`}>
             <div className="flex flex-grow flex-col items-start justify-center text-left px-4 min-h-screen">
-                <Title size="extraLarge" className="leading-normal">
+                <Title size="extraLarge">
                     <div className="fixed-line-spacing">
                         fasai <br/> charoensudjai
                     </div>
@@ -19,13 +22,13 @@ export default function Home() {
                 <div className="flex flex-row justify-center items-center my-4 space-x-2">
                     <div className="text-md flex items-center">
                         [ scroll to explore ]
-                        <BlinkingCaret className="p-0" />
+                        <BlinkingCaret />
                     </div>
                 </div>
 
                 <div>
                     <div
-                        className="lg:absolute lg:bottom-5 lg:right-4 invisible md:visible md:absolute md:bottom-5 md:right-4 text-text-light dark:text-text-dark space-x-4">
+                        className="lg:absolute lg:bottom-5 lg:right-4 invisible md:visible md:absolute md:bottom-5 md:right-4 space-x-4">
                         <ul className="flex text-md space-x-4">
                             <li>
                                 <a href="#"> linkedin </a>

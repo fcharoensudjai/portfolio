@@ -10,7 +10,6 @@
     }
 }
 
-
 .text-responsive {
     font-size: clamp(1rem, 4vw, 3rem);
 }

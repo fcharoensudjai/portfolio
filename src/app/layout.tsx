@@ -3,7 +3,7 @@ import React from "react";
 
 import { Header } from "@/components/header";
 import "./globals.css";
-import {Provider, ThemeProvider} from "@/app/providers";
+import {Provider} from "@/app/providers";
 
 export const metadata: Metadata = {
     title: "fuzzch | portfolio",
