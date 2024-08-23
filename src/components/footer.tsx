@@ -5,18 +5,23 @@ export const Footer = () => {
     return (
         <div className="flex justify-between items-center">
 
-            <div className="flex flex-col justify-between">
-                <div>
-                    artwork and website by Fasai
+            <div className="flex flex-row items-center justify-between">
 
-                    <br/>
+                <LogoButton size="medium"/>
 
-                    Charoensudjai
+                <div className="flex flex-col justify-between">
+                    <div>
+                        artwork and website by Fasai
 
-                    <br/>
-                    <br/>
+                        <br/>
 
-                    © 2024 - all rights reserved
+                        Charoensudjai
+
+                        <br/>
+                        <br/>
+
+                        © 2024 - all rights reserved
+                    </div>
                 </div>
             </div>
 

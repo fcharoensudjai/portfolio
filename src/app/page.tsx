@@ -7,6 +7,7 @@ import { useTheme } from "next-themes"
 import { MobileNav } from "@/components/mobilenav";
 import { LocalTime } from "@/components/localtime";
 import { SocialIcons } from "@/components/socialicons";
+import {Footer} from "@/components/footer";
 
 export default function Home() {
 
@@ -47,6 +48,8 @@ export default function Home() {
                     </div>
                 </Title>
             </div>
+
+            <Footer />
         </div>
 
     );
