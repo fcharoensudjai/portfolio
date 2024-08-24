@@ -22,17 +22,13 @@
     margin: 0;
     padding: 0;
     scroll-behavior: smooth;
-}
-
-.text-container {
-    line-height: 1.5em; /* Ensure this matches the line height of your text */
-    font-size: 1em; /* Adjust this value as needed */
+    line-height: 1.75em;
 }
 
 .caret-wrapper {
     display: inline-block;
-    vertical-align: baseline; /* Align with the baseline of the text */
-    font-size: 1em; /* Make sure this is consistent with the text */
-    line-height: 1em; /* Ensure this matches the height of the text */
+    vertical-align: baseline;
+    font-size: 1em;
+    line-height: 1em;
 }
 

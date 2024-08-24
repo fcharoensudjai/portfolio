@@ -9,6 +9,7 @@ import { LocalTime } from "@/components/localtime";
 import { SocialIcons } from "@/components/socialicons";
 import { Footer } from "@/components/footer";
 import {Textbox} from "@/components/textbox";
+import {Contact} from "@/components/contact";
 
 export default function Home() {
 
@@ -33,7 +34,7 @@ export default function Home() {
                     </div>
                 </main>
 
-                <div className="flex justify-between items-center px-5 py-3 bg-transparent">
+                <div className="flex justify-between items-center px-3 md:px-5 py-3 bg-transparent">
                     <LocalTime/>
                     <SocialIcons/>
                 </div>
@@ -50,7 +51,7 @@ export default function Home() {
 
 
 
-                <div className="w-[65%]">
+                <div className="md:w-[65%]">
                     <Textbox>
                         Here are some of the pieces I've been working on lately. Feel free to click on them to view some more details, or the gallery button to view all of them!
                     </Textbox>
@@ -58,6 +59,8 @@ export default function Home() {
 
 
             </div>
+
+            <Contact />
 
             <Footer/>
         </div>

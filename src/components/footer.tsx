@@ -4,7 +4,7 @@ import { LocalTime } from "@/components/localtime";
 export const Footer = () => {
     return (
         <div>
-            <div className="flex justify-between items-center p-4 text-xs sm:text-sm lg:text-md">
+            <div className="flex justify-between items-center min-h-15dvh lg:min-h-25dvh p-4 text-xs sm:text-sm lg:text-md">
 
                 <div
                     className="flex flex-row items-center justify-between space-x-3 md:space-x-4 lg:space-x-6 min-h-full">

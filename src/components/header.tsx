@@ -19,25 +19,22 @@ export const Header = () => {
     return (
         <>
             <header className={`fixed top-0 left-0 right-0 backdrop-blur-sm w-screen z-40 ${theme === "dark" ? "text-text-dark" : "text-text-light"}`}>
-                <div className="flex items-center justify-between px-4 py-2">
+                <div className="flex items-center justify-between px-4 py-2 md:px-6">
                     <LogoButton />
                     <div className="flex items-center space-x-4">
                         <nav className="hidden md:flex md:items-center">
                             <ul className="flex space-x-4 text-md">
                                 <li>
-                                    <Link className={path === "/" ? "invisible underline underline-offset-4 decoration-accent-light" : ""} href="/"> home </Link>
+                                    <Link className={path === "/#recent-works" ? "underline underline-offset-[10px] decoration-accent-light" : ""} href="/#recent-works"> recent works </Link>
                                 </li>
                                 <li>
-                                    <Link className={path === "/recent-works" ? "underline underline-offset-4 decoration-accent-light" : ""} href="/#recent-works"> recent works </Link>
+                                    <Link className={path === "/gallery" ? "underline underline-offset-[10px] decoration-accent-light" : ""} href="/gallery"> gallery </Link>
                                 </li>
                                 <li>
-                                    <Link className={path === "/gallery" ? "underline underline-offset-4 decoration-accent-light" : ""} href="/gallery"> gallery </Link>
+                                    <Link className={path === "/about" ? "underline underline-offset-[10px]  decoration-accent-light" : ""} href="/about"> about </Link>
                                 </li>
                                 <li>
-                                    <Link className={path === "/about" ? "underline underline-offset-4 decoration-accent-light" : ""} href="/about"> about </Link>
-                                </li>
-                                <li>
-                                    <Link className={path === "/contact" ? "underline underline-offset-4 decoration-accent-light" : ""} href="/contact"> contact </Link>
+                                    <Link className={path === "/#contact" ? "underline underline-offset-[10px]  decoration-accent-light" : ""} href="/#contact"> contact </Link>
                                 </li>
                             </ul>
                         </nav>

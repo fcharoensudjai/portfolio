@@ -64,8 +64,13 @@ const config: Config = {
         "navigation-height": "var(--navigation-height)",
       },
       height: {
-        'screen-dvh': '100dvh', // Adds the new `screen-dvh` class
+        "screen-dvh": "100dvh",
       },
+      minHeight: {
+        "50dvh": "50dvh",
+        "25dvh": "25dvh",
+        "15dvh": "15dvh",
+      }
 
     },
   },

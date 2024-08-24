@@ -27,7 +27,9 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className={`fixed inset-0 z-50 ${theme === "dark" ? "bg-middle-colour" : "bg-text-dark"}`}
         >
+
             <div className="flex flex-col h-full">
+
                 <div className="flex items-center justify-between px-4 py-2">
                     <LogoButton />
                     <div className="flex items-center space-x-3">
@@ -43,15 +45,43 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
                         </button>
                     </div>
                 </div>
+
                 <div className="flex flex-grow justify-end items-center pe-8">
                     <ul className="flex flex-col space-y-3 text-2xl text-right font-sans">
-                        <li> <Link className={path === "/" ? "underline underline-offset-[12px] decoration-accent-light" : ""} href="/"> home </Link> </li>
-                        <li> <Link className={path === "/recent-works" ? "underline underline-offset-[12px] decoration-accent-light" : ""} href="/recent-works"> recent works </Link> </li>
-                        <li> <Link className={path === "/gallery" ? "underline underline-offset-[12px] decoration-accent-light" : ""} href="/gallery"> gallery </Link> </li>
-                        <li> <Link className={path === "/about" ? "underline underline-offset-[12px] decoration-accent-light" : ""} href="/about"> about </Link> </li>
-                        <li> <Link className={path === "/contact" ? "underline underline-offset-[12px] decoration-accent-light" : ""} href="/contact"> contact </Link> </li>
+
+                        <li>
+                            <Link onClick={toggleNav} className={path === "/" ? "underline underline-offset-[12px] decoration-accent-light" : ""} href="/">
+                                home
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link onClick={toggleNav} className={path === "/recent-works" ? "underline underline-offset-[12px] decoration-accent-light" : ""} href="/#recent-works">
+                                recent works
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link onClick={toggleNav} className={path === "/gallery" ? "underline underline-offset-[12px] decoration-accent-light" : ""} href="/gallery">
+                                gallery
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link onClick={toggleNav} className={path === "/about" ? "underline underline-offset-[12px] decoration-accent-light" : ""} href="/about">
+                                about
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link onClick={toggleNav} className={path === "/#contact" ? "underline underline-offset-[12px] decoration-accent-light" : ""} href="/#contact">
+                                contact
+                            </Link>
+                        </li>
+
                     </ul>
                 </div>
+
                 <div className="fixed bottom-0 left-0 right-0 flex justify-between items-center px-5 py-3 bg-transparent">
                     <div className="flex-grow flex justify-start">
                         <LocalTime />
@@ -60,6 +90,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
                         <SocialIcons />
                     </div>
                 </div>
+
             </div>
         </motion.div>
     );
