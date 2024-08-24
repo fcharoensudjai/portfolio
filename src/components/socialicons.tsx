@@ -10,7 +10,7 @@ export const SocialIcons = () => {
         <div className="flex items-center space-x-2">
 
             <div className="flex md:hidden space-x-2">
-                <Link href="#">
+                <Link href="https://www.linkedin.com/in/fasaich/">
                     <Image
                         src={theme === "dark" ? "/icons/dark/linkedindark.svg" : "/icons/light/linkedin.svg"}
                         alt="linkedin"
@@ -56,7 +56,7 @@ export const SocialIcons = () => {
 
 
             <div className="hidden md:flex space-x-3 text-md">
-                <a href="#" className="text-link"> linkedin </a>
+                <a href="https://www.linkedin.com/in/fasaich/" className="text-link"> linkedin </a>
                 <a href="#" className="text-link"> instagram </a>
                 <a href="#" className="text-link"> artstation </a>
                 <a href="#" className="text-link"> youtube </a>

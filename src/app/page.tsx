@@ -2,7 +2,6 @@
 
 import React, {useState} from "react";
 import { Title } from "@/components/title";
-import BlinkingCaret from "@/components/blinkingcaret/blinkingcaret";
 import { useTheme } from "next-themes"
 import { MobileNav } from "@/components/mobilenav";
 import { LocalTime } from "@/components/localtime";
@@ -10,6 +9,7 @@ import { SocialIcons } from "@/components/socialicons";
 import { Footer } from "@/components/footer";
 import {Textbox} from "@/components/textbox";
 import {Contact} from "@/components/contact";
+import Image from "next/image";
 
 export default function Home() {
 
@@ -20,8 +20,7 @@ export default function Home() {
     return (
         <div>
             <div id="home" className={`flex flex-col min-h-dvh ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
-                <main
-                    className="flex flex-col flex-grow items-start justify-center text-left text-xs sm:text-md px-6 md:px-16 xl:px-20">
+                <main className="flex flex-col flex-grow items-start justify-center text-left text-xs sm:text-md px-6 md:px-16 xl:px-20">
                     <Title size="large">
                         <div className="fixed-line-spacing">
                             fasai <br/> charoensudjai
@@ -57,7 +56,9 @@ export default function Home() {
                     </Textbox>
                 </div>
 
-
+                <Image
+                    src={""}
+                />
             </div>
 
             <Contact />
