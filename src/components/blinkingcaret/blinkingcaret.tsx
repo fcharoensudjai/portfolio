@@ -3,7 +3,7 @@ import "./styles.css"
 
 const BlinkingCaret = () => {
     return (
-        <span className="blinking-caret items-center"></span>
+        <span className="blinking-caret"></span>
     );
 };
 

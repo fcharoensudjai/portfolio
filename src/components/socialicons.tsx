@@ -16,7 +16,6 @@ export const SocialIcons = () => {
                         alt="linkedin"
                         width={30}
                         height={30}
-                        layout="fixed"
                         className="max-w-[35px]"
                     />
                 </Link>
@@ -26,7 +25,6 @@ export const SocialIcons = () => {
                         alt="instagram"
                         width={30}
                         height={30}
-                        layout="fixed"
                         className="max-w-[35px]"
                     />
                 </Link>
@@ -37,7 +35,8 @@ export const SocialIcons = () => {
                             <Image
                                 src={theme === "dark" ? "/icons/dark/artstationdark.svg" : "/icons/light/artstation.svg"}
                                 alt="artstation"
-                                layout="fill"
+                                width={30}
+                                height={30}
                                 objectFit="contain"
                             />
                         </div>
@@ -50,7 +49,6 @@ export const SocialIcons = () => {
                         alt="youtube"
                         width={30}
                         height={30}
-                        layout="fixed"
                         className="max-w-[35px]"
                     />
                 </Link>

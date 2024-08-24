@@ -28,7 +28,7 @@ export const Header = () => {
                                     <Link className={path === "/" ? "invisible underline underline-offset-4 decoration-accent-light" : ""} href="/"> home </Link>
                                 </li>
                                 <li>
-                                    <Link className={path === "/recent-works" ? "underline underline-offset-4 decoration-accent-light" : ""} href="/recent-works"> recent works </Link>
+                                    <Link className={path === "/recent-works" ? "underline underline-offset-4 decoration-accent-light" : ""} href="/#recent-works"> recent works </Link>
                                 </li>
                                 <li>
                                     <Link className={path === "/gallery" ? "underline underline-offset-4 decoration-accent-light" : ""} href="/gallery"> gallery </Link>
@@ -53,7 +53,6 @@ export const Header = () => {
                                 alt="hamburger"
                                 width={30}
                                 height={30}
-                                layout="fixed"
                                 className="max-w-[40px] md:w-[40px] md:h-[40px]"
                             />
                         </button>

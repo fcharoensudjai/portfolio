@@ -7,7 +7,8 @@ import { useTheme } from "next-themes"
 import { MobileNav } from "@/components/mobilenav";
 import { LocalTime } from "@/components/localtime";
 import { SocialIcons } from "@/components/socialicons";
-import {Footer} from "@/components/footer";
+import { Footer } from "@/components/footer";
+import {Textbox} from "@/components/textbox";
 
 export default function Home() {
 
@@ -17,19 +18,18 @@ export default function Home() {
 
     return (
         <div>
-            <div
-                className={`flex flex-col min-h-dvh ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
-                <main className="flex flex-col flex-grow items-start justify-center text-left px-6 md:px-16 xl:px-20">
+            <div id="home" className={`flex flex-col min-h-dvh ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
+                <main
+                    className="flex flex-col flex-grow items-start justify-center text-left text-xs sm:text-md px-6 md:px-16 xl:px-20">
                     <Title size="large">
                         <div className="fixed-line-spacing">
                             fasai <br/> charoensudjai
                         </div>
                     </Title>
-                    <div className="flex flex-row justify-center items-center my-4 space-x-2">
-                        <div className="text-sm sm:text-md flex items-center">
+                    <div className="w-[65%] my-4 space-x-2">
+                        <Textbox>
                             [ scroll to explore ]
-                            <BlinkingCaret/>
-                        </div>
+                        </Textbox>
                     </div>
                 </main>
 
@@ -41,15 +41,25 @@ export default function Home() {
                 <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav}/>
             </div>
 
-            <div className="px-4">
+            <div className="px-6 md:px-16 xl:px-20 space-y-5 my-7">
                 <Title size="medium">
-                    <div className="fixed-line-spacing">
+                    <div id="recent-works" className="fixed-line-spacing">
                         recent works
                     </div>
                 </Title>
+
+
+
+                <div className="w-[65%]">
+                    <Textbox>
+                        Here are some of the pieces I've been working on lately. Feel free to click on them to view some more details, or the gallery button to view all of them!
+                    </Textbox>
+                </div>
+
+
             </div>
 
-            {/*<Footer />*/}
+            <Footer/>
         </div>
 
     );

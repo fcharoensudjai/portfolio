@@ -38,7 +38,6 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
                                 alt="close navigation"
                                 width={35}
                                 height={35}
-                                layout="fixed"
                                 className="max-w-[40px]"
                             />
                         </button>

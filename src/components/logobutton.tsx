@@ -12,7 +12,7 @@ const logoButtonVariants = cva("relative", {
     variants: {
         size: {
             small: "w-32 h-[49.9px] lg:w-56 lg:h-[77.63px]",
-            medium: "w-56 h-[77.63px] lg:w-70 lg:h-[143px]",
+            medium: "w-[143px] h-[49.9px] md:w-[222.47px] md:h-[77.63px] xl:w-[595.34px] xl:h-[192px]",
         },
     },
     defaultVariants: {
@@ -24,7 +24,7 @@ export const LogoButton = ({ size = "small" }: LogoButtonProps) => {
     const { theme } = useTheme();
 
     return (
-        <Link href="/">
+        <Link href="/#home">
             <div className={logoButtonVariants({ size })}>
                 <Image
                     src={theme === "dark" ? "/icons/dark/logodark.svg" : "/icons/light/logo.svg"}
