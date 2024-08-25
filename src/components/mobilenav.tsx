@@ -10,6 +10,12 @@ import ThemeSwitch from "@/components/themeswitch";
 import { LogoButton } from "@/components/logobutton";
 import { LocalTime } from "@/components/localtime";
 import { SocialIcons } from "@/components/socialicons";
+import { Poppins } from "@next/font/google";
+
+const poppins = Poppins({
+    subsets: ["latin"],
+    weight: ["400"],
+});
 
 interface MobileNavProps {
     isNavOpen: boolean;
@@ -25,10 +31,10 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
             initial={{ x: "100%" }}
             animate={{ x: isNavOpen ? 0 : "100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className={`fixed inset-0 z-50 ${theme === "dark" ? "bg-middle-colour" : "bg-text-dark"}`}
+            className={`fixed inset-0 z-50 ${theme === "dark" ? "bg-middle-colour" : "bg-text-dark"} ${poppins.className}`}
         >
 
-            <div className="flex flex-col h-full">
+            <div className={`flex flex-col h-full ${poppins.className}`}>
 
                 <div className="flex items-center justify-between px-4 py-2">
                     <LogoButton />
@@ -46,11 +52,11 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
                     </div>
                 </div>
 
-                <div className="flex flex-grow justify-end items-center pe-8">
-                    <ul className="flex flex-col space-y-3 text-2xl text-right font-sans">
+                <div className="flex flex-grow justify-end items-center pe-8 pb-[68.38px]">
+                    <ul className="flex flex-col space-y-3 text-xl text-right">
 
                         <li>
-                            <Link onClick={toggleNav} className={path === "/" ? "underline underline-offset-[12px] decoration-accent-light" : ""} href="/">
+                            <Link onClick={toggleNav} className={path === "/" ? "underline underline-offset-[12px] decoration-accent-light" : ""} href="/#home">
                                 home
                             </Link>
                         </li>

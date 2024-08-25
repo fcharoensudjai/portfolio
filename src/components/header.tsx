@@ -18,7 +18,7 @@ export const Header = () => {
 
     return (
         <>
-            <header className={`fixed top-0 left-0 right-0 backdrop-blur-sm w-screen z-40 ${theme === "dark" ? "text-text-dark" : "text-text-light"}`}>
+            <header className={`fixed top-0 left-0 right-0 backdrop-blur-[8px] w-screen z-40 ${theme === "dark" ? "text-text-dark" : "text-text-light"}`}>
                 <div className="flex items-center justify-between px-4 py-2 md:px-6">
                     <LogoButton />
                     <div className="flex items-center space-x-4">

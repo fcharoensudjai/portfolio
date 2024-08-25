@@ -7,7 +7,7 @@ interface TextboxProps {
 
 export const Textbox: React.FC<TextboxProps> = ( { children } ) => {
   return (
-      <div className={"text-sm lg:text-md"}>
+      <div className={"md:text-sm lg:text-md text-xs"}>
           {children}
           <span className="caret-wrapper"> <BlinkingCaret/> </span>
       </div>

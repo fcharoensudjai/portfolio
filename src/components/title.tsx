@@ -1,5 +1,11 @@
 import React from "react";
-import { cva } from "class-variance-authority"
+import { cva } from "class-variance-authority";
+import { Poppins } from "@next/font/google";
+
+const poppins = Poppins({
+    subsets: ["latin"],
+    weight: ["400"],
+});
 
 interface TitleProps {
     children: React.ReactNode;
@@ -9,9 +15,9 @@ interface TitleProps {
 const titleVariants = cva("font-sans dark:text-text-dark text-text-light", {
     variants: {
         size: {
-            small: "text-xl",
+            small: "text-lg md:text-2xl lg:text-3xl",
             medium: "text-xl md:text-3xl xl:text-4xl",
-            large: "text-3xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-[10rem] 2xl:text-[12rem]",
+            large: "text-2xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-[10rem] 2xl:text-[12rem]",
         },
     },
     defaultVariants: {
@@ -21,8 +27,8 @@ const titleVariants = cva("font-sans dark:text-text-dark text-text-light", {
 
 export const Title = ({ children, size = "medium" }: TitleProps) => {
     return (
-        <div className={titleVariants({ size })}>
+        <div className={`${titleVariants({ size })} ${poppins.className}`}>
             {children}
         </div>
     );
-}
+};
