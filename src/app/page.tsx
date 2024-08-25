@@ -20,9 +20,9 @@ export default function Home() {
     const toggleNav = () => setIsNavOpen(!isNavOpen);
 
     return (
-        <div>
-            <div id="home"
-                 className={`flex flex-col min-h-dvh ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
+        <div className="space-y-12">
+            <div id="home" className={`flex flex-col min-h-dvh ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
+
                 <main
                     className="flex flex-col flex-grow items-start justify-center text-left text-xs sm:text-md px-6 md:px-16 xl:px-20">
                     <Title size="large">
@@ -49,7 +49,7 @@ export default function Home() {
             <div className="px-6 md:px-16 xl:px-20 space-y-5 lg:space-y-12 my-7">
 
                 <Title size="medium">
-                    <div id="recent-works" className="fixed-line-spacing scroll-mt-[120.28px] lg:scroll-mt-[148.02px]">
+                    <div id="recents" className="fixed-line-spacing scroll-mt-[120.28px] lg:scroll-mt-[148.02px]">
                         recent works
                     </div>
                 </Title>
@@ -57,14 +57,14 @@ export default function Home() {
 
                 <div className="lg:w-[65%]">
                     <Textbox>
-                        Here are some of the pieces I've been working on lately. Feel free to click on them to view some
-                        more details, or the gallery button to view all of them!
+                        Here are the previews for some of the pieces I've been working on lately. Feel free to click on them to see the full image, view some
+                        more details, or click on the gallery button to view all of them!
                     </Textbox>
                 </div>
 
                 <div className="space-y-5">
 
-                    <div className="lg:hidden"> <DottedLineSeparator> [ 01 ] </DottedLineSeparator> </div>
+                    <div className="lg:hidden"> <DottedLineSeparator align="left"> [ 01 ] </DottedLineSeparator> </div>
 
 
                     <div className="lg:hidden"> <Title size="small"> raiden shogun </Title> </div>
@@ -87,6 +87,8 @@ export default function Home() {
 
                         <div className="lg:max-w-[45%] order-last flex flex-col lg:space-y-5">
 
+                            <div className="hidden lg:block"><DottedLineSeparator align="left"> [ 01 ] </DottedLineSeparator></div>
+
                             <div className="hidden lg:block"><Title size="small"> raiden shogun </Title></div>
 
                             <div className="flex flex-col justify-evenly lg:space-y-7">
@@ -95,8 +97,7 @@ export default function Home() {
                                     Raiden Shogun has been my favorite character from Genshin Impact for the longest
                                     time, and so I wanted to make something that captured her energy. Inspired by the
                                     League of Legends splash art styles, this is one of the biggest digital canvases
-                                    I've ever
-                                    worked on, and I’m really happy with how it turned out.
+                                    I've ever worked on, and I’m really happy with how it turned out.
                                 </Textbox>
 
                             </div>
@@ -107,21 +108,23 @@ export default function Home() {
 
                 <div className="space-y-5">
 
-                    <div className="lg:hidden"><DottedLineSeparator> [ 02 ] </DottedLineSeparator></div>
+                    <div className="lg:hidden"><DottedLineSeparator align="left"> [ 02 ] </DottedLineSeparator></div>
 
                     <div className="lg:hidden"><Title size="small"> raven </Title></div>
 
                     <div
                         className="flex flex-col-reverse space-y-reverse md:space-y-reverse lg:flex-row lg:justify-between justify-between lg:space-x-16 space-y-5 md:space-y-7 lg:space-y-0">
 
-                        <div className="lg:max-w-[45%] flex flex-col lg:items-end lg:space-y-5">
+                        <div className="lg:max-w-[45%] flex flex-col lg:space-y-5">
 
-                            <div className="hidden lg:block"><Title size="small"> raven </Title></div>
+                            <div className="hidden lg:block text-end"> <Title size="small"> raven </Title> </div>
+
+                            <div className="hidden lg:block "> <DottedLineSeparator align="right"> [ 02 ] </DottedLineSeparator> </div>
 
                             <div className="flex flex-col justify-evenly lg:space-y-7 lg:text-end">
 
                                 <Textbox>
-                                    I participated in a "Draw This In Your Style" contest for Raven, a character by
+                                    I participated in a "Draw This In Your Style Challenge" for Raven, a character by
                                     another artist. Raven was a great learning experience for me, especially in drawing
                                     metal, and marked my second attempt into drawing better backgrounds after Raiden.
                                     This project pushed me to grow as an artist and expand my skills,
@@ -135,13 +138,16 @@ export default function Home() {
 
                         <div className="relative lg:w-[50%]">
                             <Image
-                                src="/images/raven/raven-home.png"
+                                src="/images/raven/raven-home-2.png"
                                 alt="snippet of raven"
                                 width={1183}
                                 height={851}
-                                style={{objectFit: "cover"}}
+                                style={{
+                                    objectFit: "cover",
+                                    objectPosition: "80% 50%"
+                                }}
                                 quality={80}
-                                className="w-full h-auto lg:h-full lg:w-auto "
+                                className="w-full h-auto lg:h-full lg:w-auto"
                             />
                         </div>
 
@@ -150,17 +156,53 @@ export default function Home() {
 
             </div>
 
-            <div className="px-6 md:px-16 xl:px-20 space-y-5 lg:space-y-12 my-7">
+            <div id="intro" className=" px-6 md:px-16 xl:px-20 space-y-5 lg:space-y-12 my-7 min-h-[85dvh] flex flex-col justify-center items-center">
 
-                <Title size="medium">
-                    <div id="about" className="fixed-line-spacing scroll-mt-[120.28px] lg:scroll-mt-[148.02px]">
+                <div id="" className="md:hidden item-start fixed-line-spacing">
+                    <Title size="medium">
                         a brief intro
-                    </div>
-                </Title>
+                    </Title>
+                </div>
 
+                <div className="flex flex-col justify-center space-y-5 sm:flex-row sm:space-x-9 lg:space-x-16 xl:space-x-20 sm:space-y-0">
+
+                    <div className="flex items-center justify-center md:justify-start">
+                        <Image
+                            src={theme === "dark" ? "/icons/dark/logodark.svg" : "/icons/light/logo.svg"}
+                            alt="logo"
+                            width={1000}
+                            height={1000}
+                            style={{
+                                objectFit: "contain",
+                            }}
+                            className="p-4"
+                        />
+                    </div>
+
+                    <div className="sm:max-w-[55%] sm:space-y-5 lg:space-y-7 xl:space-y-10 flex flex-col justify-center items-start">
+                        <div className="hidden md:block fixed-line-spacing">
+
+                            <Title size="medium">
+                                a brief intro
+                            </Title>
+
+                        </div>
+
+                        <div className="flex items-center">
+                            <Textbox>
+                                Hi, I’m Fasai, an artist from Thailand and an Economics student at the University of
+                                Warwick.
+                                I created this website to showcase my passion for illustration, concept art, and fanart.
+                                Combining my love for art with web design allows me to bring my ideas to life in a way
+                                that's true to my style.
+                                Click the button below to learn more about my journey!
+                            </Textbox>
+                        </div>
+                    </div>
+
+                </div>
 
             </div>
-
 
 
             <Contact/>
@@ -169,5 +211,5 @@ export default function Home() {
 
         </div>
 
-        );
-    }
+    );
+}

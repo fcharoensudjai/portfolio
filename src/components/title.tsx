@@ -17,7 +17,7 @@ const titleVariants = cva("font-sans dark:text-text-dark text-text-light", {
         size: {
             small: "text-lg md:text-2xl lg:text-3xl",
             medium: "text-xl md:text-3xl xl:text-4xl",
-            large: "text-2xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-[10rem] 2xl:text-[12rem]",
+            large: "text-2xl sm:text-5xl lg:text-8xl xl:text-[10rem] 2xl:text-[12rem]",
         },
     },
     defaultVariants: {

@@ -55,7 +55,7 @@ export const SocialIcons = () => {
             </div>
 
 
-            <div className="hidden md:flex space-x-3 text-md">
+            <div className="hidden md:flex space-x-3 text-md md:space-x-5">
                 <a href="https://www.linkedin.com/in/fasaich/" className="text-link"> linkedin </a>
                 <a href="#" className="text-link"> instagram </a>
                 <a href="#" className="text-link"> artstation </a>

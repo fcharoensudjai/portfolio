@@ -27,8 +27,8 @@ export const LogoButton = ({ size = "small" }: LogoButtonProps) => {
         <Link href="/#home">
             <div className={logoButtonVariants({ size })}>
                 <Image
-                    src={theme === "dark" ? "/icons/dark/logodark.svg" : "/icons/light/logo.svg"}
-                    alt="logo"
+                    src={theme === "dark" ? "/icons/dark/fulllogodark.svg" : "/icons/light/fulllogo.svg"}
+                    alt="full logo"
                     layout="fill"
                     objectFit="contain"
                 />

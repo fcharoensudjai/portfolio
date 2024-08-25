@@ -25,21 +25,34 @@ export const Header = () => {
                         <nav className="hidden md:flex md:items-center">
                             <ul className="flex space-x-4 text-md">
                                 <li>
-                                    <Link className={path === "/#recent-works" ? "underline underline-offset-[10px] decoration-accent-light" : ""} href="/#recent-works"> recent works </Link>
+                                    <Link
+                                        className={path === "/#recents" ? "underline underline-offset-[10px] decoration-accent-light" : ""}
+                                        href="/#recents"> recents </Link>
                                 </li>
                                 <li>
-                                    <Link className={path === "/gallery" ? "underline underline-offset-[10px] decoration-accent-light" : ""} href="/gallery"> gallery </Link>
+                                    <Link
+                                        className={path === "/gallery" ? "underline underline-offset-[10px] decoration-accent-light" : ""}
+                                        href="/gallery"> gallery </Link>
                                 </li>
                                 <li>
-                                    <Link className={path === "/about" ? "underline underline-offset-[10px]  decoration-accent-light" : ""} href="/about"> about </Link>
+                                    <Link
+                                        className={path === "/#intro" ? "underline underline-offset-[10px]  decoration-accent-light" : ""}
+                                        href="/#intro"> intro </Link>
                                 </li>
                                 <li>
-                                    <Link className={path === "/#contact" ? "underline underline-offset-[10px]  decoration-accent-light" : ""} href="/#contact"> contact </Link>
+                                    <Link
+                                        className={path === "/about" ? "underline underline-offset-[10px]  decoration-accent-light" : ""}
+                                        href="/about"> about </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        className={path === "/#contact" ? "underline underline-offset-[10px]  decoration-accent-light" : ""}
+                                        href="/#contact"> contact </Link>
                                 </li>
                             </ul>
                         </nav>
                         <div className="invisible md:visible ml-4 flex justify-center items-center">
-                            <ThemeSwitch />
+                            <ThemeSwitch/>
                         </div>
                     </div>
                     <div className="flex md:hidden items-center space-x-3">
