@@ -8,7 +8,7 @@ import ThemeSwitch from "@/components/themeswitch";
 import { LogoButton } from "@/components/logobutton";
 import { LocalTime } from "@/components/localtime";
 import { SocialIcons } from "@/components/socialicons";
-import { Poppins } from "@next/font/google";
+import { Poppins } from "next/font/google";
 
 const poppins = Poppins({
     subsets: ["latin"],

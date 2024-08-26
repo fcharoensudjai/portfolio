@@ -10,19 +10,17 @@ export const metadata: Metadata = {
     description: "welcome to my portfolio!",
 };
 
-export default function RootLayout({
-                                       children,
-                                   }: {
+export default function RootLayout({ children }: {
     children: React.ReactNode;
 }) {
     return (
         <html lang="en" suppressHydrationWarning={true}>
-            <body>
-                <Provider>
-                     <Header />
+            <Provider>
+                <body className={"bg-main-light dark:bg-text-light text-text-light dark:text-text-dark"}>
+                    <Header />
                     {children}
-                </Provider>
-            </body>
+                </body>
+            </Provider>
         </html>
     );
 }
