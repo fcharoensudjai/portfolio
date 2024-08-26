@@ -12,7 +12,7 @@ interface TitleProps {
     size?: "small" | "medium" | "large";
 }
 
-const titleVariants = cva("font-sans dark:text-text-dark text-text-light", {
+const titleVariants = cva("font-sans", {
     variants: {
         size: {
             small: "text-lg md:text-2xl lg:text-3xl",

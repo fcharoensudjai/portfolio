@@ -1,16 +1,34 @@
 import { LogoButton } from "@/components/logobutton";
 import { LocalTime } from "@/components/localtime";
+import Image from "next/image";
+import { useTheme } from "next-themes";
 
 export const Footer = () => {
+
+    const { theme } = useTheme();
+
     return (
         <div>
-            <div className="flex justify-between items-center min-h-15dvh lg:min-h-25dvh p-4 text-xs sm:text-sm lg:text-md">
+            <div className="flex justify-between items-center min-h-15dvh lg:px-7 lg:min-h-25dvh p-4 text-xs sm:text-sm lg:text-md">
 
-                <div
-                    className="flex flex-row items-center justify-between space-x-3 md:space-x-4 lg:space-x-6 min-h-full">
-                    <LogoButton size="medium"/>
+                <div className="flex flex-row items-center justify-start space-x-5 min-h-full">
 
-                    <div className="flex flex-col justify-between space-y-6 h-full">
+                    <div className="space-x-0">
+
+                        <div className="hidden lg:block"><LogoButton size="medium"/></div>
+
+                        <div className="lg:hidden h-[80%] w-auto">
+                            <Image
+                                src={theme === "dark" ? "/icons/dark/logodark.svg" : "/icons/light/logo.svg"}
+                                alt={"logo"}
+                                width={200}
+                                height={200}
+                            />
+                        </div>
+
+                    </div>
+
+                    <div className="flex flex-col justify-between space-y-5 h-full">
 
                         <div className={"space-y-2"}>
                             <div>
@@ -20,7 +38,9 @@ export const Footer = () => {
                             </div>
 
                             <div>
-                                © 2024 - all rights reserved
+                                © 2024 - all rights
+                                <br/>
+                                reserved
                             </div>
                         </div>
 
@@ -30,7 +50,7 @@ export const Footer = () => {
                     </div>
                 </div>
 
-                <div className="flex flex-col justify-between h-full space-y-1">
+                <div className="flex flex-col justify-between space-y-4 h-full">
                     <div> [ my socials ]</div>
                     <ul className="flex flex-col space-y-1">
                         <li><a href={"#"}>linkedin</a></li>
@@ -39,6 +59,7 @@ export const Footer = () => {
                         <li><a href={"#"}>youtube</a></li>
                     </ul>
                 </div>
+
             </div>
 
         </div>

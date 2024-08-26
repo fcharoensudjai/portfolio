@@ -12,7 +12,7 @@ const logoButtonVariants = cva("relative", {
     variants: {
         size: {
             small: "w-32 h-[49.9px] lg:w-56 lg:h-[77.63px]",
-            medium: "w-[143px] h-[49.9px] md:w-[222.47px] md:h-[77.63px] xl:w-[595.34px] xl:h-[192px]",
+            medium: "w-[595.34px] h-[192px]",
         },
     },
     defaultVariants: {
@@ -29,8 +29,11 @@ export const LogoButton = ({ size = "small" }: LogoButtonProps) => {
                 <Image
                     src={theme === "dark" ? "/icons/dark/fulllogodark.svg" : "/icons/light/fulllogo.svg"}
                     alt="full logo"
-                    layout="fill"
-                    objectFit="contain"
+                    width={500}
+                    height={500}
+                    style={{
+                        objectFit: "contain",
+                    }}
                 />
             </div>
         </Link>

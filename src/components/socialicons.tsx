@@ -37,7 +37,9 @@ export const SocialIcons = () => {
                                 alt="artstation"
                                 width={30}
                                 height={30}
-                                objectFit="contain"
+                                style={{
+                                    objectFit: "contain",
+                                }}
                             />
                         </div>
                     </div>
