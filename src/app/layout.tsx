@@ -4,7 +4,6 @@ import React from "react";
 import { Header } from "@/components/header";
 import "./globals.css";
 import { Provider } from "@/app/providers";
-import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
     title: "fuzzch | portfolio",
@@ -18,7 +17,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en" suppressHydrationWarning={true}>
-            <body className={"bg-main-light dark:bg-text-light text-text-light dark:text-text-dark"}>
+            <body>
                 <Provider>
                      <Header />
                     {children}

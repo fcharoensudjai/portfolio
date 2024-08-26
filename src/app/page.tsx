@@ -1,17 +1,17 @@
 "use client";
 
 import React, {useState} from "react";
-import {Title} from "@/components/title";
-import {useTheme} from "next-themes"
-import {MobileNav} from "@/components/mobilenav";
-import {LocalTime} from "@/components/localtime";
-import {SocialIcons} from "@/components/socialicons";
-import {Footer} from "@/components/footer";
-import {Textbox} from "@/components/textbox";
-import {Contact} from "@/components/contact";
+import { Title } from "@/components/title";
+import { useTheme } from "next-themes"
+import { MobileNav } from "@/components/mobilenav";
+import { LocalTime } from "@/components/localtime";
+import { SocialIcons } from "@/components/socialicons";
+import { Footer } from "@/components/footer";
+import { Textbox } from "@/components/textbox";
+import { Contact } from "@/components/contact";
 import Image from "next/image";
-import {DottedLineSeparator} from "@/components/dottedlineseparator";
-import {Button} from "@/components/button";
+import { DottedLineSeparator } from "@/components/dottedlineseparator";
+import { Button } from "@/components/button";
 
 
 export default function Home() {
@@ -163,6 +163,7 @@ export default function Home() {
                         </div>
 
                         </div>
+
                     </div>
 
                 </div>
