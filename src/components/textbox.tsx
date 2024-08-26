@@ -2,7 +2,7 @@ import BlinkingCaret from "@/components/blinkingcaret/blinkingcaret";
 import React from "react";
 
 interface TextboxProps {
-    children: React.ReactNode; // Type for children
+    children: React.ReactNode;
 }
 
 export const Textbox: React.FC<TextboxProps> = ( { children } ) => {
