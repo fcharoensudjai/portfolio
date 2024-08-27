@@ -148,7 +148,7 @@ export default function Home() {
                                     <div className="lg:hidden flex justify-center items-center"><Button
                                         href=""> more detail </Button></div>
 
-                                    <div className="lg:max-w-[45%] flex flex-col lg:space-y-5 lg:mr-16">
+                                    <div className="lg:w-[45%] flex flex-col lg:space-y-5 lg:mr-16">
 
                                         <div className="hidden lg:block"><DottedLineSeparator align="right"> [ 02
                                             ] </DottedLineSeparator></div>
