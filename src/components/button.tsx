@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import {stagger, motion, useAnimate} from "framer-motion";
+import {stagger, animate, motion, useAnimate} from "framer-motion";
 
 interface ButtonProps {
     children: React.ReactNode;
