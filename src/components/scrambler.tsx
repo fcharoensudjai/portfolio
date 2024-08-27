@@ -27,7 +27,7 @@ export const Scramble: React.FC<ScrambleProps> = ({ children }) => {
 
         return chars.map((char, index) => {
             if (char === ' ') {
-                return shuffledSpaces.includes(index) ? ' ' : ' '; // Ensure spaces are always present
+                return shuffledSpaces.includes(index) ? ' ' : ' ';
             }
             return index < intervalCount ? char : letters[Math.floor(Math.random() * letters.length)];
         }).join("");
@@ -43,7 +43,7 @@ export const Scramble: React.FC<ScrambleProps> = ({ children }) => {
                 setScrambled(scrambleText(children, newCount));
                 return newCount;
             });
-        }, 15);
+        }, 30);
 
         setIntervalId(id);
 
@@ -65,7 +65,7 @@ export const Scramble: React.FC<ScrambleProps> = ({ children }) => {
     }, [intervalId]);
 
     return (
-        <motion.span onHoverStart={handleMouseOver}>
+        <motion.span onHoverStart={handleMouseOver} onClick={handleMouseOver}>
             {scrambled}
         </motion.span>
     );

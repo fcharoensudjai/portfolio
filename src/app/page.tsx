@@ -110,13 +110,17 @@ export default function Home() {
 
                                     <div className="flex flex-col justify-evenly lg:space-y-7">
 
-                                        <Textbox>
-                                            <Scramble> Raiden Shogun has been my favorite character from Genshin Impact for the
-                                                longest time, and so I wanted to make something that captured her energy.
-                                                Inspired by the League of Legends splash art styles, this is one of the
-                                                biggest digital canvases I've ever worked on, and I’m really happy with how it turned
-                                                out. </Scramble>
-                                        </Textbox>
+                                        <div className={`flex flex-grow w-full`}>
+                                            <Textbox>
+                                                <Scramble>
+                                                    Raiden Shogun has been my favorite character from Genshin Impact
+                                                    for the longest time, and so I wanted to make something that captured her
+                                                    energy. Inspired by the League of Legends splash art styles, this is one of the
+                                                    biggest digital canvases I've ever worked on, and I’m really happy with
+                                                    how it turned out.
+                                                </Scramble>
+                                            </Textbox>
+                                        </div>
 
                                         <div className="hidden lg:block justify-start"><Button href=""> more
                                             detail </Button>
@@ -136,14 +140,16 @@ export default function Home() {
 
                 <div className={`sticky top-0 z-20 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
                     <div className="flex flex-col min-h-[100dvh] justify-center items-center">
-                        <div className="flex flex-col justify-center items-center space-y-10 lg:py-16">
+                        <div className="flex flex-col justify-center items-center space-y-10 lg:py-12">
                             <div className="space-y-5">
 
-                                <div className="lg:hidden"><DottedLineSeparator align="left"> [ 02 ] </DottedLineSeparator> </div>
+                                <div className="lg:hidden"><DottedLineSeparator align="left"> [ 02
+                                    ] </DottedLineSeparator></div>
 
                                 <div className="lg:hidden"><Title size="small"> raven </Title></div>
 
-                                <div className="flex flex-col-reverse space-y-reverse md:space-y-reverse lg:flex-row lg:justify-between space-y-5 md:space-y-7 lg:space-y-0">
+                                <div
+                                    className="flex flex-col-reverse space-y-reverse md:space-y-reverse lg:flex-row lg:justify-between space-y-5 md:space-y-7 lg:space-y-0">
 
                                     <div className="lg:hidden flex justify-center items-center"><Button
                                         href=""> more detail </Button></div>
@@ -159,15 +165,18 @@ export default function Home() {
 
                                         <div className="flex flex-col justify-evenly lg:space-y-7 lg:text-end">
 
-                                            <Textbox>
-                                                <Scramble>I participated in a "Draw This In Your Style Challenge" for Raven, a
-                                                    character by another artist. Raven was a great learning experience
-                                                    for me, especially in drawing metal, and marked my second attempt into
-                                                    drawing better backgrounds after Raiden. This project pushed me to grow as an artist and expand
-                                                    my skills, and I was very happy to have been featured on the front of the
-                                                    artist's post at the end of the competition!
-                                                </Scramble>
-                                            </Textbox>
+                                            <div className={`flex flex-grow w-full`}>
+                                                <Textbox>
+                                                    <Scramble>
+                                                        I participated in a "Draw This In Your Style Challenge" for
+                                                        Raven, a character by another artist. Raven was a great learning experience
+                                                        for me, especially in drawing metal, and marked my second attempt
+                                                        into drawing better backgrounds after Raiden. This project pushed me to
+                                                        grow as an artist and expand my skills, and I was very happy to have been featured on the front
+                                                        of the artist's post at the end of the competition!
+                                                    </Scramble>
+                                                </Textbox>
+                                            </div>
 
                                             <div className="hidden lg:block justify-end"><Button href=""> more
                                                 detail </Button></div>
@@ -207,7 +216,7 @@ export default function Home() {
 
                 <div
                     className={`hidden lg:block sticky top-0 z-30 bg-main-light ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
-                    <div className="flex justify-center items-center py-10 my-10">
+                    <div className="flex justify-center items-center py-10 my-16">
                         <Button href="/gallery"> view my gallery </Button>
                     </div>
                 </div>

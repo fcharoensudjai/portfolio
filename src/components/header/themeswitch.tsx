@@ -29,7 +29,7 @@ export default function ThemeSwitch() {
                        alt="switch to light mode"
                        width={30}
                        height={30}
-                       className={"md:w-[36px] md:h-[36px]"}
+                       className={"lg:w-[36px] lg:h-[36px]"}
                 />
             ) : (
                 <Image
@@ -37,7 +37,7 @@ export default function ThemeSwitch() {
                     alt="switch to dark mode"
                     width={30}
                     height={30}
-                    className={"md:w-[36px] md:h-[36px]"}
+                    className={"lg:w-[36px] lg:h-[36px]"}
                 />
             )}
         </button>
