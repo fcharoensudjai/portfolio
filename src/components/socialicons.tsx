@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import React from "react";
 import { useTheme } from "next-themes";
+import {UnderlinedLink} from "@/components/underlinedlink";
 
 export const SocialIcons = () => {
     const { theme } = useTheme();
@@ -10,7 +11,13 @@ export const SocialIcons = () => {
         <div className="flex items-center space-x-2">
 
             <div className="flex md:hidden space-x-2">
-                <Link href="https://www.linkedin.com/in/fasaich/">
+
+                <a
+                    href="https://www.linkedin.com/in/fasaich/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative inline-block"
+                >
                     <Image
                         src={theme === "dark" ? "/icons/dark/linkedindark.svg" : "/icons/light/linkedin.svg"}
                         alt="linkedin"
@@ -18,8 +25,14 @@ export const SocialIcons = () => {
                         height={30}
                         className="max-w-[35px]"
                     />
-                </Link>
-                <Link href="#">
+                </a>
+
+                <a
+                    href="https://www.instagram.com/fuzz_ch/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative inline-block"
+                >
                     <Image
                         src={theme === "dark" ? "/icons/dark/instagramdark.svg" : "/icons/light/instagram.svg"}
                         alt="instagram"
@@ -27,9 +40,14 @@ export const SocialIcons = () => {
                         height={30}
                         className="max-w-[35px]"
                     />
-                </Link>
+                </a>
 
-                <Link href="#">
+                <a
+                    href="https://www.artstation.com/fuzz_ch"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative inline-block"
+                >
                     <div className={"w-[30px]"}>
                         <div className={"relative w-[28px] h-[30px]"}>
                             <Image
@@ -43,9 +61,14 @@ export const SocialIcons = () => {
                             />
                         </div>
                     </div>
-                </Link>
+                </a>
 
-                <Link href="#">
+                <a
+                    href="https://www.instagram.com/fuzz_ch/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative inline-block"
+                >
                     <Image
                         src={theme === "dark" ? "/icons/dark/youtubedark.svg" : "/icons/light/youtube.svg"}
                         alt="youtube"
@@ -53,15 +76,17 @@ export const SocialIcons = () => {
                         height={30}
                         className="max-w-[35px]"
                     />
-                </Link>
+                </a>
             </div>
 
 
-            <div className="hidden md:flex space-x-3 text-md md:space-x-5">
-                <a href="https://www.linkedin.com/in/fasaich/" className="text-link"> linkedin </a>
-                <a href="#" className="text-link"> instagram </a>
-                <a href="#" className="text-link"> artstation </a>
-                <a href="#" className="text-link"> youtube </a>
+            <div className="hidden md:flex space-x-3 text-md font-mono md:space-x-5">
+                <UnderlinedLink href="https://www.linkedin.com/in/fasaich/"
+                                isExternal={true}> linkedin </UnderlinedLink>
+                <UnderlinedLink href="https://www.instagram.com/fuzz_ch/" isExternal={true}> instagram </UnderlinedLink>
+                <UnderlinedLink href="https://www.artstation.com/fuzz_ch"
+                                isExternal={true}> artstation </UnderlinedLink>
+                <UnderlinedLink href="https://www.youtube.com/@fuzz_ch" isExternal={true}> youtube </UnderlinedLink>
             </div>
         </div>
     );

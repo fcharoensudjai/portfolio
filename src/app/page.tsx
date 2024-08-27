@@ -50,148 +50,183 @@ export default function Home() {
 
             </div>
 
-            <div className="px-6 md:px-16 xl:px-20 space-y-8 lg:space-y-12 my-7">
+            <div id={"recents"} className="px-6 md:px-16 xl:px-20 space-y-[25dvh] lg:space-y-12 my-7">
 
-                <Title size="medium">
-                    <div id="recents" className="fixed-line-spacing scroll-mt-[120.28px] lg:scroll-mt-[148.02px]">
-                        recent works
-                    </div>
-                </Title>
+                <div className="sticky top-0 z-0">
+                    <div className="flex min-h-[100dvh] justify-center items-center">
+
+                        <div className="flex flex-col space-y-6 lg:space-y-7 xl:space-y-10">
+
+                            <Title size="medium">
+                                <div className="fixed-line-spacing scroll-mt-[120.28px] lg:scroll-mt-[148.02px]"> recent
+                                    works
+                                </div>
+                            </Title>
 
 
-                <div className="lg:w-[65%]">
-                    <Textbox>
-                        Here are the previews for some of the pieces I've been working on lately. Feel free to click on
-                        them to see the full image, view some
-                        more details, or click on the gallery button to view all of them!
-                    </Textbox>
-                </div>
-
-                <div className="flex min-h-[100dvh] justify-center items-center">
-                    <div className="space-y-5">
-
-                        <div className="lg:hidden"><DottedLineSeparator align="left"> [ 01 ] </DottedLineSeparator>
-                        </div>
-
-                        <div className="lg:hidden"><Title size="small"> raiden shogun </Title></div>
-
-                        <div
-                            className="flex flex-col lg:flex-row lg:justify-between justify-center lg:space-x-16 space-y-5 md:space-y-7 lg:space-y-0">
-
-                            <div className="relative lg:w-[65%]">
-                                <Image
-                                    src="/images/raiden-shogun/raiden-home.png"
-                                    alt="snippet of raiden shogun"
-                                    width={1183}
-                                    height={851}
-                                    style={{objectFit: "cover"}}
-                                    quality={60}
-                                    className="w-full h-auto lg:h-full lg:w-auto"
-                                />
+                            <div className="lg:w-[65%]">
+                                <Textbox>
+                                    Here are the previews for some of the pieces I've been working on lately. Feel free
+                                    to click on them to see the full image, view some more details,
+                                    or click on the gallery button to view all of them!
+                                </Textbox>
                             </div>
 
+                            <div> <Button href="#recents"> view my gallery </Button></div>
+                        </div>
 
-                            <div className="lg:max-w-[45%] flex flex-col lg:space-y-5">
+                    </div>
+                </div>
 
-                                <div className="hidden lg:block"><DottedLineSeparator align="left"> [ 01
-                                    ] </DottedLineSeparator></div>
+                <div className={`sticky top-0 z-10 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+                    <div className="flex min-h-[100dvh] justify-center items-center">
+                        <div className="space-y-5">
 
-                                <div className="hidden lg:block"><Title size="small"> raiden shogun </Title></div>
+                            <div className="lg:hidden"><DottedLineSeparator align="left"> [ 01 ] </DottedLineSeparator>
+                            </div>
 
-                                <div className="flex flex-col justify-evenly lg:space-y-7">
+                            <div className="lg:hidden"><Title size="small"> raiden shogun </Title></div>
 
-                                    <Textbox>
-                                        Raiden Shogun has been my favorite character from Genshin Impact for the longest
-                                        time, and so I wanted to make something that captured her energy. Inspired by
-                                        the
-                                        League of Legends splash art styles, this is one of the biggest digital canvases
-                                        I've ever worked on, and I’m really happy with how it turned out.
-                                    </Textbox>
+                            <div
+                                className="flex flex-col lg:flex-row lg:justify-between justify-center lg:space-x-16 space-y-5 md:space-y-7 lg:space-y-0">
 
-                                    <div className="hidden lg:block justify-start"><Button href=""> more
-                                        detail </Button>
+                                <div className="relative lg:w-[65%]">
+                                    <Image
+                                        src="/images/raiden-shogun/raiden-home.png"
+                                        alt="snippet of raiden shogun"
+                                        width={1183}
+                                        height={851}
+                                        style={{objectFit: "cover"}}
+                                        quality={60}
+                                        className="w-full h-auto lg:h-full lg:w-auto"
+                                    />
+                                </div>
+
+
+                                <div className="lg:max-w-[45%] flex flex-col lg:space-y-5">
+
+                                    <div className="hidden lg:block"><DottedLineSeparator align="left"> [ 01
+                                        ] </DottedLineSeparator></div>
+
+                                    <div className="hidden lg:block"><Title size="small"> raiden shogun </Title></div>
+
+                                    <div className="flex flex-col justify-evenly lg:space-y-7">
+
+                                        <Textbox>
+                                            Raiden Shogun has been my favorite character from Genshin Impact for the
+                                            longest
+                                            time, and so I wanted to make something that captured her energy. Inspired
+                                            by
+                                            the
+                                            League of Legends splash art styles, this is one of the biggest digital
+                                            canvases
+                                            I've ever worked on, and I’m really happy with how it turned out.
+                                        </Textbox>
+
+                                        <div className="hidden lg:block justify-start"><Button href=""> more
+                                            detail </Button>
+                                        </div>
+
                                     </div>
 
                                 </div>
 
+                                <div className="lg:hidden flex justify-center items-center"><Button href=""> more
+                                    detail </Button></div>
+
                             </div>
-
-                            <div className="lg:hidden flex justify-center items-center"><Button href=""> more
-                                detail </Button></div>
-
                         </div>
                     </div>
                 </div>
 
-                <div className="flex min-h-[100dvh] justify-center items-center">
-                    <div className="space-y-5">
+                <div className={`sticky top-0 z-20 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+                    <div className="flex min-h-[100dvh] justify-center items-center">
+                        <div className="flex flex-col justify-center items-center space-y-16">
+                            <div className="space-y-5">
 
-                        <div className="lg:hidden"><DottedLineSeparator align="left"> [ 02 ] </DottedLineSeparator>
-                        </div>
+                                <div className="lg:hidden"><DottedLineSeparator align="left"> [ 02
+                                    ] </DottedLineSeparator>
+                                </div>
 
-                        <div className="lg:hidden"><Title size="small"> raven </Title></div>
+                                <div className="lg:hidden"><Title size="small"> raven </Title></div>
 
-                        <div
-                            className="flex flex-col-reverse space-y-reverse md:space-y-reverse lg:flex-row lg:justify-between space-y-5 md:space-y-7 lg:space-y-0">
+                                <div
+                                    className="flex flex-col-reverse space-y-reverse md:space-y-reverse lg:flex-row lg:justify-between space-y-5 md:space-y-7 lg:space-y-0">
 
-                            <div className="lg:hidden flex justify-center items-center"><Button href=""> more
-                                detail </Button></div>
+                                    <div className="lg:hidden flex justify-center items-center"><Button href=""> more
+                                        detail </Button></div>
 
-                            <div className="lg:max-w-[45%] flex flex-col lg:space-y-5 lg:mr-16">
+                                    <div className="lg:max-w-[45%] flex flex-col lg:space-y-5 lg:mr-16">
 
-                                <div className="hidden lg:block"><DottedLineSeparator align="right"> [ 02
-                                    ] </DottedLineSeparator></div>
+                                        <div className="hidden lg:block"><DottedLineSeparator align="right"> [ 02
+                                            ] </DottedLineSeparator></div>
 
-                                <div className="hidden lg:block text-end"><Title size="small"> raven </Title></div>
+                                        <div className="hidden lg:block text-end"><Title size="small"> raven </Title>
+                                        </div>
 
-                                <div className="flex flex-col justify-evenly lg:space-y-7 lg:text-end">
+                                        <div className="flex flex-col justify-evenly lg:space-y-7 lg:text-end">
 
-                                    <Textbox>
-                                        I participated in a "Draw This In Your Style Challenge" for Raven, a character
-                                        by
-                                        another artist. Raven was a great learning experience for me, especially in
-                                        drawing
-                                        metal, and marked my second attempt into drawing better backgrounds after
-                                        Raiden.
-                                        This project pushed me to grow as an artist and expand my skills,
-                                        and I was very happy to have been featured on the front of the artist's post at
-                                        the
-                                        end of the competition!
-                                    </Textbox>
+                                            <Textbox>
+                                                I participated in a "Draw This In Your Style Challenge" for Raven, a
+                                                character
+                                                by
+                                                another artist. Raven was a great learning experience for me, especially
+                                                in
+                                                drawing
+                                                metal, and marked my second attempt into drawing better backgrounds
+                                                after
+                                                Raiden.
+                                                This project pushed me to grow as an artist and expand my skills,
+                                                and I was very happy to have been featured on the front of the artist's
+                                                post
+                                                at
+                                                the
+                                                end of the competition!
+                                            </Textbox>
 
-                                    <div className="hidden lg:block justify-end"><Button href=""> more detail </Button>
+                                            <div className="hidden lg:block justify-end"><Button href=""> more
+                                                detail </Button>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div className="relative lg:w-[50%]">
+                                        <Image
+                                            src="/images/raven/raven-home.png"
+                                            alt="snippet of raven"
+                                            width={1183}
+                                            height={851}
+                                            style={{
+                                                objectFit: "cover",
+                                                objectPosition: "80% 50%"
+                                            }}
+                                            quality={80}
+                                            className="w-full h-auto lg:h-full lg:w-auto"
+                                        />
                                     </div>
 
                                 </div>
 
+                                <div className="lg:hidden flex justify-center items-center">
+                                    <Button href=""> view my gallery </Button>
+                                </div>
+
                             </div>
 
-                            <div className="relative lg:w-[50%]">
-                                <Image
-                                    src="/images/raven/raven-home.png"
-                                    alt="snippet of raven"
-                                    width={1183}
-                                    height={851}
-                                    style={{
-                                        objectFit: "cover",
-                                        objectPosition: "80% 50%"
-                                    }}
-                                    quality={80}
-                                    className="w-full h-auto lg:h-full lg:w-auto"
-                                />
-                            </div>
+                            <div className="hidden lg:block justify-center items-center"><Button href=""> view my
+                                gallery </Button></div>
 
                         </div>
-
-                        <div className="lg:hidden flex justify-center items-center"><Button href=""> view my
-                            gallery </Button></div>
 
                     </div>
                 </div>
 
             </div>
 
-            <div id="intro" className=" px-6 md:px-16 xl:px-20 space-y-5 lg:space-y-12 my-7 min-h-[85dvh] flex flex-col justify-center items-start scroll-mt-[75.48px]">
+            <div id="intro"
+                 className=" px-6 md:px-16 xl:px-20 space-y-5 lg:space-y-12 my-7 min-h-[85dvh] flex flex-col justify-center items-start scroll-mt-[75.48px]">
 
                 <div id="" className="md:hidden fixed-line-spacing">
                     <Title size="medium">

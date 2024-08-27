@@ -2,6 +2,7 @@ import { LogoButton } from "@/components/logobutton";
 import { LocalTime } from "@/components/localtime";
 import Image from "next/image";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 
 export const Footer = () => {
 
@@ -18,12 +19,14 @@ export const Footer = () => {
                         <div className="hidden lg:block"><LogoButton size="medium"/></div>
 
                         <div className="lg:hidden h-[80%] w-auto">
-                            <Image
+                            <Link href="/#home">
+                                <Image
                                 src={theme === "dark" ? "/icons/dark/logodark.svg" : "/icons/light/logo.svg"}
                                 alt={"logo"}
                                 width={200}
                                 height={200}
-                            />
+                                />
+                            </Link>
                         </div>
 
                     </div>

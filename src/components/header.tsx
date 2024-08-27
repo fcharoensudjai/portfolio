@@ -9,6 +9,8 @@ import ThemeSwitch from "./themeswitch";
 import { LogoButton } from "@/components/logobutton";
 import { MobileNav } from "@/components/mobilenav";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import {Scrollbar} from "@/components/scrollbar";
+import {UnderlinedLink} from "@/components/underlinedlink";
 
 export const Header = () => {
     const [isNavOpen, setIsNavOpen] = useState(false);
@@ -17,29 +19,12 @@ export const Header = () => {
     const path = usePathname();
     const { theme } = useTheme();
 
-    const { scrollYProgress } = useScroll();
-    const reverseScrollYProgress = useTransform(scrollYProgress, [0, 1], [1, 0]);
-    const scaleX = useSpring(reverseScrollYProgress, {
-        stiffness: 100,
-        damping: 50,
-        restDelta: 0.001
-    });
-
-
     return (
         <div>
 
-            <header className="fixed top-0 left-0 right-0 h-[3px] z-50 bg-white mix-blend-difference">
-                <motion.div
-                    style={{
-                        scaleX,
-                        backgroundColor: "white",
-                    }}
-                    className="h-[3px] origin-right mix-blend-difference"
-                />
-            </header>
+            <Scrollbar />
 
-            <header className={`fixed top-0 left-0 bg-transparent backdrop-blur-[8px] w-screen z-40`}>
+            <header className={`fixed top-0 left-0 bg-transparent backdrop-blur-[8px] w-screen z-40 ${theme === "dark" ? "text-text-dark" : "text-text-light"}`}>
 
                 <div className="flex items-center justify-between px-4 py-2 md:px-6">
 
@@ -49,29 +34,29 @@ export const Header = () => {
                         <nav className="hidden md:flex md:items-center">
                             <ul className="flex space-x-4 text-md">
                                 <li>
-                                    <Link
-                                        className={path === "/#recents" ? "underline underline-offset-[10px] decoration-accent-light" : ""}
-                                        href="/#recents"> recents </Link>
+                                    <UnderlinedLink href="/#recents">
+                                        recents
+                                    </UnderlinedLink>
                                 </li>
                                 <li>
-                                    <Link
-                                        className={path === "/gallery" ? "underline underline-offset-[10px] decoration-accent-light" : ""}
-                                        href="/gallery"> gallery </Link>
+                                    <UnderlinedLink href="/gallery">
+                                        gallery
+                                    </UnderlinedLink>
                                 </li>
                                 <li>
-                                    <Link
-                                        className={path === "/#intro" ? "underline underline-offset-[10px]  decoration-accent-light" : ""}
-                                        href="/#intro"> intro </Link>
+                                    <UnderlinedLink href="/#intro">
+                                        intro
+                                    </UnderlinedLink>
                                 </li>
                                 <li>
-                                    <Link
-                                        className={path === "/about" ? "underline underline-offset-[10px]  decoration-accent-light" : ""}
-                                        href="/about"> about </Link>
+                                    <UnderlinedLink href="/about">
+                                        about
+                                    </UnderlinedLink>
                                 </li>
                                 <li>
-                                    <Link
-                                        className={path === "/#contact" ? "underline underline-offset-[10px]  decoration-accent-light" : ""}
-                                        href="/#contact"> contact </Link>
+                                    <UnderlinedLink href="/#contact">
+                                        contact
+                                    </UnderlinedLink>
                                 </li>
                             </ul>
                         </nav>

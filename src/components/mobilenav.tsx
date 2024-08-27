@@ -9,6 +9,8 @@ import { LogoButton } from "@/components/logobutton";
 import { LocalTime } from "@/components/localtime";
 import { SocialIcons } from "@/components/socialicons";
 import { Poppins } from "next/font/google";
+import {Scrollbar} from "@/components/scrollbar";
+import {UnderlinedLink} from "@/components/underlinedlink";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -25,12 +27,14 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
     const path = usePathname();
 
     return (
+
         <motion.div
             initial={{ x: "100%" }}
             animate={{ x: isNavOpen ? 0 : "100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className={`fixed inset-0 z-50 ${theme === "dark" ? "bg-middle-colour" : "bg-text-dark"} ${poppins.className}`}
         >
+            <Scrollbar />
 
             <div className={`flex flex-col h-full ${poppins.className}`}>
 
@@ -54,51 +58,29 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
                     <ul className="flex flex-col space-y-3 text-xl text-right">
 
                         <li>
-                            <Link onClick={toggleNav}
-                                  className={path === "/" ? "underline underline-offset-[12px] decoration-accent-light" : ""}
-                                  href="/#home">
-                                home
-                            </Link>
-                        </li>
-
-                        <li>
-                            <Link onClick={toggleNav}
-                                  className={path === "/recents" ? "underline underline-offset-[12px] decoration-accent-light" : ""}
-                                  href="/#recents">
+                            <UnderlinedLink href="/#recents" onClick={toggleNav}>
                                 recents
-                            </Link>
+                            </UnderlinedLink>
                         </li>
-
                         <li>
-                            <Link onClick={toggleNav}
-                                  className={path === "/gallery" ? "underline underline-offset-[12px] decoration-accent-light" : ""}
-                                  href="/gallery">
+                            <UnderlinedLink href="/gallery" onClick={toggleNav}>
                                 gallery
-                            </Link>
+                            </UnderlinedLink>
                         </li>
-
                         <li>
-                            <Link onClick={toggleNav}
-                                  className={path === "/#intro" ? "underline underline-offset-[12px] decoration-accent-light" : ""}
-                                  href="/#intro">
+                            <UnderlinedLink href="/#intro" onClick={toggleNav}>
                                 intro
-                            </Link>
+                            </UnderlinedLink>
                         </li>
-
                         <li>
-                            <Link onClick={toggleNav}
-                                  className={path === "/about" ? "underline underline-offset-[12px] decoration-accent-light" : ""}
-                                  href="/about">
+                            <UnderlinedLink href="/about" onClick={toggleNav}>
                                 about
-                            </Link>
+                            </UnderlinedLink>
                         </li>
-
                         <li>
-                            <Link onClick={toggleNav}
-                                  className={path === "/#contact" ? "underline underline-offset-[12px] decoration-accent-light" : ""}
-                                  href="/#contact">
+                            <UnderlinedLink href="/#contact" onClick={toggleNav}>
                                 contact
-                            </Link>
+                            </UnderlinedLink>
                         </li>
 
                     </ul>

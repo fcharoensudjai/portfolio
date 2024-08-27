@@ -11,7 +11,7 @@
   "dependencies": {
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.5.1",
-    "framer-motion": "^11.3.29",
+    "framer-motion": "^11.3.30",
     "intersection-observer": "^0.12.2",
     "next": "^14.2.6",
     "next-themes": "^0.3.0",

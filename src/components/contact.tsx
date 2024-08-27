@@ -3,7 +3,7 @@ import {Textbox} from "@/components/textbox";
 
 export const Contact = () => {
     return (
-        <div id="contact" className="flex flex-grow flex-col min-h-50dvh">
+        <div id="contact" className="flex flex-grow flex-col min-h-[75dvh]">
 
             <div className={"flex flex-grow justify-center items-center w-full"}>
                 <Title size="large">
