@@ -13,9 +13,10 @@
     "classnames": "^2.5.1",
     "framer-motion": "^11.3.30",
     "intersection-observer": "^0.12.2",
+    "lenis": "^1.1.13",
     "next": "^14.2.6",
     "next-themes": "^0.3.0",
-    "react": "^18",
+    "react": "^18.3.1",
     "react-dom": "^18",
     "react-live-clock": "^6.1.23-beta"
   },

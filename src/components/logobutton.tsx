@@ -11,7 +11,7 @@ interface LogoButtonProps {
 const logoButtonVariants = cva("relative", {
     variants: {
         size: {
-            small: "w-32 h-[49.9px] lg:w-56 lg:h-[77.63px]",
+            small: "w-32 h-[49.9px] xl:w-56 xl:h-[77.63px]",
             medium: "w-[595.34px] h-[192px]",
         },
     },

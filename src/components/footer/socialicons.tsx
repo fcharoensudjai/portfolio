@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Image from "next/image";
 import React from "react";
 import { useTheme } from "next-themes";
@@ -80,7 +79,7 @@ export const SocialIcons = () => {
             </div>
 
 
-            <div className="hidden md:flex space-x-3 text-md font-mono md:space-x-5">
+            <div className="hidden md:flex space-x-3 text-sm lg:text-md font-mono md:space-x-5">
                 <UnderlinedLink href="https://www.linkedin.com/in/fasaich/"
                                 isExternal={true}> linkedin </UnderlinedLink>
                 <UnderlinedLink href="https://www.instagram.com/fuzz_ch/" isExternal={true}> instagram </UnderlinedLink>

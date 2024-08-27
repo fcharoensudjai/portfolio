@@ -1,15 +1,14 @@
 import React from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
-import ThemeSwitch from "@/components/themeswitch";
+import ThemeSwitch from "@/components/header/themeswitch";
 import { LogoButton } from "@/components/logobutton";
-import { LocalTime } from "@/components/localtime";
-import { SocialIcons } from "@/components/socialicons";
+import { LocalTime } from "@/components/footer/localtime";
+import { SocialIcons } from "@/components/footer/socialicons";
 import { Poppins } from "next/font/google";
-import {Scrollbar} from "@/components/scrollbar";
+import {Scrollbar} from "@/components/header/scrollbar";
 import {UnderlinedLink} from "@/components/underlinedlink";
 
 const poppins = Poppins({
@@ -57,6 +56,11 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
                 <div className="flex flex-grow justify-end items-center pe-8 pb-[68.38px]">
                     <ul className="flex flex-col space-y-3 text-xl text-right">
 
+                        <li>
+                            <UnderlinedLink href="/#home" onClick={toggleNav}>
+                                home
+                            </UnderlinedLink>
+                        </li>
                         <li>
                             <UnderlinedLink href="/#recents" onClick={toggleNav}>
                                 recents

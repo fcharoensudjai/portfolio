@@ -1,5 +1,6 @@
 import BlinkingCaret from "@/components/blinkingcaret/blinkingcaret";
 import React from "react";
+import { Scramble } from "@/components/scrambler";
 
 interface TextboxProps {
     children: React.ReactNode;
@@ -7,9 +8,9 @@ interface TextboxProps {
 
 export const Textbox: React.FC<TextboxProps> = ( { children } ) => {
   return (
-      <div className={"md:text-sm lg:text-md text-xs"}>
+      <div className={"md:text-sm xl:text-md text-xs"}>
           {children}
-          <span className="caret-wrapper"> <BlinkingCaret/> </span>
+          <span className="relative inline caret-wrapper"> <BlinkingCaret/> </span>
       </div>
 
   )

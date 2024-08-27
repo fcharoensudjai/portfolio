@@ -1,5 +1,5 @@
-import {Title} from "@/components/title";
-import {Textbox} from "@/components/textbox";
+import { Title } from "@/components/title";
+import { Textbox } from "@/components/textbox";
 
 export const Contact = () => {
     return (

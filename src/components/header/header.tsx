@@ -1,22 +1,19 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import React, { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import ThemeSwitch from "./themeswitch";
 import { LogoButton } from "@/components/logobutton";
-import { MobileNav } from "@/components/mobilenav";
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
-import {Scrollbar} from "@/components/scrollbar";
+import { MobileNav } from "@/components/header/mobilenav";
+import {Scrollbar} from "@/components/header/scrollbar";
 import {UnderlinedLink} from "@/components/underlinedlink";
 
 export const Header = () => {
     const [isNavOpen, setIsNavOpen] = useState(false);
     const toggleNav = () => setIsNavOpen(!isNavOpen);
 
-    const path = usePathname();
     const { theme } = useTheme();
 
     return (
@@ -32,7 +29,7 @@ export const Header = () => {
 
                     <div className="flex items-center space-x-4 mix-blend-difference">
                         <nav className="hidden md:flex md:items-center">
-                            <ul className="flex space-x-4 text-md">
+                            <ul className="flex space-x-4 text-xs lg:text-sm xl:text-md">
                                 <li>
                                     <UnderlinedLink href="/#recents">
                                         recents
