@@ -79,7 +79,7 @@ export default function Home() {
 
                 <div className={`sticky top-0 z-10 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
                     <div className="flex min-h-[100dvh] justify-center items-center">
-                        <div className="space-y-5">
+                        <div className="py-12 space-y-2 lg:space-y-5">
 
                             <div className="lg:hidden"><DottedLineSeparator align="left"> [ 01 ] </DottedLineSeparator> </div>
 
@@ -100,20 +100,18 @@ export default function Home() {
                                 </div>
 
 
-                                <div className="lg:w-[45%] flex flex-col lg:space-y-5">
+                                <div className="lg:min-w-[45%] lg:max-w-[45%] flex flex-col lg:space-y-5">
 
-                                    <div className="hidden lg:block"><DottedLineSeparator align="left"> [ 01
-                                        ] </DottedLineSeparator></div>
+                                    <div className="hidden lg:block"><DottedLineSeparator align="left"> [ 01 ] </DottedLineSeparator></div>
 
-                                    <div className="hidden lg:block"><Title size="small"> raiden shogun </Title>
-                                    </div>
+                                    <div className="hidden lg:block"><Title size="small"> raiden shogun </Title></div>
 
                                     <div className="flex flex-col justify-evenly lg:space-y-7">
 
                                         <div className={`flex flex-grow w-full`}>
                                             <Textbox>
                                                 <Scramble>
-                                                    Raiden Shogun has been my favorite character from Genshin Impact
+                                                    Raiden Shogun has been my favourite character from Genshin Impact
                                                     for the longest time, and so I wanted to make something that captured her
                                                     energy. Inspired by the League of Legends splash art styles, this is one of the
                                                     biggest digital canvases I've ever worked on, and I’m really happy with
@@ -141,10 +139,9 @@ export default function Home() {
                 <div className={`sticky top-0 z-20 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
                     <div className="flex flex-col min-h-[100dvh] justify-center items-center">
                         <div className="flex flex-col justify-center items-center space-y-10 lg:py-12">
-                            <div className="space-y-5">
+                            <div className="py-12 space-y-2 lg:space-y-5">
 
-                                <div className="lg:hidden"><DottedLineSeparator align="left"> [ 02
-                                    ] </DottedLineSeparator></div>
+                                <div className="lg:hidden"><DottedLineSeparator align="left"> [ 02 ] </DottedLineSeparator></div>
 
                                 <div className="lg:hidden"><Title size="small"> raven </Title></div>
 
@@ -156,8 +153,7 @@ export default function Home() {
 
                                     <div className="lg:w-[45%] flex flex-col lg:space-y-5 lg:mr-16">
 
-                                        <div className="hidden lg:block"><DottedLineSeparator align="right"> [ 02
-                                            ] </DottedLineSeparator></div>
+                                        <div className="hidden lg:block"><DottedLineSeparator align="right"> [ 02 ] </DottedLineSeparator></div>
 
                                         <div className="hidden lg:block text-end"><Title
                                             size="small"> raven </Title>

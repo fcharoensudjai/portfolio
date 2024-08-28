@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 interface ScrambleProps {
@@ -6,6 +6,7 @@ interface ScrambleProps {
 }
 
 export const Scramble: React.FC<ScrambleProps> = ({ children }) => {
+
     const letters = "กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮ";
 
     const [scrambled, setScrambled] = useState<string>(children);
@@ -25,12 +26,12 @@ export const Scramble: React.FC<ScrambleProps> = ({ children }) => {
         const spaces = chars.map((char, index) => (char === ' ' ? index : -1)).filter(index => index !== -1);
         const shuffledSpaces = shuffleArray([...spaces]);
 
-        return chars.map((char, index) => {
+        return chars.map((char, index) => { //if space, leave it alone
             if (char === ' ') {
                 return shuffledSpaces.includes(index) ? ' ' : ' ';
             }
             return index < intervalCount ? char : letters[Math.floor(Math.random() * letters.length)];
-        }).join("");
+        }).join(""); // if not a space, shuffle randomly, and choose letters from letters constant
     }
 
     function handleMouseOver() {
@@ -56,7 +57,6 @@ export const Scramble: React.FC<ScrambleProps> = ({ children }) => {
     }
 
     useEffect(() => {
-        // Clean up interval on unmount
         return () => {
             if (intervalId) {
                 clearInterval(intervalId);

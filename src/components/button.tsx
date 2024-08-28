@@ -23,6 +23,8 @@ export const Button = ({ children, href }: ButtonProps) => {
                 whileTap={{
                     scale: 0.95,
                     color: theme === "dark" ? "#CD7A7A" : "#DDA6A6",
+                    backgroundColor: theme === "dark" ? "#E8E7E2" : "#242424",
+                    borderColor: theme === "dark" ? "#E8E7E2" : "#242424"
                 }}
                 whileHover={{
                     scale: 1.0,
