@@ -9,13 +9,15 @@ interface UnderlineLinkProps {
     href: string;
     onClick?: () => void;
     isExternal?: boolean;
+    active?: boolean;
 }
 
-export const UnderlinedLink: React.FC<UnderlineLinkProps> = ({ href, children, onClick, isExternal = false }) => {
+export const UnderlinedLink: React.FC<UnderlineLinkProps> = ({ href, children, onClick, isExternal = false, active = false }) => {
+
     const [hovered, setHovered] = useState(false);
     const { theme } = useTheme();
     const path = usePathname();
-    const isActive = path === href;
+    const isCurrentPath = path === href;
 
     const content = isExternal ? (
         <a
@@ -36,6 +38,7 @@ export const UnderlinedLink: React.FC<UnderlineLinkProps> = ({ href, children, o
     return (
         <motion.div
             className="relative inline-block"
+            onClick={() => setHovered(true)}
             onHoverStart={() => setHovered(true)}
             onHoverEnd={() => setHovered(false)}
         >
@@ -44,7 +47,7 @@ export const UnderlinedLink: React.FC<UnderlineLinkProps> = ({ href, children, o
                 className={`
                 border-t-[3px] transition-all duration-[350ms] ease-in-out
                 ${theme === "dark" ? "border-accent-dark" : "border-accent-light"} 
-                ${hovered || isActive ? "w-full" : "w-0"} 
+                ${hovered || isCurrentPath || active ? "w-full" : "w-0"} 
             `}>
             </div>
         </motion.div>

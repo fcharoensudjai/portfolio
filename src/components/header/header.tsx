@@ -2,13 +2,12 @@
 
 import Image from "next/image";
 import React, { useState } from "react";
-import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import ThemeSwitch from "./themeswitch";
 import { LogoButton } from "@/components/logobutton";
 import { MobileNav } from "@/components/header/mobilenav";
-import {Scrollbar} from "@/components/header/scrollbar";
-import {UnderlinedLink} from "@/components/underlinedlink";
+import { Scrollbar } from "@/components/header/scrollbar";
+import { UnderlinedLink } from "@/components/underlinedlink";
 
 export const Header = () => {
     const [isNavOpen, setIsNavOpen] = useState(false);
@@ -29,7 +28,7 @@ export const Header = () => {
 
                     <div className="flex items-center space-x-4 mix-blend-difference">
                         <nav className="hidden md:flex md:items-center">
-                            <ul className="flex space-x-4 text-xs lg:text-sm xl:text-md">
+                            <ul className="flex space-x-4 md:text-sm xl:text-md text-xs">
                                 <li>
                                     <UnderlinedLink href="/#recents">
                                         recents

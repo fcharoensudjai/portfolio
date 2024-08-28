@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+
 
 interface ScrambleProps {
     children: string;
@@ -21,6 +23,11 @@ export const Scramble: React.FC<ScrambleProps> = ({ children }) => {
         return array;
     }
 
+    const [ref, inView] = useInView({
+        triggerOnce: true,
+        threshold: 0.5
+    });
+
     function scrambleText(text: string, intervalCount: number) {
         const chars = text.split("");
         const spaces = chars.map((char, index) => (char === ' ' ? index : -1)).filter(index => index !== -1);
@@ -31,10 +38,10 @@ export const Scramble: React.FC<ScrambleProps> = ({ children }) => {
                 return shuffledSpaces.includes(index) ? ' ' : ' ';
             }
             return index < intervalCount ? char : letters[Math.floor(Math.random() * letters.length)];
-        }).join(""); // if not a space, shuffle randomly, and choose letters from letters constant
+        }).join(""); // if not a space, shuffle randomly, and choose letters from "letters" constant
     }
 
-    function handleMouseOver() {
+    function handleScramble() {
         const textLength = children.length;
         setIntervalCount(0);
 
@@ -44,7 +51,7 @@ export const Scramble: React.FC<ScrambleProps> = ({ children }) => {
                 setScrambled(scrambleText(children, newCount));
                 return newCount;
             });
-        }, 30);
+        }, 25);
 
         setIntervalId(id);
 
@@ -64,8 +71,14 @@ export const Scramble: React.FC<ScrambleProps> = ({ children }) => {
         };
     }, [intervalId]);
 
+    useEffect(() => {
+        if (inView) {
+            handleScramble();
+        }
+    }, [inView]);
+
     return (
-        <motion.span onHoverStart={handleMouseOver} onClick={handleMouseOver}>
+        <motion.span onHoverStart={handleScramble} onClick={handleScramble} ref={ref}>
             {scrambled}
         </motion.span>
     );
