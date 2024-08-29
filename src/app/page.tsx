@@ -12,8 +12,9 @@ import { Contact } from "@/components/contact";
 import Image from "next/image";
 import { DottedLineSeparator } from "@/components/dottedlineseparator";
 import { Button } from "@/components/button";
-import { Scramble } from "@/styles/scrambler";
-import Fader from "@/styles/fader";
+import { Scramble } from "@/components/stylers/scramblerthai";
+import Fader from "@/components/stylers/fader";
+import {Preloader} from "@/components/stylers/preloader";
 
 export default function Home() {
 
@@ -31,11 +32,13 @@ export default function Home() {
     return (
         <div className={`${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
 
+            <Preloader />
+
             <div id="home" className={`flex flex-col min-h-dvh ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
 
                 <main className="flex flex-col flex-grow items-start justify-center text-left text-xs sm:text-md px-6 md:px-16 xl:px-20">
 
-                    <Fader>
+                    <Fader enterDelay={1.5} once={true}>
 
                         <Title size="large">
                             <div className="fixed-line-spacing mt-[75.58px] lg:mt-[103.22px]">
@@ -45,7 +48,7 @@ export default function Home() {
 
                         <div className="w-[65%] my-4 space-x-2">
                             <Textbox>
-                                <Scramble> [ scroll to explore ] </Scramble>
+                                <Scramble delay={2000} hover={true}> [ scroll to explore ] </Scramble>
                             </Textbox>
                         </div>
 
@@ -239,10 +242,10 @@ export default function Home() {
                 </div>
 
                 <div className={`sticky top-0 z-10 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
-                    <Fader>
+                    <Fader enterDelay={0.6} threshold={0.3}>
                         <div className="flex h-[100dvh] justify-center items-center">
-                            <div className="py-[75.48px] lg:py-0 space-y-3 lg:space-y-5">
-                                <div className="flex justify-center items-center md:mb-[10dvh] md:py-6">
+                            <div className="mt-[75.58px] lg:mt-[103.22px] space-y-3 lg:space-y-5">
+                                <div className="flex justify-center items-center md:mb-[10dvh]">
                                     <Button href="/gallery"> view my gallery </Button>
                                 </div>
                             </div>
@@ -250,10 +253,15 @@ export default function Home() {
                     </Fader>
                 </div>
 
+                <div className={`sticky top-0 z-0 bg-transparent`}>
+                    <div className="flex h-[50dvh] justify-center items-center"> </div>
+                </div>
+
 
             </div>
 
-            <div id="intro" className=" px-6 md:px-16 xl:px-20 space-y-5 lg:space-y-12 my-7 min-h-[100dvh] flex flex-col justify-center items-start">
+            <div id="intro"
+                 className=" px-6 md:px-16 xl:px-20 space-y-5 lg:space-y-12 my-7 min-h-[100dvh] flex flex-col justify-center items-start">
 
                 <Fader>
                     <div className={`py-[75.48px] space-y-3 lg:space-y-5`}>

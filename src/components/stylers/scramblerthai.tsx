@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
-
 interface ScrambleProps {
     children: string;
+    delay?: number; // delay before starting the scramble effect
+    hover?: boolean; // choose whether I want it to have an onHover effect
 }
 
-export const Scramble: React.FC<ScrambleProps> = ({ children }) => {
+export const Scramble: React.FC<ScrambleProps> = ({ children, delay = 500, hover = false }) => { // default delay is 500ms
 
     const letters = "กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮ";
 
@@ -25,7 +26,7 @@ export const Scramble: React.FC<ScrambleProps> = ({ children }) => {
 
     const [ref, inView] = useInView({
         triggerOnce: true,
-        threshold: 0.5
+        threshold: 0.1, // Small threshold to detect when in view
     });
 
     function scrambleText(text: string, intervalCount: number) {
@@ -33,12 +34,12 @@ export const Scramble: React.FC<ScrambleProps> = ({ children }) => {
         const spaces = chars.map((char, index) => (char === ' ' ? index : -1)).filter(index => index !== -1);
         const shuffledSpaces = shuffleArray([...spaces]);
 
-        return chars.map((char, index) => { //if space, leave it alone
+        return chars.map((char, index) => {
             if (char === ' ') {
                 return shuffledSpaces.includes(index) ? ' ' : ' ';
             }
             return index < intervalCount ? char : letters[Math.floor(Math.random() * letters.length)];
-        }).join(""); // if not a space, shuffle randomly, and choose letters from "letters" constant
+        }).join("");
     }
 
     function handleScramble() {
@@ -51,7 +52,7 @@ export const Scramble: React.FC<ScrambleProps> = ({ children }) => {
                 setScrambled(scrambleText(children, newCount));
                 return newCount;
             });
-        }, 25);
+        }, 15);
 
         setIntervalId(id);
 
@@ -64,6 +65,16 @@ export const Scramble: React.FC<ScrambleProps> = ({ children }) => {
     }
 
     useEffect(() => {
+        if (inView) {
+            const delayTimer = setTimeout(() => {
+                handleScramble();
+            }, delay);
+
+            return () => clearTimeout(delayTimer); // Clean up timer if the component unmounts or inView changes
+        }
+    }, [inView, delay]);
+
+    useEffect(() => {
         return () => {
             if (intervalId) {
                 clearInterval(intervalId);
@@ -71,14 +82,11 @@ export const Scramble: React.FC<ScrambleProps> = ({ children }) => {
         };
     }, [intervalId]);
 
-    useEffect(() => {
-        if (inView) {
-            handleScramble();
-        }
-    }, [inView]);
-
     return (
-        <motion.span onHoverStart={handleScramble} onClick={handleScramble} ref={ref}>
+        <motion.span
+            ref={ref}
+            onHoverStart={() => { if (hover) { handleScramble() } } }
+        >
             {scrambled}
         </motion.span>
     );

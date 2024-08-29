@@ -17,7 +17,6 @@ export const Header = () => {
 
     return (
         <div>
-
             <Scrollbar />
 
             <header className={`fixed top-0 left-0 bg-transparent backdrop-blur-[8px] w-screen z-40 ${theme === "dark" ? "text-text-dark" : "text-text-light"}`}>

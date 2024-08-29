@@ -8,8 +8,8 @@ import { LogoButton } from "@/components/logobutton";
 import { LocalTime } from "@/components/footer/localtime";
 import { SocialIcons } from "@/components/footer/socialicons";
 import { Poppins } from "next/font/google";
-import {Scrollbar} from "@/components/header/scrollbar";
-import {UnderlinedLink} from "@/components/underlinedlink";
+import { Scrollbar } from "@/components/header/scrollbar";
+import { UnderlinedLink } from "@/components/underlinedlink";
 
 const poppins = Poppins({
     subsets: ["latin"],
