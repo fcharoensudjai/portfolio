@@ -2,7 +2,6 @@ import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
-import { usePathname } from "next/navigation";
 import ThemeSwitch from "@/components/header/themeswitch";
 import { LogoButton } from "@/components/logobutton";
 import { LocalTime } from "@/components/footer/localtime";

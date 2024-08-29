@@ -14,7 +14,7 @@ export const Contact = () => {
 
             <div className="flex justify-end items-center p-3 md:p-5">
                 <Textbox>
-                    <Scramble delay={2000} hover={true}> [ mail | fuzz.ch04@gmail.com ] </Scramble>
+                    <Scramble delay={2000} hover={true} interval={20}> [ mail | fuzz.ch04@gmail.com ] </Scramble>
                 </Textbox>
             </div>
         </div>

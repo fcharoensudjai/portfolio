@@ -6,9 +6,10 @@ interface ScrambleProps {
     children: string;
     delay?: number; // delay before starting the scramble effect
     hover?: boolean; // choose whether I want it to have an onHover effect
+    interval?: number
 }
 
-export const Scramble: React.FC<ScrambleProps> = ({ children, delay = 500, hover = false }) => { // default delay is 500ms
+export const Scramble: React.FC<ScrambleProps> = ({ children, delay = 500, hover = false, interval = 2}) => { // default delay is 500ms
 
     const letters = "กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮ";
 
@@ -52,7 +53,7 @@ export const Scramble: React.FC<ScrambleProps> = ({ children, delay = 500, hover
                 setScrambled(scrambleText(children, newCount));
                 return newCount;
             });
-        }, 15);
+        }, interval);
 
         setIntervalId(id);
 

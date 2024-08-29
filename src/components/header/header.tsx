@@ -8,10 +8,13 @@ import { LogoButton } from "@/components/logobutton";
 import { MobileNav } from "@/components/header/mobilenav";
 import { Scrollbar } from "@/components/header/scrollbar";
 import { UnderlinedLink } from "@/components/underlinedlink";
+import {ExitAnimation} from "@/components/stylers/page-loading/exitanimation";
 
 export const Header = () => {
     const [isNavOpen, setIsNavOpen] = useState(false);
+    const [isExit, setIsExit] = useState(false);
     const toggleNav = () => setIsNavOpen(!isNavOpen);
+    const toggleExit = () => setIsExit(!isExit);
 
     const { theme } = useTheme();
 
@@ -75,6 +78,8 @@ export const Header = () => {
             </header>
 
             <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav}/>
+
+            <ExitAnimation isExit={isExit}></ExitAnimation>
 
         </div>
     );

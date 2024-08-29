@@ -14,7 +14,7 @@ import { DottedLineSeparator } from "@/components/dottedlineseparator";
 import { Button } from "@/components/button";
 import { Scramble } from "@/components/stylers/scramblerthai";
 import Fader from "@/components/stylers/fader";
-import { Preloader } from "@/components/stylers/preloader";
+import { Preloader } from "@/components/stylers/page-loading/preloader";
 
 export default function Home() {
 
@@ -48,7 +48,7 @@ export default function Home() {
 
                         <div className="w-[65%] my-4 space-x-2">
                             <Textbox>
-                                <Scramble delay={2000} hover={true}> [ scroll to explore ] </Scramble>
+                                <Scramble delay={2000} hover={true} interval={20}> [ scroll to explore ] </Scramble>
                             </Textbox>
                         </div>
 

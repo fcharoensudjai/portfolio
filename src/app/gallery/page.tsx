@@ -6,7 +6,7 @@ import { MobileNav } from "@/components/header/mobilenav";
 import { Footer } from "@/components/footer/footer";
 import { Contact } from "@/components/contact";
 import Fader from "@/components/stylers/fader";
-import { Preloader } from "@/components/stylers/preloader";
+import { Preloader } from "@/components/stylers/page-loading/preloader";
 
 
 export default function Gallery() {
