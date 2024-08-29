@@ -86,6 +86,7 @@ export const Scramble: React.FC<ScrambleProps> = ({ children, delay = 500, hover
         <motion.span
             ref={ref}
             onHoverStart={() => { if (hover) { handleScramble() } } }
+            onClick={() => { if (hover) { handleScramble() } } }
         >
             {scrambled}
         </motion.span>

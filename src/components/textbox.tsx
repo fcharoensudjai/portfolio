@@ -1,6 +1,6 @@
 import BlinkingCaret from "@/components/blinkingcaret/blinkingcaret";
 import React from "react";
-import { Scramble } from "@/components/stylers/scramblerthai";
+
 
 interface TextboxProps {
     children: React.ReactNode;

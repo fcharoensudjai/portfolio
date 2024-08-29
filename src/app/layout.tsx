@@ -3,8 +3,8 @@ import React from "react";
 import { Header } from "@/components/header/header";
 import "./globals.css";
 import { Provider } from "@/app/providers";
-import Loader from "@/components/stylers/loader";
 import Highlighter from "@/components/stylers/highlighter";
+import { Unmounter } from "@/components/stylers/unmounter";
 
 export const metadata: Metadata = {
     title: "fuzzch | portfolio",
@@ -18,9 +18,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Provider>
             <body>
                 <Highlighter/>
-                <Loader />
                 <Header />
-                {children}
+                <Unmounter delay={1000} visible={true}>{children}</Unmounter>
             </body>
         </Provider>
         </html>

@@ -14,7 +14,7 @@ import { DottedLineSeparator } from "@/components/dottedlineseparator";
 import { Button } from "@/components/button";
 import { Scramble } from "@/components/stylers/scramblerthai";
 import Fader from "@/components/stylers/fader";
-import {Preloader} from "@/components/stylers/preloader";
+import { Preloader } from "@/components/stylers/preloader";
 
 export default function Home() {
 
@@ -32,7 +32,7 @@ export default function Home() {
     return (
         <div className={`${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
 
-            <Preloader />
+            <Preloader duration={1100} texts={["hello", "สวัสดี"]} delay={500} />
 
             <div id="home" className={`flex flex-col min-h-dvh ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
 

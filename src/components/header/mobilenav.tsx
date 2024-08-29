@@ -23,7 +23,6 @@ interface MobileNavProps {
 
 export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) => {
     const { theme } = useTheme();
-    const path = usePathname();
 
     return (
 
