@@ -15,6 +15,7 @@ import { Button } from "@/components/button";
 import { Scramble } from "@/components/stylers/scramblerthai";
 import Fader from "@/components/stylers/fader";
 import { Preloader } from "@/components/stylers/page-loading/preloader";
+import { useInView } from "react-intersection-observer";
 
 export default function Home() {
 
@@ -22,12 +23,15 @@ export default function Home() {
     const [isNavOpen, setIsNavOpen] = useState(false);
     const toggleNav = () => setIsNavOpen(!isNavOpen);
 
-    const sectionRefs = {
-        home: useRef<HTMLDivElement>(null),
-        recents: useRef<HTMLDivElement>(null),
-        intro: useRef<HTMLDivElement>(null),
-        contact: useRef<HTMLDivElement>(null),
-    };
+    const { ref: recentsRef, inView: recentsInView } = useInView({
+        triggerOnce: false,
+        threshold: 0.5,
+    })
+
+    const { ref: introRef, inView: introInView } = useInView({
+        triggerOnce: false,
+        threshold: 0.5,
+    })
 
     return (
         <div className={`${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
@@ -41,7 +45,7 @@ export default function Home() {
                     <Fader enterDelay={1.5} once={true}>
 
                         <Title size="large">
-                            <div className="fixed-line-spacing mt-[75.58px] lg:mt-[103.22px]">
+                            <div className="fixed-line-spacing mt-[75.58px] xl:mt-[103.22px]">
                                 fasai <br/> charoensudjai
                             </div>
                         </Title>
@@ -64,7 +68,7 @@ export default function Home() {
 
             </div>
 
-            <div id="recents" ref={sectionRefs.recents}
+            <div id="recents"
                  className="px-6 md:px-16 xl:px-20 space-y-[25dvh] lg:space-y-12 my-7">
 
                 <div className="sticky top-0 z-0">
@@ -110,8 +114,7 @@ export default function Home() {
 
                                 <div className="lg:hidden"><Title size="small"> raiden shogun </Title></div>
 
-                                <div
-                                    className="flex flex-col lg:flex-row lg:justify-between justify-center lg:space-x-16 space-y-3 md:space-y-7 lg:space-y-0 lg:py-12">
+                                <div className="flex flex-col lg:flex-row lg:justify-between justify-center lg:space-x-16 space-y-3 md:space-y-7 lg:space-y-0 lg:py-12">
 
                                     <div className="relative lg:w-[65%] max-h-full">
                                         <Image
@@ -128,11 +131,9 @@ export default function Home() {
 
                                     <div className="lg:min-w-[45%] lg:max-w-[45%] flex flex-col lg:space-y-5">
 
-                                        <div className="hidden lg:block"><DottedLineSeparator align="left"> [ 01
-                                            ] </DottedLineSeparator></div>
+                                        <div className="hidden lg:block"><DottedLineSeparator align="left"> [ 01 ] </DottedLineSeparator></div>
 
-                                        <div className="hidden lg:block"><Title size="small"> raiden shogun </Title>
-                                        </div>
+                                        <div className="hidden lg:block"><Title size="small"> raiden shogun </Title> </div>
 
                                         <div className="flex flex-col justify-evenly lg:space-y-7">
 
@@ -180,8 +181,7 @@ export default function Home() {
 
                                 <div className="lg:hidden"><Title size="small"> raven </Title></div>
 
-                                <div
-                                    className="flex flex-col lg:flex-row-reverse lg:space-x-reverse lg:justify-between justify-center lg:space-x-16 space-y-3 md:space-y-7 lg:space-y-0 lg:py-12">
+                                <div className="flex flex-col lg:flex-row-reverse lg:space-x-reverse lg:justify-between justify-center lg:space-x-16 space-y-3 md:space-y-7 lg:space-y-0 lg:py-12">
 
                                     <div className="relative lg:w-[65%] max-h-full">
                                         <Image
@@ -201,11 +201,9 @@ export default function Home() {
 
                                     <div className="lg:min-w-[45%] lg:max-w-[45%] flex flex-col lg:space-y-5">
 
-                                        <div className="hidden lg:block"><DottedLineSeparator align="right"> [ 02
-                                            ] </DottedLineSeparator></div>
+                                        <div className="hidden lg:block"><DottedLineSeparator align="right"> [ 02 ] </DottedLineSeparator></div>
 
-                                        <div className="hidden lg:block text-end"><Title size="small"> raven </Title>
-                                        </div>
+                                        <div className="hidden lg:block text-end"><Title size="small"> raven </Title> </div>
 
                                         <div className="flex flex-col justify-evenly lg:space-y-7">
 
@@ -225,15 +223,13 @@ export default function Home() {
                                                 </div>
                                             </div>
 
-                                            <div className="hidden lg:flex justify-end"><Button href=""> more
-                                                detail </Button></div>
+                                            <div className="hidden lg:flex justify-end"><Button href=""> more detail </Button></div>
 
                                         </div>
 
                                     </div>
 
-                                    <div className="lg:hidden flex justify-center items-center"><Button href=""> more
-                                        detail </Button></div>
+                                    <div className="lg:hidden flex justify-center items-center"><Button href=""> more detail </Button></div>
 
                                 </div>
                             </div>
@@ -244,8 +240,8 @@ export default function Home() {
                 <div className={`sticky top-0 z-10 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
                     <Fader enterDelay={0.6} threshold={0.3}>
                         <div className="flex h-[100dvh] justify-center items-center">
-                            <div className="mt-[75.58px] lg:mt-[103.22px] space-y-3 lg:space-y-5">
-                                <div className="flex justify-center items-center md:mb-[10dvh]">
+                            <div className="mt-[75.48px] lg:mt-[103.22px]">
+                                <div className="flex justify-center items-center">
                                     <Button href="/gallery"> view my gallery </Button>
                                 </div>
                             </div>
@@ -311,12 +307,12 @@ export default function Home() {
                                     </Textbox>
                                 </div>
 
-                                <div className={"justify-start hidden sm:block"}><Button href=""> read my
+                                <div className={"justify-start hidden sm:block"}><Button href="/about"> read my
                                     story </Button>
                                 </div>
                             </div>
 
-                            <div className="sm:hidden flex justify-center items-center"><Button href=""> read my
+                            <div className="sm:hidden flex justify-center items-center"><Button href="/about"> read my
                                 story </Button></div>
 
                         </div>

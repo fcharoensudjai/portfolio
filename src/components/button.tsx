@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
 import React from "react";
+import {UnderlinedLink} from "@/components/underlinedlink";
 
 interface ButtonProps {
     children: React.ReactNode;
@@ -34,9 +35,9 @@ export const Button = ({ children, href }: ButtonProps) => {
                 }}
                 className={`rounded-full border-[2px] py-1 md:py-[0.5rem] px-3 lg:px-5 lg:py-2.5 md:text-sm lg:text-md text-xs`}
             >
-                <Link href={href}>
+                <UnderlinedLink underline={false} href={href}>
                     {children}
-                </Link>
+                </UnderlinedLink>
             </motion.button>
 
         </motion.div>

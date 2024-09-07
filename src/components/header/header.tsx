@@ -8,13 +8,11 @@ import { LogoButton } from "@/components/logobutton";
 import { MobileNav } from "@/components/header/mobilenav";
 import { Scrollbar } from "@/components/header/scrollbar";
 import { UnderlinedLink } from "@/components/underlinedlink";
-import {ExitAnimation} from "@/components/stylers/page-loading/exitanimation";
+import { ExitAnimation } from "@/components/stylers/page-loading/exitanimation";
 
 export const Header = () => {
     const [isNavOpen, setIsNavOpen] = useState(false);
-    const [isExit, setIsExit] = useState(false);
     const toggleNav = () => setIsNavOpen(!isNavOpen);
-    const toggleExit = () => setIsExit(!isExit);
 
     const { theme } = useTheme();
 
@@ -32,7 +30,7 @@ export const Header = () => {
                         <nav className="hidden md:flex md:items-center">
                             <ul className="flex space-x-4 md:text-sm xl:text-md text-xs">
                                 <li>
-                                    <UnderlinedLink href="/#recents">
+                                    <UnderlinedLink exitDuration={1100} href="/#recents">
                                         recents
                                     </UnderlinedLink>
                                 </li>
@@ -42,7 +40,7 @@ export const Header = () => {
                                     </UnderlinedLink>
                                 </li>
                                 <li>
-                                    <UnderlinedLink href="/#intro">
+                                    <UnderlinedLink exitDuration={1100} href="/#intro">
                                         intro
                                     </UnderlinedLink>
                                 </li>
@@ -52,7 +50,7 @@ export const Header = () => {
                                     </UnderlinedLink>
                                 </li>
                                 <li>
-                                    <UnderlinedLink href="/#contact">
+                                    <UnderlinedLink exitDuration={1100} href="/#contact">
                                         contact
                                     </UnderlinedLink>
                                 </li>
@@ -79,7 +77,7 @@ export const Header = () => {
 
             <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav}/>
 
-            <ExitAnimation isExit={isExit}></ExitAnimation>
+            <ExitAnimation />
 
         </div>
     );

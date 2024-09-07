@@ -6,10 +6,11 @@ interface ScrambleProps {
     children: string;
     delay?: number; // delay before starting the scramble effect
     hover?: boolean; // choose whether I want it to have an onHover effect
-    interval?: number
+    interval?: number; // how quickly stuff scrambles
+    paragraphs?: boolean
 }
 
-export const Scramble: React.FC<ScrambleProps> = ({ children, delay = 500, hover = false, interval = 2}) => { // default delay is 500ms
+export const Scramble: React.FC<ScrambleProps> = ({ children, delay = 500, hover = false, interval = 2, paragraphs=false}) => { // default delay is 500ms
 
     const letters = "กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮ";
 
@@ -27,7 +28,7 @@ export const Scramble: React.FC<ScrambleProps> = ({ children, delay = 500, hover
 
     const [ref, inView] = useInView({
         triggerOnce: true,
-        threshold: 0.1, // Small threshold to detect when in view
+        threshold: 0.1, // small threshold to detect when in view
     });
 
     function scrambleText(text: string, intervalCount: number) {
@@ -85,6 +86,7 @@ export const Scramble: React.FC<ScrambleProps> = ({ children, delay = 500, hover
 
     return (
         <motion.span
+            style={{ whiteSpace: paragraphs ? 'pre-wrap' : 'normal' }}
             ref={ref}
             onHoverStart={() => { if (hover) { handleScramble() } } }
             onClick={() => { if (hover) { handleScramble() } } }

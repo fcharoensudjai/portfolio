@@ -14,7 +14,7 @@ interface PreloaderProps {
     delay?: number;
 }
 
-export const Preloader: React.FC<PreloaderProps> = ( { duration = 700, texts = ["hello", "สวัสดี"], delay = 400} ) => {
+export const Preloader: React.FC<PreloaderProps> = ( { duration = 800, texts = ["hello", "สวัสดี"], delay = 400} ) => {
     const [loading, setLoading] = useState(true);
     const [textIndex, setTextIndex] = useState(0);
 
@@ -57,7 +57,7 @@ export const Preloader: React.FC<PreloaderProps> = ( { duration = 700, texts = [
                     initial={{ y: 0 }}
                     animate={{ y: 0 }}
                     exit={{ y: '-100%' }}
-                    transition={{ duration: 1, ease: [0.65, 0, 0.35, 1] }}
+                    transition={{ duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
                 >
                     <ScramblerComponent delay={delay}>{texts[textIndex]}</ScramblerComponent>
                 </motion.div>
