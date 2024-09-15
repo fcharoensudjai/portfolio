@@ -5,6 +5,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 interface VisibilityContextType {
     isIntroInView: boolean;
     setIsIntroInView: (inView: boolean) => void;
+    resetIntroVisibility: () => void;
 }
 
 const Introvisibilitycontext = createContext<VisibilityContextType | undefined>(undefined);
@@ -12,8 +13,10 @@ const Introvisibilitycontext = createContext<VisibilityContextType | undefined>(
 export const VisibilityProvider2: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isIntroInView, setIsIntroInView] = useState<boolean>(false);
 
+    const resetIntroVisibility = () => setIsIntroInView(false);
+
     return (
-        <Introvisibilitycontext.Provider value={{ isIntroInView, setIsIntroInView }}>
+        <Introvisibilitycontext.Provider value={{ isIntroInView, setIsIntroInView, resetIntroVisibility }}>
             {children}
         </Introvisibilitycontext.Provider>
     );

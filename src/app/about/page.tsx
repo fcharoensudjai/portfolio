@@ -49,7 +49,7 @@ export default function Gallery() {
 
             <div className="min-h-[100dvh] px-6 md:px-16 xl:px-20 lg:py-12 py-7">
 
-                <div className="flex flex-col space-y-5 lg:space-y-7 mt-[75.58px] xl:mt-[103.22px]">
+                <div className="flex flex-col space-y-5 md:space-y-7 mt-[75.58px] xl:mt-[103.22px]">
 
                     <div className={`lg:hidden`}><Title> who am i? </Title></div>
 
@@ -135,7 +135,7 @@ export default function Gallery() {
 
                     </div>
 
-                    <div className={`lg:min-h-[100dvh] flex justify-center items-center ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+                    <div className={`lg:min-h-[10dvh] flex justify-center items-center ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
                         <Fader enterDelay={0.6} threshold={0.3}>
                             <div className="flex justify-center items-center">
                                 <Button href="/gallery">

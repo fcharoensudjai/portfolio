@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, {useState, useRef, useEffect} from "react";
 import { Title } from "@/components/title";
 import { useTheme } from "next-themes"
 import { MobileNav } from "@/components/header/mobilenav";
@@ -18,7 +18,7 @@ import { Preloader } from "@/components/stylers/page-loading/preloader";
 import { useInView } from "react-intersection-observer";
 import { useVisibility } from "@/app/recentsvisibilitycontext";
 import { useVisibility2 } from "@/app/introvisibilitycontext";
-
+import {router} from "next/client";
 
 export default function Home() {
 
@@ -115,7 +115,7 @@ export default function Home() {
                                     </Textbox>
                                 </div>
 
-                                <div><Button href="/gallery"> view my gallery </Button></div>
+                                <div><Button href="/gallery"> view my gallery </Button> </div>
                             </div>
 
                         </div>

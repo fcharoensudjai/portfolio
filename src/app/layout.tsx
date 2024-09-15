@@ -17,19 +17,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
     return (
         <html lang="en" suppressHydrationWarning={true}>
-        <ProviderTheme>
+        <body><ProviderTheme>
             <ExitAnimationProvider>
                 <VisibilityProvider>
                     <VisibilityProvider2>
-                        <body>
                         <Highlighter/>
                         <Header/>
                         {children}
-                        </body>
-                    </VisibilityProvider2>
-                </VisibilityProvider>
-            </ExitAnimationProvider>
+                </VisibilityProvider2>
+            </VisibilityProvider>
+        </ExitAnimationProvider>
         </ProviderTheme>
+        </body>
         </html>
     );
 }

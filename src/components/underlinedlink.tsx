@@ -7,6 +7,8 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useExitAnimation } from "@/app/exitcontext";
 import { useInView } from "react-intersection-observer";
+import { useVisibility } from "@/app/recentsvisibilitycontext";
+import { useVisibility2 } from "@/app/introvisibilitycontext";
 
 interface UnderlinedLinkProps {
     children: React.ReactNode;
@@ -35,6 +37,9 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
     const { setIsExit } = useExitAnimation();
     const isActive = href === path
 
+    const { resetRecentsVisibility } = useVisibility(); // Add this line
+    const { resetIntroVisibility } = useVisibility2();
+
     const { ref, inView } = useInView({
         triggerOnce: false,
         threshold: 0.5,
@@ -47,6 +52,8 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
             if (!isCurrentPath) {
                 event.preventDefault();
                 setIsExit(true);
+                resetRecentsVisibility();
+                resetIntroVisibility();
                 await sleep(exitDuration);
                 router.push(href);
                 setIsExit(false);
