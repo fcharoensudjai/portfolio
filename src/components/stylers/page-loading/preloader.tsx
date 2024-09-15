@@ -14,7 +14,7 @@ interface PreloaderProps {
     delay?: number;
 }
 
-export const Preloader: React.FC<PreloaderProps> = ( { duration = 800, texts = ["hello", "สวัสดี"], delay = 400} ) => {
+export const Preloader: React.FC<PreloaderProps> = ( { duration = 800, texts = ["hello", "สวัสดี"], delay = 300} ) => {
     const [loading, setLoading] = useState(true);
     const [textIndex, setTextIndex] = useState(0);
 

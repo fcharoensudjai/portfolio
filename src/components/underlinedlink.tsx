@@ -51,7 +51,6 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
                 router.push(href);
                 setIsExit(false);
 
-
             } else {
                 onClick?.();
             }
@@ -89,7 +88,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
                 className={`
                 border-t-[3px] transition-all duration-[350ms] ease-in-out
                 ${theme === "dark" ? "border-accent-dark" : "border-accent-light"} 
-                ${hovered || isActive || inView ? "w-full" : "w-0"} 
+                ${hovered || isActive || isVisible ? "w-full" : "w-0"} 
             `}>
             </div>
         </motion.div> )

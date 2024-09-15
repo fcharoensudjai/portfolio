@@ -9,12 +9,16 @@ import { MobileNav } from "@/components/header/mobilenav";
 import { Scrollbar } from "@/components/header/scrollbar";
 import { UnderlinedLink } from "@/components/underlinedlink";
 import { ExitAnimation } from "@/components/stylers/page-loading/exitanimation";
+import { useVisibility } from "@/app/recentsvisibilitycontext";
+import { useVisibility2 } from "@/app/introvisibilitycontext";
 
 export const Header = () => {
     const [isNavOpen, setIsNavOpen] = useState(false);
     const toggleNav = () => setIsNavOpen(!isNavOpen);
 
     const { theme } = useTheme();
+    const { isRecentsInView } = useVisibility();
+    const { isIntroInView } = useVisibility2();
 
     return (
         <div>
@@ -30,7 +34,7 @@ export const Header = () => {
                         <nav className="hidden md:flex md:items-center">
                             <ul className="flex space-x-4 md:text-sm xl:text-md text-xs">
                                 <li>
-                                    <UnderlinedLink exitDuration={1100} href="/#recents">
+                                    <UnderlinedLink exitDuration={1100} href="/#recents" isVisible={isRecentsInView}>
                                         recents
                                     </UnderlinedLink>
                                 </li>
@@ -40,7 +44,7 @@ export const Header = () => {
                                     </UnderlinedLink>
                                 </li>
                                 <li>
-                                    <UnderlinedLink exitDuration={1100} href="/#intro">
+                                    <UnderlinedLink exitDuration={1100} href="/#intro" isVisible={isIntroInView}>
                                         intro
                                     </UnderlinedLink>
                                 </li>

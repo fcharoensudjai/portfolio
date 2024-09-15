@@ -16,6 +16,9 @@ import { Scramble } from "@/components/stylers/scramblerthai";
 import Fader from "@/components/stylers/fader";
 import { Preloader } from "@/components/stylers/page-loading/preloader";
 import { useInView } from "react-intersection-observer";
+import { useVisibility } from "@/app/recentsvisibilitycontext";
+import { useVisibility2 } from "@/app/introvisibilitycontext";
+
 
 export default function Home() {
 
@@ -23,15 +26,32 @@ export default function Home() {
     const [isNavOpen, setIsNavOpen] = useState(false);
     const toggleNav = () => setIsNavOpen(!isNavOpen);
 
-    const { ref: recentsRef, inView: recentsInView } = useInView({
-        triggerOnce: false,
-        threshold: 0.5,
-    })
+    // controlling the underlining for the recents section
 
-    const { ref: introRef, inView: introInView } = useInView({
-        triggerOnce: false,
+    const { setIsRecentsInView } = useVisibility();
+    const { ref: recentsRef, inView: isRecentsInView } = useInView({
         threshold: 0.5,
-    })
+        triggerOnce: false,
+    });
+
+    // used to update the context with visibility state
+    React.useEffect(() => {
+        setIsRecentsInView(isRecentsInView);
+    }, [isRecentsInView, setIsRecentsInView]);
+
+    // controlling the underlining for the intro section
+
+    const { setIsIntroInView } = useVisibility2();
+
+    const { ref: introRef, inView: isIntroInView } = useInView({
+        threshold: 0.5,
+        triggerOnce: false,
+    });
+
+    // used to update the context with visibility state
+    React.useEffect(() => {
+        setIsIntroInView(isIntroInView);
+    }, [isIntroInView, setIsIntroInView]);
 
     return (
         <div className={`${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
@@ -71,7 +91,7 @@ export default function Home() {
             <div id="recents"
                  className="px-6 md:px-16 xl:px-20 space-y-[25dvh] lg:space-y-12 my-7">
 
-                <div className="sticky top-0 z-0">
+                <div ref={recentsRef} className="sticky top-0 z-0">
                     <Fader>
                         <div className="flex min-h-[100dvh] justify-center items-center">
 
@@ -79,8 +99,7 @@ export default function Home() {
 
                                 <Title size="medium">
                                     <div
-                                        className="fixed-line-spacing scroll-mt-[120.28px] lg:scroll-mt-[148.02px]"> recent
-                                        works
+                                        className="fixed-line-spacing scroll-mt-[120.28px] lg:scroll-mt-[148.02px]"> recent works
                                     </div>
                                 </Title>
 
@@ -105,7 +124,7 @@ export default function Home() {
 
                 <div className={`sticky top-0 z-10 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
                     <Fader>
-                        <div className="flex h-[100dvh] justify-center items-center">
+                        <div className="flex h-[100dvh] justify-center items-center my-[10dvh]">
                             <div className="py-[75.48px] lg:py-0 space-y-3 lg:space-y-5">
 
                                 <div className="lg:hidden"><DottedLineSeparator align="left"> [ 01
@@ -172,16 +191,15 @@ export default function Home() {
 
                 <div className={`sticky top-0 z-10 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
                     <Fader>
-                        <div className="flex h-[100dvh] justify-center items-center">
+                        <div className="flex h-[100dvh] justify-center items-center my-[10dvh]">
                             <div className="py-[75.48px] lg:py-0 space-y-3 lg:space-y-5">
 
-                                <div className="lg:hidden"><DottedLineSeparator align="left"> [ 02
-                                    ] </DottedLineSeparator>
+                                <div className="lg:hidden"><DottedLineSeparator align="left"> [ 02 ] </DottedLineSeparator>
                                 </div>
 
                                 <div className="lg:hidden"><Title size="small"> raven </Title></div>
 
-                                <div className="flex flex-col lg:flex-row-reverse lg:space-x-reverse lg:justify-between justify-center lg:space-x-16 space-y-3 md:space-y-7 lg:space-y-0 lg:py-12">
+                                <div className="flex flex-col lg:flex-row-reverse lg:space-x-reverse lg:justify-between justify-center lg:space-x-16 space-y-4 md:space-y-7 lg:space-y-0 lg:py-12">
 
                                     <div className="relative lg:w-[65%] max-h-full">
                                         <Image
@@ -205,7 +223,7 @@ export default function Home() {
 
                                         <div className="hidden lg:block text-end"><Title size="small"> raven </Title> </div>
 
-                                        <div className="flex flex-col justify-evenly lg:space-y-7">
+                                        <div className="flex flex-col lg:space-y-7">
 
                                             <div className={`flex flex-grow w-full`}>
                                                 <div
@@ -260,7 +278,7 @@ export default function Home() {
                  className=" px-6 md:px-16 xl:px-20 space-y-5 lg:space-y-12 my-7 min-h-[100dvh] flex flex-col justify-center items-start">
 
                 <Fader>
-                    <div className={`py-[75.48px] space-y-3 lg:space-y-5`}>
+                    <div ref={introRef} className={`py-[75.48px] space-y-5`}>
                         <div id="" className="md:hidden fixed-line-spacing">
                             <Title size="medium">
                                 a brief intro
@@ -268,7 +286,7 @@ export default function Home() {
                         </div>
 
                         <div
-                            className="flex flex-col justify-center space-y-3 lg:space-y-5 sm:flex-row-reverse sm:space-x-reverse sm:space-x-6 lg:space-x-reverse lg:space-x-12 xl:space-x-reverse sm:space-y-0 ">
+                            className="flex flex-col justify-center space-y-5 sm:flex-row-reverse sm:space-x-reverse sm:space-x-6 lg:space-x-reverse lg:space-x-12 xl:space-x-reverse sm:space-y-0 ">
 
                             <div className="flex items-center justify-center md:justify-center">
                                 <Image
@@ -283,8 +301,7 @@ export default function Home() {
                                 />
                             </div>
 
-                            <div
-                                className="sm:max-w-[50%] sm:space-y-5 lg:space-y-7 xl:space-y-10 flex flex-col justify-center items-start">
+                            <div className="sm:max-w-[50%] sm:space-y-5 lg:space-y-7 xl:space-y-10 flex flex-col justify-center items-start">
                                 <div className="hidden md:block fixed-line-spacing">
 
                                     <Title size="medium">
@@ -293,7 +310,7 @@ export default function Home() {
 
                                 </div>
 
-                                <div className="flex items-center">
+                                <div className="flex flex-col justify-center items-center">
                                     <Textbox>
                                         <Scramble>
                                             Hi, I’m Fasai, an artist from Thailand and an Economics student at the

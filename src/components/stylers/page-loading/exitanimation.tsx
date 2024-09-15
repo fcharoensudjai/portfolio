@@ -17,7 +17,7 @@ export const ExitAnimation: React.FC = () => {
     const handleAnimationComplete = () => {
         setTimeout(() => {
             setIsAnimating(false);
-        }, 800);
+        }, 850);
     };
 
     return (

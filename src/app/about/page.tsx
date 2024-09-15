@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useTheme } from "next-themes"
+import { useTheme } from "next-themes";
 import { MobileNav } from "@/components/header/mobilenav";
 import { Footer } from "@/components/footer/footer";
 import { Contact } from "@/components/contact";
@@ -11,19 +11,13 @@ import { Title } from "@/components/title";
 import { Textbox } from "@/components/textbox";
 import { Scramble } from "@/components/stylers/scramblerthai";
 import Image from "next/image";
-import { useInView } from "react-intersection-observer";
 import ParagraphScroll from "@/components/stylers/paragraphscroll";
-
+import {Button} from "@/components/button";
 
 export default function Gallery() {
-
     const { theme } = useTheme();
     const [isNavOpen, setIsNavOpen] = useState(false);
     const toggleNav = () => setIsNavOpen(!isNavOpen);
-    const { ref: textRef, inView: textInView } = useInView({
-        triggerOnce: false,
-        threshold: 0.1,
-    })
 
     return (
         <div className={`${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
@@ -33,106 +27,133 @@ export default function Gallery() {
             <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav}/>
 
             <Fader enterDelay={1.2} once={true}>
-                <div className={`min-h-[100dvh] flex flex-col justify-between items-center px-6 md:px-16 xl:px-20`}>
-
+                <div className="min-h-[100dvh] flex flex-col justify-between items-center px-6 md:px-16 xl:px-20">
                     <div
-                        className={`flex flex-col flex-grow justify-center items-center text-center lg:max-w-[1500px] mt-[75.58px] xl:mt-[103.22px]`}>
+                        className="flex flex-col flex-grow justify-center items-center text-center lg:max-w-[1500px] mt-[75.58px] xl:mt-[103.22px]">
                         <Title size="medium">
-                            Economics student with a passion for finance, data science and art, finding
+                            Economics student with a passion for finance and data science finding
                             a creative outlet, dedicated to bringing ideas to life through vibrant and dynamic
                             illustrations.
                         </Title>
                     </div>
 
-                    <div className={`py-3 lg:py-5`}>
-
-                        <Textbox> <Scramble delay={1750} hover={true} interval={20}>[ scroll for more ]</Scramble> </Textbox>
-
+                    <div className="py-3 lg:py-5">
+                        <Textbox>
+                            <Scramble delay={1750} hover={true} interval={20}>
+                                [ scroll for more ]
+                            </Scramble>
+                        </Textbox>
                     </div>
-
                 </div>
             </Fader>
 
-            <div className={`min-h-[100dvh] px-6 md:px-16 xl:px-20 lg:py-12 py-7`}>
+            <div className="min-h-[100dvh] px-6 md:px-16 xl:px-20 lg:py-12 py-7">
 
-                <div className={`flex flex-col space-y-5 lg:space-y-7 mt-[75.58px] xl:mt-[103.22px]`}>
+                <div className="flex flex-col space-y-5 lg:space-y-7 mt-[75.58px] xl:mt-[103.22px]">
 
-                    <Title> who am i? </Title>
+                    <div className={`lg:hidden`}><Title> who am i? </Title></div>
 
                     <div
-                        className={`lg:sticky lg:top-0 flex flex-col lg:justify-between lg:flex-row items-center space-y-7 lg:space-y-0 lg:space-x-16`}>
+                        className="flex flex-col lg:justify-between lg:flex-row items-start space-y-7 lg:space-y-0 lg:space-x-16">
 
-                        <div className="lg:w-[45%] w-full h-full">
+                        <div
+                            className="lg:w-[45%] w-full h-full lg:sticky lg:top-0 lg:h-[100vh] flex flex-col justify-center items-start lg:space-y-7 lg:py-12 xl:py-20">
+
+                            <div className={`lg:block hidden`}><Title> who am i? </Title></div>
+
                             <Image
                                 src="/images/about.png"
                                 alt="a picture of me"
                                 width={5000}
                                 height={5000}
-                                style={{
-                                    objectFit: "cover"
-                                }}
+                                style={{objectFit: "cover"}}
                                 quality={80}
-                                className="w-full h-auto"
+                                className="w-full h-auto max-h-[70vh]"
                             />
                         </div>
 
-                        <div className={`lg:w-[55%] space-y-5`}>
-                            <div className={`flex flex-col space-y-[1.5em] md:text-sm xl:text-md text-xs`}>
+                        <div className="lg:w-[55%] h-auto space-y-5">
 
-
-                                <ParagraphScroll>
+                            <div
+                                className="lg:sticky lg:top-0 lg:pt-[10dvh] lg:min-h-[100dvh] flex items-center justify-center">
+                                <div
+                                    className={`lg:h-[50dvh] flex justify-center items-center ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
                                     <Textbox>
                                         <Scramble>
-                                            Hi, I’m Fasai Charoensudjai, a 20-year-old Economics student at the University
-                                            of Warwick from Thailand.
-                                            While I’m actively pursuing a career in consulting with a focus on data science
-                                            and finance, my real passion is art.
-                                            This website is a passion project I created over the summer, combining my love
-                                            for art and web development to showcase my illustrations, concept art, and
-                                            fanart in a way that feels true to my personal style.
+                                            Hi, I’m Fasai Charoensudjai, a 20-year-old Economics student at the
+                                            University
+                                            of Warwick from Thailand. While I’m actively pursuing a career in
+                                            consulting
+                                            with a focus on data science and finance, my real passion is art. This
+                                            website is a passion project I created
+                                            over the summer, combining my love for art and web development to
+                                            showcase
+                                            my
+                                            illustrations, concept art, and fanart in a way that feels true to my
+                                            personal style.
                                         </Scramble>
                                     </Textbox>
-                                </ParagraphScroll>
+                                </div>
+                            </div>
 
-                                <ParagraphScroll>
+                            <div
+                                className="lg:sticky lg:top-0 lg:pt-[10.5dvh] lg:min-h-[100dvh] flex items-center justify-center">
+                                <div
+                                    className={`lg:h-[50dvh] flex justify-center items-center ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
                                     <Textbox>
                                         <Scramble>
-                                            Art has always been a part of my life, and even though university keeps me busy,
-                                            I still find time to draw pieces inspired by the games and shows I love, like
-                                            League of Legends, Genshin Impact, and Arcane.
-                                            I primarily work digitally using Procreate on my iPad, but I’ve also explored
-                                            traditional mediums in the past.
-                                            My creative process is mostly focused on stylistic work, but I’m always pushing
-                                            myself to improve. Whether it’s learning anatomy, creating immersive
-                                            backgrounds, or capturing the right ambience, I’m always eager to learn.
+                                            Art has always been a part of my life, and even though university keeps
+                                            me
+                                            busy, I still find time to draw pieces inspired by the games and shows I
+                                            love, like League of Legends, Genshin Impact, and Arcane. I primarily
+                                            work
+                                            digitally using Procreate on my iPad, but I’ve also explored traditional
+                                            mediums in the past. My creative process is mostly focused on stylistic
+                                            work, but I’m always pushing myself to improve.
                                         </Scramble>
                                     </Textbox>
-                                </ParagraphScroll>
 
-                                <ParagraphScroll>
+                                </div>
+                            </div>
+
+                            <div
+                                className="lg:sticky lg:top-0 lg:pt-[12dvh] lg:min-h-[100dvh] flex items-center justify-center">
+                                <div
+                                    className={`lg:h-[50dvh] flex justify-center items-center ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
                                     <Textbox>
                                         <Scramble>
-                                            Coming from Thailand, I wanted this website to reflect a bit of my cultural
+                                            Coming from Thailand, I wanted this website to reflect a bit of my
+                                            cultural
                                             background, which is why I designed the logo based on a traditional Thai
-                                            pattern.
-                                            This site is not only a space to display my art but also a step forward in my
-                                            web development journey!
+                                            pattern. This site is not only a space to display my art but also a step
+                                            forward in my web development journey!
                                         </Scramble>
                                     </Textbox>
-                                </ParagraphScroll>
-
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
+                    </div>
+
+                    <div className={`lg:min-h-[100dvh] flex justify-center items-center ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+                        <Fader enterDelay={0.6} threshold={0.3}>
+                            <div className="flex justify-center items-center">
+                                <Button href="/gallery">
+                                    view my gallery
+                                </Button>
+                            </div>
+                        </Fader>
+                    </div>
+
+                </div>
             </div>
 
-            <Fader> <Contact/> </Fader>
+
+            <Fader>
+                <Contact/>
+            </Fader>
 
             <Footer/>
-
         </div>
-
     );
 }

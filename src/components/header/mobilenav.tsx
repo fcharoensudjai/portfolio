@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
@@ -9,6 +9,9 @@ import { SocialIcons } from "@/components/footer/socialicons";
 import { Poppins } from "next/font/google";
 import { Scrollbar } from "@/components/header/scrollbar";
 import { UnderlinedLink } from "@/components/underlinedlink";
+import { usePathname, useRouter } from "next/navigation";
+import { useVisibility } from "@/app/recentsvisibilitycontext";
+import { useVisibility2 } from "@/app/introvisibilitycontext";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -21,7 +24,18 @@ interface MobileNavProps {
 }
 
 export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) => {
+
     const { theme } = useTheme();
+    const pathname = usePathname();
+
+    useEffect(() => {
+        if (isNavOpen) {
+            toggleNav();
+        }
+    }, [pathname]);
+
+    const { isRecentsInView } = useVisibility();
+    const { isIntroInView } = useVisibility2();
 
     return (
 
@@ -60,7 +74,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
                             </UnderlinedLink>
                         </li>
                         <li>
-                            <UnderlinedLink href="/#recents" onClick={toggleNav}>
+                            <UnderlinedLink href="/#recents" onClick={toggleNav} isVisible={isRecentsInView}>
                                 recents
                             </UnderlinedLink>
                         </li>
@@ -70,7 +84,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
                             </UnderlinedLink>
                         </li>
                         <li>
-                            <UnderlinedLink href="/#intro" onClick={toggleNav}>
+                            <UnderlinedLink href="/#intro" onClick={toggleNav} isVisible={isIntroInView}>
                                 intro
                             </UnderlinedLink>
                         </li>
