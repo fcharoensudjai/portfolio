@@ -12,6 +12,7 @@ import { UnderlinedLink } from "@/components/underlinedlink";
 import { usePathname, useRouter } from "next/navigation";
 import { useVisibility } from "@/app/recentsvisibilitycontext";
 import { useVisibility2 } from "@/app/introvisibilitycontext";
+import { useVisibility3 } from "@/app/contactvisibilitycontext";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -36,6 +37,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
 
     const { isRecentsInView } = useVisibility();
     const { isIntroInView } = useVisibility2();
+    const { isContactInView } = useVisibility3();
 
     return (
 
@@ -94,7 +96,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
                             </UnderlinedLink>
                         </li>
                         <li>
-                            <UnderlinedLink href="/#contact" onClick={toggleNav}>
+                            <UnderlinedLink href="/#contact" scroll={true} isVisible={isContactInView} onClick={toggleNav}>
                                 contact
                             </UnderlinedLink>
                         </li>

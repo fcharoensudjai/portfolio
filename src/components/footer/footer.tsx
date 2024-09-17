@@ -3,10 +3,49 @@ import { LocalTime } from "@/components/footer/localtime";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import {usePathname, useRouter} from "next/navigation";
+import {useExitAnimation} from "@/app/exitcontext";
+import {useVisibility} from "@/app/recentsvisibilitycontext";
+import {useVisibility2} from "@/app/introvisibilitycontext";
+import React from "react";
 
-export const Footer = () => {
+function sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export const Footer = ( { exitDuration = 800 }) => {
 
     const { theme } = useTheme();
+    const path = usePathname();
+    const router = useRouter();
+    const { setIsExit } = useExitAnimation();
+    const { resetRecentsVisibility } = useVisibility();
+    const { resetIntroVisibility } = useVisibility2();
+
+    const baseCurrentPath = path.split('#')[0];
+    const currentHash = path.split('#')[1];
+    const targetHash = "home";
+    const isCurrentPath = baseCurrentPath === "/";
+
+    const handleClick = async (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        if (!isCurrentPath || (isCurrentPath && currentHash === targetHash)) {
+            if (!isCurrentPath) {
+                event.preventDefault();
+                setIsExit(true);
+                await sleep(exitDuration);
+                router.push("/#home");
+                setIsExit(false);
+                resetRecentsVisibility();
+                resetIntroVisibility();
+            } else {
+                event.preventDefault();
+                window.scrollTo({
+                    top: document.getElementById("home")?.offsetTop || 0,
+                    behavior: "smooth",
+                });
+            }
+        }
+    };
 
     return (
         <div>
@@ -19,7 +58,7 @@ export const Footer = () => {
                         <div className="hidden xl:block"><LogoButton size="medium"/></div>
 
                         <div className="hidden sm:block xl:hidden h-[80%] w-auto">
-                            <Link href="/#home">
+                            <Link href="/#home" onClick={handleClick}>
                                 <Image
                                 src={theme === "dark" ? "/icons/dark/logodark.svg" : "/icons/light/logo.svg"}
                                 alt={"logo"}

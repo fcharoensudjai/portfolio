@@ -12,9 +12,10 @@ interface PreloaderProps {
     duration?: number;
     texts?: string[];
     delay?: number;
+    interval?: number;
 }
 
-export const Preloader: React.FC<PreloaderProps> = ( { duration = 800, texts = ["hello", "สวัสดี"], delay = 300} ) => {
+export const Preloader: React.FC<PreloaderProps> = ( { duration = 800, texts = ["hello", "สวัสดี"], delay = 300, interval = 2} ) => {
     const [loading, setLoading] = useState(true);
     const [textIndex, setTextIndex] = useState(0);
 
@@ -33,7 +34,7 @@ export const Preloader: React.FC<PreloaderProps> = ( { duration = 800, texts = [
             intervalId = setTimeout(() => {
                 setTextIndex(prevIndex => (prevIndex + 1) % texts.length);
                 updateText();
-            }, getRandomInterval(50, 500));
+            }, getRandomInterval(50, 400));
         };
 
         updateText();
@@ -59,7 +60,7 @@ export const Preloader: React.FC<PreloaderProps> = ( { duration = 800, texts = [
                     exit={{ y: '-100%' }}
                     transition={{ duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
                 >
-                    <ScramblerComponent delay={delay}>{texts[textIndex]}</ScramblerComponent>
+                    <ScramblerComponent delay={delay} interval={interval}>{texts[textIndex]}</ScramblerComponent>
                 </motion.div>
             )}
         </AnimatePresence>

@@ -10,7 +10,7 @@ export function ProviderTheme({ children }: { children: React.ReactNode }) {
         setMounted(true);
     }, []);
 
-    // avoid hydration mismatch by only rendering theme provider after the client has mounted
+    // avoid hydration mismatch by only rendering provider after the client has mounted
     if (!mounted) return null;
 
     return (

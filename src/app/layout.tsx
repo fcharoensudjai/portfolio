@@ -7,6 +7,7 @@ import Highlighter from "@/components/stylers/highlighter";
 import { ExitAnimationProvider } from "@/app/exitcontext";
 import { VisibilityProvider } from "@/app/recentsvisibilitycontext";
 import { VisibilityProvider2 } from "@/app/introvisibilitycontext";
+import { VisibilityProvider3 } from "@/app/contactvisibilitycontext";
 
 export const metadata: Metadata = {
     title: "fuzzch | portfolio",
@@ -17,17 +18,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
     return (
         <html lang="en" suppressHydrationWarning={true}>
-        <body><ProviderTheme>
-            <ExitAnimationProvider>
-                <VisibilityProvider>
-                    <VisibilityProvider2>
-                        <Highlighter/>
-                        <Header/>
-                        {children}
-                </VisibilityProvider2>
-            </VisibilityProvider>
-        </ExitAnimationProvider>
-        </ProviderTheme>
+        <body>
+            <ProviderTheme>
+                <ExitAnimationProvider>
+                    <VisibilityProvider>
+                        <VisibilityProvider2>
+                            <VisibilityProvider3>
+                                <Highlighter/>
+                                <Header/>
+                                {children}
+                            </VisibilityProvider3>
+                    </VisibilityProvider2>
+                </VisibilityProvider>
+            </ExitAnimationProvider>
+            </ProviderTheme>
         </body>
         </html>
     );

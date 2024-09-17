@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useState, useRef, useEffect} from "react";
+import React, { useState } from "react";
 import { Title } from "@/components/title";
 import { useTheme } from "next-themes"
 import { MobileNav } from "@/components/header/mobilenav";
@@ -18,7 +18,7 @@ import { Preloader } from "@/components/stylers/page-loading/preloader";
 import { useInView } from "react-intersection-observer";
 import { useVisibility } from "@/app/recentsvisibilitycontext";
 import { useVisibility2 } from "@/app/introvisibilitycontext";
-import {router} from "next/client";
+import { useVisibility3 } from "@/app/contactvisibilitycontext";
 
 export default function Home() {
 
@@ -34,7 +34,7 @@ export default function Home() {
         triggerOnce: false,
     });
 
-    // used to update the context with visibility state
+    // used to update the recents context with visibility state
     React.useEffect(() => {
         setIsRecentsInView(isRecentsInView);
     }, [isRecentsInView, setIsRecentsInView]);
@@ -48,7 +48,7 @@ export default function Home() {
         triggerOnce: false,
     });
 
-    // used to update the context with visibility state
+    // used to update the intro context with visibility state
     React.useEffect(() => {
         setIsIntroInView(isIntroInView);
     }, [isIntroInView, setIsIntroInView]);
@@ -70,9 +70,9 @@ export default function Home() {
                             </div>
                         </Title>
 
-                        <div className="w-[65%] my-4 space-x-2">
+                        <div className="my-4">
                             <Textbox>
-                                <Scramble delay={2000} hover={true} interval={20}> [ scroll to explore ] </Scramble>
+                                <Scramble delay={2000} hover={true} interval={20}>[ scroll to explore ]</Scramble>
                             </Textbox>
                         </div>
 
@@ -124,18 +124,18 @@ export default function Home() {
 
                 <div className={`sticky top-0 z-10 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
                     <Fader>
-                        <div className="flex h-[100dvh] justify-center items-center my-[10dvh]">
-                            <div className="py-[75.48px] lg:py-0 space-y-3 lg:space-y-5">
+                        <div className="flex h-[100dvh] justify-center items-center my-[20dvh]">
+                            <div className="py-20 xl:py-0 space-y-3 lg:space-y-5">
 
-                                <div className="lg:hidden"><DottedLineSeparator align="left"> [ 01
-                                    ] </DottedLineSeparator>
+                                <div className="lg:hidden">
+                                    <DottedLineSeparator align="left"> [ 01 ] </DottedLineSeparator>
                                 </div>
 
                                 <div className="lg:hidden"><Title size="small"> raiden shogun </Title></div>
 
                                 <div className="flex flex-col lg:flex-row lg:justify-between justify-center lg:space-x-16 space-y-3 md:space-y-7 lg:space-y-0 lg:py-12">
 
-                                    <div className="relative lg:w-[65%] max-h-full">
+                                    <div className="relative lg:w-[65%] md:min-h-[35dvh] max-h-full">
                                         <Image
                                             src="/images/raiden-shogun/raiden-home.png"
                                             alt="snippet of raiden shogun"
@@ -143,7 +143,7 @@ export default function Home() {
                                             height={851}
                                             style={{objectFit: "cover"}}
                                             quality={60}
-                                            className="w-full h-auto lg:h-full lg:w-full"
+                                            className="w-full h-auto lg:h-full lg:w-full rounded-xl"
                                         />
                                     </div>
 
@@ -158,7 +158,7 @@ export default function Home() {
 
                                             <div className={`flex flex-grow w-full`}>
                                                 <div
-                                                    className={`className="flex-grow min-h-[100px] md:min-h-[150px] lg:min-h-[250px]`}>
+                                                    className={`flex flex-grow items-center justify-center min-h-[100px] md:min-h-[150px] lg:min-h-[250px]`}>
                                                     <Textbox>
                                                         <Scramble>
                                                             Raiden Shogun has been my favourite character from Genshin
@@ -173,15 +173,13 @@ export default function Home() {
                                                 </div>
                                             </div>
 
-                                            <div className="hidden lg:block justify-start"><Button href=""> more
-                                                detail </Button></div>
+                                            <div className="hidden lg:block justify-start"><Button href=""> more detail </Button></div>
 
                                         </div>
 
                                     </div>
 
-                                    <div className="lg:hidden flex justify-center items-center"><Button href=""> more
-                                        detail </Button></div>
+                                    <div className="lg:hidden flex justify-center items-center"><Button href=""> more detail </Button></div>
 
                                 </div>
                             </div>
@@ -191,8 +189,8 @@ export default function Home() {
 
                 <div className={`sticky top-0 z-10 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
                     <Fader>
-                        <div className="flex h-[100dvh] justify-center items-center my-[10dvh]">
-                            <div className="py-[75.48px] lg:py-0 space-y-3 lg:space-y-5">
+                        <div className="flex h-[100dvh] justify-center items-center my-[20dvh]">
+                            <div className="py-20 xl:py-0 lg:py-0 space-y-3 lg:space-y-5">
 
                                 <div className="lg:hidden"><DottedLineSeparator align="left"> [ 02 ] </DottedLineSeparator>
                                 </div>
@@ -201,7 +199,7 @@ export default function Home() {
 
                                 <div className="flex flex-col lg:flex-row-reverse lg:space-x-reverse lg:justify-between justify-center lg:space-x-16 space-y-4 md:space-y-7 lg:space-y-0 lg:py-12">
 
-                                    <div className="relative lg:w-[65%] max-h-full">
+                                    <div className="relative lg:w-[65%] md:min-h-[35dvh] max-h-full">
                                         <Image
                                             src="/images/raven/raven-home.png"
                                             alt="snippet of raven"
@@ -212,7 +210,7 @@ export default function Home() {
                                                 objectPosition: "80% 50%"
                                             }}
                                             quality={80}
-                                            className="w-full h-auto lg:h-full lg:w-auto"
+                                            className="w-full h-auto lg:h-full lg:w-auto rounded-xl"
                                         />
                                     </div>
 
@@ -227,7 +225,7 @@ export default function Home() {
 
                                             <div className={`flex flex-grow w-full`}>
                                                 <div
-                                                    className={`className="flex-grow min-h-[100px] md:min-h-[150px] lg:min-h-[250px] lg:text-end`}>
+                                                    className={`flex flex-grow items-center justify-center min-h-[135px] md:min-h-[150px] lg:min-h-[250px] lg:text-end`}>
                                                     <Textbox>
                                                         <Scramble>
                                                             I joined a "Draw This In Your Style Challenge" for

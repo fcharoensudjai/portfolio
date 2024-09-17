@@ -6,7 +6,6 @@ import { useTheme } from "next-themes";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useExitAnimation } from "@/app/exitcontext";
-import { useInView } from "react-intersection-observer";
 import { useVisibility } from "@/app/recentsvisibilitycontext";
 import { useVisibility2 } from "@/app/introvisibilitycontext";
 
@@ -18,13 +17,14 @@ interface UnderlinedLinkProps {
     exitDuration?: number;
     underline?: boolean;
     isVisible?: boolean;
+    scroll?: boolean;
 }
 
 function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, onClick, isExternal = false, exitDuration = 800, underline = true, isVisible = false }) => {
+export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, onClick, isExternal = false, exitDuration = 800, underline = true, isVisible = false, scroll = false }) => {
     const [hovered, setHovered] = useState(false);
     const { theme } = useTheme();
     const path = usePathname();
@@ -37,34 +37,43 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
     const { setIsExit } = useExitAnimation();
     const isActive = href === path
 
-    const { resetRecentsVisibility } = useVisibility(); // Add this line
+    const { resetRecentsVisibility } = useVisibility();
     const { resetIntroVisibility } = useVisibility2();
 
-    const { ref, inView } = useInView({
-        triggerOnce: false,
-        threshold: 0.5,
-    });
+    const scrollToBottom = () => {
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: 'smooth',
+        });
+    };
 
     const handleClick = async (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+
+        if (scroll) {
+            // if scroll is true, perform scrolling to the bottom and exit
+            event.preventDefault();
+            scrollToBottom();
+            return;
+        }
+
+        // handle navigation and exit animation logic only if not scrolling
         if (isExternal || !isCurrentPath || (isCurrentPath && currentHash === targetHash)) {
-            // if external link or the base paths are different, trigger the exit animation
-            // or if the base path and hash are the same, just call onClick
             if (!isCurrentPath) {
                 event.preventDefault();
                 setIsExit(true);
-                resetRecentsVisibility();
-                resetIntroVisibility();
                 await sleep(exitDuration);
                 router.push(href);
                 setIsExit(false);
-
+                resetRecentsVisibility();
+                resetIntroVisibility();
             } else {
                 onClick?.();
             }
         } else {
-            // if the base paths are the same but hashes are different (aka same page), allow default behaviour without exit animation
             onClick?.();
         }
+
+        setHovered(false);
     };
 
     const content = isExternal ? (

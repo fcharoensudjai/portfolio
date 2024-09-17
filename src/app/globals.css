@@ -4,8 +4,20 @@
 
 @layer base {
     html {
-        @apply font-mono dark:bg-text-light;
+        @apply font-mono;
     }
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    scrollbar-width: none;
+}
+
+body {
+    -ms-overflow-style: none;
 }
 
 .text-responsive {
@@ -29,3 +41,29 @@
     font-size: 1em;
     line-height: 1em;
 }
+
+.border-corner {
+    position: relative;
+    border: 2px solid transparent;
+}
+.border-corner::before,
+.border-corner::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid
+}
+.border-corner::before {
+    top: 0;
+    left: 0;
+    border-bottom-width: 0;
+    border-right-width: 0;
+}
+.border-corner::after {
+    bottom: 0;
+    right: 0;
+    border-top-width: 0;
+    border-left-width: 0;
+}
+

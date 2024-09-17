@@ -22,7 +22,7 @@ export default function Gallery() {
     return (
         <div className={`${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
 
-            <Preloader texts={['about']}/>
+            <Preloader texts={['about']} delay={200} interval={40}/>
 
             <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav}/>
 
@@ -30,7 +30,7 @@ export default function Gallery() {
                 <div className="min-h-[100dvh] flex flex-col justify-between items-center px-6 md:px-16 xl:px-20">
                     <div
                         className="flex flex-col flex-grow justify-center items-center text-center lg:max-w-[1500px] mt-[75.58px] xl:mt-[103.22px]">
-                        <Title size="medium">
+                        <Title size="about">
                             Economics student with a passion for finance and data science finding
                             a creative outlet, dedicated to bringing ideas to life through vibrant and dynamic
                             illustrations.
@@ -136,7 +136,7 @@ export default function Gallery() {
                     </div>
 
                     <div className={`lg:min-h-[10dvh] flex justify-center items-center ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
-                        <Fader enterDelay={0.6} threshold={0.3}>
+                        <Fader enterDelay={0.3} threshold={0.3}>
                             <div className="flex justify-center items-center">
                                 <Button href="/gallery">
                                     view my gallery

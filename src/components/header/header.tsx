@@ -11,6 +11,7 @@ import { UnderlinedLink } from "@/components/underlinedlink";
 import { ExitAnimation } from "@/components/stylers/page-loading/exitanimation";
 import { useVisibility } from "@/app/recentsvisibilitycontext";
 import { useVisibility2 } from "@/app/introvisibilitycontext";
+import { useVisibility3 } from "@/app/contactvisibilitycontext";
 
 export const Header = () => {
     const [isNavOpen, setIsNavOpen] = useState(false);
@@ -19,6 +20,7 @@ export const Header = () => {
     const { theme } = useTheme();
     const { isRecentsInView } = useVisibility();
     const { isIntroInView } = useVisibility2();
+    const { isContactInView } = useVisibility3();
 
     return (
         <div>
@@ -30,7 +32,7 @@ export const Header = () => {
 
                     <LogoButton/>
 
-                    <div className="flex items-center space-x-4 mix-blend-difference">
+                    <div className="flex items-center space-x-4">
                         <nav className="hidden md:flex md:items-center">
                             <ul className="flex space-x-4 md:text-sm xl:text-md text-xs">
                                 <li>
@@ -54,7 +56,7 @@ export const Header = () => {
                                     </UnderlinedLink>
                                 </li>
                                 <li>
-                                    <UnderlinedLink exitDuration={1100} href="/#contact">
+                                    <UnderlinedLink exitDuration={1100} href="/#contact" scroll={true} isVisible={isContactInView}>
                                         contact
                                     </UnderlinedLink>
                                 </li>

@@ -1,10 +1,29 @@
 import { Title } from "@/components/title";
 import { Textbox } from "@/components/textbox";
 import { Scramble } from "@/components/stylers/scramblerthai";
+import { useVisibility3 } from "@/app/contactvisibilitycontext";
+import { useInView } from "react-intersection-observer";
+import React from "react";
 
 export const Contact = () => {
+
+    // controlling the underlining for the contact section
+
+    const { setIsContactInView } = useVisibility3();
+
+    const { ref: contactRef, inView: isContactInView } = useInView({
+        threshold: 0.5,
+        triggerOnce: false,
+    });
+
+    // used to update the context with visibility state
+    React.useEffect(() => {
+        setIsContactInView(isContactInView);
+    }, [isContactInView, setIsContactInView]);
+
+
     return (
-        <div id="contact" className="flex justify-center flex-col min-h-[50dvh] scroll-mt-[75.58px] xl:scroll-mt-[103.22px]">
+        <div ref={contactRef} id="contact" className="flex justify-center flex-col min-h-[50dvh] scroll-mt-[75.58px] xl:scroll-mt-[103.22px]">
 
             <div className={"flex flex-grow justify-center items-center w-full"}>
                 <Title size="large">
@@ -14,7 +33,7 @@ export const Contact = () => {
 
             <div className="flex justify-end items-center p-3 md:p-5">
                 <Textbox>
-                    <Scramble delay={2000} hover={true} interval={15}> [ mail | fuzz.ch04@gmail.com ] </Scramble>
+                    <Scramble delay={2000} hover={true} interval={15}> [ mail | fuzz.ch04@gmail.com ]</Scramble>
                 </Textbox>
             </div>
         </div>

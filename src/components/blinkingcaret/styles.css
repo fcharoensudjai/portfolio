@@ -11,6 +11,6 @@
     height: 1em;
     background-color: currentColor;
     animation: blink 1s step-start infinite;
-    margin-left: 0.55em;
+    margin-left: 0.5em;
     line-height: 1em;
 }
