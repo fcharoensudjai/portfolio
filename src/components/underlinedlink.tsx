@@ -18,13 +18,14 @@ interface UnderlinedLinkProps {
     underline?: boolean;
     isVisible?: boolean;
     scroll?: boolean;
+    toggleNav?: () => void;
 }
 
 function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, onClick, isExternal = false, exitDuration = 800, underline = true, isVisible = false, scroll = false }) => {
+export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, onClick, isExternal = false, exitDuration = 800, underline = true, isVisible = false, scroll = false, toggleNav }) => {
     const [hovered, setHovered] = useState(false);
     const { theme } = useTheme();
     const path = usePathname();
@@ -52,6 +53,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
         if (scroll) {
             // if scroll is true, perform scrolling to the bottom and exit
             event.preventDefault();
+            if (toggleNav) toggleNav();
             scrollToBottom();
             return;
         }

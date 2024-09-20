@@ -1,7 +1,6 @@
 import BlinkingCaret from "@/components/blinkingcaret/blinkingcaret";
 import React from "react";
 
-
 interface TextboxProps {
     children: React.ReactNode;
     caret?: boolean;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Title } from "@/components/title";
 import { useTheme } from "next-themes"
 import { MobileNav } from "@/components/header/mobilenav";
@@ -18,7 +18,8 @@ import { Preloader } from "@/components/stylers/page-loading/preloader";
 import { useInView } from "react-intersection-observer";
 import { useVisibility } from "@/app/recentsvisibilitycontext";
 import { useVisibility2 } from "@/app/introvisibilitycontext";
-import { useVisibility3 } from "@/app/contactvisibilitycontext";
+import { motion, useMotionValue, animate } from "framer-motion";
+import { Petal } from "@/components/petal";
 
 export default function Home() {
 
@@ -53,6 +54,81 @@ export default function Home() {
         setIsIntroInView(isIntroInView);
     }, [isIntroInView, setIsIntroInView]);
 
+    // flower rotating speed
+    const rotateValue = useMotionValue(0);
+    const [mustFinish, setMustFinish] = useState(false);
+    const [rerender, setRerender] = useState(false);
+    const defaultDuration = 7
+    const [duration, setDuration] = useState(defaultDuration);
+
+
+    useEffect(() => {
+        let controls;
+        const finalRotation = 360;
+
+        if (mustFinish) {
+            controls = animate(rotateValue, [rotateValue.get(), finalRotation], {
+                ease: "linear",
+                duration: duration * (1 - rotateValue.get() / finalRotation),
+                onComplete: () => {
+                    setMustFinish(false);
+                    setRerender(!rerender);
+                },
+            });
+        } else {
+            controls = animate(rotateValue, [0, finalRotation], {
+                ease: "linear",
+                duration: duration,
+                repeat: Infinity,
+                repeatType: "loop",
+                repeatDelay: 0,
+            });
+        }
+
+        return controls?.stop;
+    }, [rerender, rotateValue, duration, mustFinish]);
+
+
+    // changing rotation direction of flower
+
+    const [scrollDirection, setScrollDirection] = useState<'up' | 'down' | null>(null);
+    const [prevScrollY, setPrevScrollY] = useState(0);
+    const [prevScrollDirection, setPrevScrollDirection] = useState<'up' | 'down' | null>(null);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+
+            if (currentScrollY > prevScrollY) {
+                setScrollDirection('down');
+            } else if (currentScrollY < prevScrollY) {
+                setScrollDirection('up');
+            }
+
+            setPrevScrollY(currentScrollY);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [prevScrollY]);
+
+    useEffect(() => {
+        let controls;
+
+        const rotationDirection = scrollDirection === 'up' ? -360 : 360;
+
+        controls = animate(rotateValue, [rotateValue.get(), rotationDirection], {
+            ease: "linear",
+            duration: duration,
+            repeat: Infinity,
+            repeatType: "loop",
+            repeatDelay: 0,
+        });
+
+        return () => controls?.stop();
+    }, [scrollDirection, rotateValue, duration]);
+
+
     return (
         <div className={`${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
 
@@ -65,8 +141,8 @@ export default function Home() {
                     <Fader enterDelay={1.5} once={true}>
 
                         <Title size="large">
-                            <div className="fixed-line-spacing mt-[75.58px] xl:mt-[103.22px]">
-                                fasai <br/> charoensudjai
+                            <div className="relative fixed-line-spacing mt-[75.58px] xl:mt-[103.22px]">
+                                fasai <br/> charoensudjai <Petal positioning="left-[96.5%] bottom-[37.75%] sm:left-[96.75%] sm:bottom-[36.5%] 2xl:left-[97%]" />
                             </div>
                         </Title>
 
@@ -89,9 +165,9 @@ export default function Home() {
             </div>
 
             <div id="recents"
-                 className="px-6 md:px-16 xl:px-20 space-y-[25dvh] lg:space-y-12 my-7">
+                 className="px-6 md:px-16 xl:px-20 md:space-y-[25dvh] lg:space-y-12 my-7">
 
-                <div ref={recentsRef} className="sticky top-0 z-0">
+                <div ref={recentsRef} className="md:sticky md:top-0 md:z-10">
                     <Fader>
                         <div className="flex min-h-[100dvh] justify-center items-center">
 
@@ -122,9 +198,9 @@ export default function Home() {
                     </Fader>
                 </div>
 
-                <div className={`sticky top-0 z-10 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+                <div className={`md:sticky md:top-0 md:z-10 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
                     <Fader>
-                        <div className="flex h-[100dvh] justify-center items-center my-[20dvh]">
+                        <div className="flex md:h-[100dvh] justify-center items-center my-[20dvh]">
                             <div className="py-20 xl:py-0 space-y-3 lg:space-y-5">
 
                                 <div className="lg:hidden">
@@ -187,9 +263,9 @@ export default function Home() {
                     </Fader>
                 </div>
 
-                <div className={`sticky top-0 z-10 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+                <div className={`md:sticky md:top-0 md:z-10 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
                     <Fader>
-                        <div className="flex h-[100dvh] justify-center items-center my-[20dvh]">
+                        <div className="flex md:h-[100dvh] justify-center items-center my-[20dvh]">
                             <div className="py-20 xl:py-0 lg:py-0 space-y-3 lg:space-y-5">
 
                                 <div className="lg:hidden"><DottedLineSeparator align="left"> [ 02 ] </DottedLineSeparator>
@@ -276,7 +352,7 @@ export default function Home() {
                  className=" px-6 md:px-16 xl:px-20 space-y-5 lg:space-y-12 my-7 min-h-[100dvh] flex flex-col justify-center items-start">
 
                 <Fader>
-                    <div ref={introRef} className={`py-[75.48px] space-y-5`}>
+                    <div ref={introRef} className={`py-[75.48px] flex flex-col justify-center md:flex-row md:justify-between space-y-5 sm:space-y-0`}>
                         <div id="" className="md:hidden fixed-line-spacing">
                             <Title size="medium">
                                 a brief intro
@@ -284,9 +360,20 @@ export default function Home() {
                         </div>
 
                         <div
-                            className="flex flex-col justify-center space-y-5 sm:flex-row-reverse sm:space-x-reverse sm:space-x-6 lg:space-x-reverse lg:space-x-12 xl:space-x-reverse sm:space-y-0 ">
+                            className="flex flex-col justify-center lg:justify-between space-y-5 sm:flex-row-reverse sm:space-x-reverse lg:space-x-reverse xl:space-x-reverse sm:space-y-0 ">
 
-                            <div className="flex items-center justify-center md:justify-center">
+                            <motion.div
+                                className="flex justify-center items-center"
+                                style={{ rotate: rotateValue }}
+                                onHoverStart={() => {
+                                    setMustFinish(true);
+                                    setDuration(15);
+                                }}
+                                onHoverEnd={() => {
+                                    setMustFinish(true);
+                                    setDuration(defaultDuration);
+                                }}
+                            >
                                 <Image
                                     src={theme === "dark" ? "/icons/dark/logodark.svg" : "/icons/light/logo.svg"}
                                     alt="logo"
@@ -295,11 +382,11 @@ export default function Home() {
                                     style={{
                                         objectFit: "contain",
                                     }}
-                                    className="p-2 sm:p-4 xl:p-6 max-w-[70%] sm:h-[400px] lg:h-[700px] xl:h-full"
+                                    className="xl:p-2 2xl:p-10 max-w-[75%] h-full"
                                 />
-                            </div>
+                            </motion.div>
 
-                            <div className="sm:max-w-[50%] sm:space-y-5 lg:space-y-7 xl:space-y-10 flex flex-col justify-center items-start">
+                            <div className="sm:max-w-[55%] sm:space-y-5 lg:space-y-7 xl:space-y-10 flex flex-col justify-center items-start">
                                 <div className="hidden md:block fixed-line-spacing">
 
                                     <Title size="medium">

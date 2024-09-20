@@ -11,8 +11,8 @@ import { Title } from "@/components/title";
 import { Textbox } from "@/components/textbox";
 import { Scramble } from "@/components/stylers/scramblerthai";
 import Image from "next/image";
-import ParagraphScroll from "@/components/stylers/paragraphscroll";
 import {Button} from "@/components/button";
+import { Petal } from "@/components/petal";
 
 export default function Gallery() {
     const { theme } = useTheme();
@@ -30,11 +30,17 @@ export default function Gallery() {
                 <div className="min-h-[100dvh] flex flex-col justify-between items-center px-6 md:px-16 xl:px-20">
                     <div
                         className="flex flex-col flex-grow justify-center items-center text-center lg:max-w-[1500px] mt-[75.58px] xl:mt-[103.22px]">
-                        <Title size="about">
-                            Economics student with a passion for finance and data science finding
-                            a creative outlet, dedicated to bringing ideas to life through vibrant and dynamic
-                            illustrations.
-                        </Title>
+                        <div>
+
+                            <Title size="about">
+                            Economics student with a passion for
+                            finance and data science finding a
+                            creative outlet, dedicated to bringing
+                            ideas to life through vibrant and dynamic
+                            </Title>
+
+                            <span className={`relative`}><Title size="about">&nbsp;illustrations. <Petal size={"small"} positioning={'left-[63.75%] bottom-[90%] sm:left-[63.5%] sm:bottom-[140%] lg:bottom-[200%] 2xl:left-[63.25%] 2xl:bottom-[245%]'}/> </Title></span>
+                        </div>
                     </div>
 
                     <div className="py-3 lg:py-5">

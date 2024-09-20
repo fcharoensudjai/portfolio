@@ -7,10 +7,12 @@ interface ScrambleProps {
     delay?: number; // delay before starting the scramble effect
     hover?: boolean; // choose whether I want it to have an onHover effect
     interval?: number; // how quickly stuff scrambles
-    paragraphs?: boolean
+    paragraphs?: boolean;
+    navigate?: boolean;
+
 }
 
-export const Scramble: React.FC<ScrambleProps> = ({ children, delay = 500, hover = false, interval = 2, paragraphs=false}) => { // default delay is 500ms
+export const Scramble: React.FC<ScrambleProps> = ({ children, delay = 500, hover = false, interval = 2, paragraphs=false, navigate = false }) => { // default delay is 500ms
 
     const letters = "กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮ";
 
@@ -67,14 +69,24 @@ export const Scramble: React.FC<ScrambleProps> = ({ children, delay = 500, hover
     }
 
     useEffect(() => {
-        if (inView) {
+        if (inView && !navigate) {
             const delayTimer = setTimeout(() => {
                 handleScramble();
             }, delay);
 
-            return () => clearTimeout(delayTimer); // Clean up timer if the component unmounts or inView changes
+            return () => clearTimeout(delayTimer);
         }
     }, [inView, delay]);
+
+    useEffect(() => {
+        if (navigate) {
+            const delayTimer = setTimeout(() => {
+                handleScramble();
+            }, 200);
+
+            return () => clearTimeout(delayTimer);
+        }
+    }, [children, navigate]);
 
     useEffect(() => {
         return () => {

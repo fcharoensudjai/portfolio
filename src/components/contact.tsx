@@ -4,6 +4,7 @@ import { Scramble } from "@/components/stylers/scramblerthai";
 import { useVisibility3 } from "@/app/contactvisibilitycontext";
 import { useInView } from "react-intersection-observer";
 import React from "react";
+import { Petal } from "@/components/petal";
 
 export const Contact = () => {
 
@@ -21,14 +22,14 @@ export const Contact = () => {
         setIsContactInView(isContactInView);
     }, [isContactInView, setIsContactInView]);
 
-
     return (
         <div ref={contactRef} id="contact" className="flex justify-center flex-col min-h-[50dvh] scroll-mt-[75.58px] xl:scroll-mt-[103.22px]">
 
             <div className={"flex flex-grow justify-center items-center w-full"}>
-                <Title size="large">
-                    get in touch!
-                </Title>
+                <div className={`relative`}>
+                    <Title size="large">
+                    get in touch! <Petal enterDelay={0} positioning="left-[31%] bottom-[67%] sm:left-[31%] sm:bottom-[66%] lg:bottom-[79%] xl:bottom-[78%] 2xl:left-[31.25%]"/>
+                </Title></div>
             </div>
 
             <div className="flex justify-end items-center p-3 md:p-5">

@@ -11,7 +11,7 @@ export interface CustomImageData {
 export const imageData: CustomImageData[] = [
 
     {
-        src:"/images/raiden-shogun/raiden-gallery.png",
+        src:"/images/raiden-shogun/raidenshogun-gallery.png",
         alt: "drawing of raiden shogun",
         name: "raiden shogun",
         date: "2024-03-30",
@@ -159,7 +159,7 @@ export const imageData: CustomImageData[] = [
         src:"/images/fabric-gallery.png",
         alt: "drawing of a scarf",
         date: "2019-05-22",
-        name: "fabric study",
+        name: "fabric study (IGCSE)",
         wide: true
     },
 

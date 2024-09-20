@@ -8,11 +8,11 @@ import { LocalTime } from "@/components/footer/localtime";
 import { SocialIcons } from "@/components/footer/socialicons";
 import { Poppins } from "next/font/google";
 import { Scrollbar } from "@/components/header/scrollbar";
-import { UnderlinedLink } from "@/components/underlinedlink";
-import { usePathname, useRouter } from "next/navigation";
+import { UnderlinedLink } from "@/components/underlinedlink"
 import { useVisibility } from "@/app/recentsvisibilitycontext";
 import { useVisibility2 } from "@/app/introvisibilitycontext";
 import { useVisibility3 } from "@/app/contactvisibilitycontext";
+import { usePathname } from "next/navigation";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -96,7 +96,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
                             </UnderlinedLink>
                         </li>
                         <li>
-                            <UnderlinedLink href="/#contact" scroll={true} isVisible={isContactInView} onClick={toggleNav}>
+                            <UnderlinedLink href="/#contact" scroll={true} isVisible={isContactInView} onClick={toggleNav} toggleNav={toggleNav}>
                                 contact
                             </UnderlinedLink>
                         </li>
