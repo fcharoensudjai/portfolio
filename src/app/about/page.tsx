@@ -39,7 +39,7 @@ export default function Gallery() {
                             ideas to life through vibrant and dynamic
                             </Title>
 
-                            <span className={`relative`}><Title size="about">&nbsp;illustrations. <Petal size={"small"} positioning={'left-[63.75%] bottom-[90%] sm:left-[63.5%] sm:bottom-[140%] lg:bottom-[200%] 2xl:left-[63.25%] 2xl:bottom-[245%]'}/> </Title></span>
+                            <span className={`relative`}><Title size="about">&nbsp;illustrations. <Petal enterDelay={0.3} size={"small"} positioning={'left-[64%] bottom-[92%] sm:left-[63.75%] sm:bottom-[94.5%] md:bottom-[138%] lg:left-[63%] lg:bottom-[165%] 2xl:left-[63.5%] 2xl:bottom-[240%]'}/> </Title></span>
                         </div>
                     </div>
 
@@ -78,7 +78,7 @@ export default function Gallery() {
                             />
                         </div>
 
-                        <div className="lg:w-[55%] h-auto space-y-5">
+                        <div className="hidden lg:block lg:w-[55%] h-auto space-y-5">
 
                             <div
                                 className="lg:sticky lg:top-0 lg:pt-[10dvh] lg:min-h-[100dvh] flex items-center justify-center">
@@ -139,9 +139,53 @@ export default function Gallery() {
                             </div>
                         </div>
 
+                        <div className="lg:hidden h-auto space-y-5">
+                            <div
+                                className={`flex justify-center items-center ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
+                                <Textbox caret={false}>
+                                    <Scramble>
+                                        Hi, I’m Fasai Charoensudjai, a 20-year-old Economics student at the University
+                                        of Warwick from Thailand. While I’m actively pursuing a career in consulting
+                                        with a focus on data science and finance, my real passion is art. This website
+                                        is a passion project I created over the summer, combining my love for art and
+                                        web development to showcase my illustrations, concept art, and fanart in a way
+                                        that feels true to my personal style.
+                                    </Scramble>
+                                </Textbox>
+                            </div>
+
+                            <div
+                                className={`flex justify-center items-center ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
+                                <Textbox caret={false}>
+                                    <Scramble>
+                                        Art has always been a part of my life, and even though university keeps me busy,
+                                        I still find time to draw pieces inspired by the games and shows I love, like
+                                        League of Legends, Genshin Impact, and Arcane. I primarily work digitally using
+                                        Procreate on my iPad, but I’ve also explored traditional mediums in the past. My
+                                        creative process is mostly focused on stylistic work, but I’m always pushing
+                                        myself to improve.
+                                    </Scramble>
+                                </Textbox>
+                            </div>
+
+                            <div
+                                className={`flex justify-center items-center ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
+                                <Textbox>
+                                    <Scramble>
+                                        Coming from Thailand, I wanted this website to reflect a bit of my cultural
+                                        background, which is why I designed the logo based on a traditional Thai
+                                        pattern. This site is not only a space to display my art but also a step forward
+                                        in my web development journey!
+                                    </Scramble>
+                                </Textbox>
+                            </div>
+                        </div>
+
+
                     </div>
 
-                    <div className={`lg:min-h-[10dvh] flex justify-center items-center ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+                    <div
+                        className={`lg:min-h-[10dvh] flex justify-center items-center ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
                         <Fader enterDelay={0.3} threshold={0.3}>
                             <div className="flex justify-center items-center">
                                 <Button href="/gallery">

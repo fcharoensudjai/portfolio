@@ -18,8 +18,9 @@ import { Preloader } from "@/components/stylers/page-loading/preloader";
 import { useInView } from "react-intersection-observer";
 import { useVisibility } from "@/app/recentsvisibilitycontext";
 import { useVisibility2 } from "@/app/introvisibilitycontext";
-import { motion, useMotionValue, animate } from "framer-motion";
+import {motion, useMotionValue, animate, AnimatePresence} from "framer-motion";
 import { Petal } from "@/components/petal";
+import {UnderlinedLink} from "@/components/underlinedlink";
 
 export default function Home() {
 
@@ -93,7 +94,6 @@ export default function Home() {
 
     const [scrollDirection, setScrollDirection] = useState<'up' | 'down' | null>(null);
     const [prevScrollY, setPrevScrollY] = useState(0);
-    const [prevScrollDirection, setPrevScrollDirection] = useState<'up' | 'down' | null>(null);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -128,6 +128,24 @@ export default function Home() {
         return () => controls?.stop();
     }, [scrollDirection, rotateValue, duration]);
 
+    const [showOverlay, setShowOverlay] = useState(false);
+    const toggleOverlay = () => setShowOverlay(!showOverlay);
+
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+    const textBoxWidth = 150;
+    const textBoxHeight = 50;
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        const clampedX = Math.min(Math.max(mouseX, textBoxWidth / 2), rect.width - textBoxWidth / 1.6 );
+        const clampedY = Math.min(Math.max(mouseY, textBoxHeight / 2), rect.height - textBoxHeight);
+
+        setMousePosition({ x: clampedX, y: clampedY });
+    };
 
     return (
         <div className={`${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
@@ -142,7 +160,7 @@ export default function Home() {
 
                         <Title size="large">
                             <div className="relative fixed-line-spacing mt-[75.58px] xl:mt-[103.22px]">
-                                fasai <br/> charoensudjai <Petal positioning="left-[96.5%] bottom-[37.75%] sm:left-[96.75%] sm:bottom-[36.5%] 2xl:left-[97%]" />
+                                fasai <br/> charoensudjai <Petal positioning="left-[96.5%] bottom-[36.75%] sm:left-[96.75%] sm:bottom-[36.5%] 2xl:left-[97%]" />
                             </div>
                         </Title>
 
@@ -211,7 +229,50 @@ export default function Home() {
 
                                 <div className="flex flex-col lg:flex-row lg:justify-between justify-center lg:space-x-16 space-y-3 md:space-y-7 lg:space-y-0 lg:py-12">
 
-                                    <div className="relative lg:w-[65%] md:min-h-[35dvh] max-h-full">
+                                    <motion.div
+                                        className="relative lg:w-[65%] md:min-h-[35dvh] max-h-full rounded-xl"
+                                        onHoverStart={toggleOverlay}
+                                        onHoverEnd={toggleOverlay}
+                                        onMouseMove={handleMouseMove}
+                                    >
+
+                                        <AnimatePresence>
+                                            {showOverlay && (
+                                                <motion.div
+                                                    className="inset-0 z-10 absolute flex justify-center items-center rounded-xl"
+                                                    initial={{ opacity: 0 }}
+                                                    animate={{ opacity: 1 }}
+                                                    exit={{ opacity: 0 }}
+                                                    transition={{ duration: 0.2, ease: [0.65, 0, 0.35, 1] }}
+                                                    style={{ cursor: showOverlay ? "none" : "default" }}
+                                                >
+                                                    <div
+                                                        className={`absolute inset-0 backdrop-blur-[2px] rounded-xl ${theme === "dark" ? "bg-middle-colour" : "bg-text-dark"} bg-opacity-60`}
+                                                    >
+                                                        <motion.div
+                                                            className="absolute border-corner z-20 flex justify-center items-center"
+                                                            style={{
+                                                                top: mousePosition.y - textBoxHeight / 2 + 10,
+                                                                left: mousePosition.x - textBoxWidth / 2 + 10,
+                                                                width: textBoxWidth,
+                                                                height: textBoxHeight,
+                                                            }}
+                                                            initial={{scale: 1.3}}
+                                                            animate={{scale: 1}}
+                                                            exit={{scale: 1.3}}
+                                                            transition={{ duration: 0.2, ease: [0.65, 0, 0.35, 1] }}
+                                                            whileTap={{scale: 0.9}}
+                                                        >
+                                                            <UnderlinedLink href="/recents/1" line={false}>
+                                                                <Scramble interval={20} hover={true}> more detail </Scramble>
+                                                            </UnderlinedLink>
+                                                        </motion.div>
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+
+
                                         <Image
                                             src="/images/raiden-shogun/raiden-home.png"
                                             alt="snippet of raiden shogun"
@@ -221,7 +282,7 @@ export default function Home() {
                                             quality={60}
                                             className="w-full h-auto lg:h-full lg:w-full rounded-xl"
                                         />
-                                    </div>
+                                    </motion.div>
 
 
                                     <div className="lg:min-w-[45%] lg:max-w-[45%] flex flex-col lg:space-y-5">
@@ -249,13 +310,13 @@ export default function Home() {
                                                 </div>
                                             </div>
 
-                                            <div className="hidden lg:block justify-start"><Button href=""> more detail </Button></div>
+                                            <div className="hidden lg:block justify-start"><Button href="/recents/1"> more detail </Button></div>
 
                                         </div>
 
                                     </div>
 
-                                    <div className="lg:hidden flex justify-center items-center"><Button href=""> more detail </Button></div>
+                                    <div className="lg:hidden flex justify-center items-center"><Button href="/recents/1"> more detail </Button></div>
 
                                 </div>
                             </div>
@@ -315,13 +376,13 @@ export default function Home() {
                                                 </div>
                                             </div>
 
-                                            <div className="hidden lg:flex justify-end"><Button href=""> more detail </Button></div>
+                                            <div className="hidden lg:flex justify-end"><Button href="/recents/2"> more detail </Button></div>
 
                                         </div>
 
                                     </div>
 
-                                    <div className="lg:hidden flex justify-center items-center"><Button href=""> more detail </Button></div>
+                                    <div className="lg:hidden flex justify-center items-center"><Button href="/recents/2"> more detail </Button></div>
 
                                 </div>
                             </div>

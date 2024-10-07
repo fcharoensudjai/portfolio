@@ -28,7 +28,7 @@ export const Contact = () => {
             <div className={"flex flex-grow justify-center items-center w-full"}>
                 <div className={`relative`}>
                     <Title size="large">
-                    get in touch! <Petal enterDelay={0} positioning="left-[31%] bottom-[67%] sm:left-[31%] sm:bottom-[66%] lg:bottom-[79%] xl:bottom-[78%] 2xl:left-[31.25%]"/>
+                    get in touch! <Petal enterDelay={0} positioning="left-[31%] bottom-[66%] sm:left-[31%] sm:bottom-[66%] lg:bottom-[79%] xl:bottom-[78%] 2xl:left-[31.25%]"/>
                 </Title></div>
             </div>
 

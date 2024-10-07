@@ -1,12 +1,15 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { useExitAnimation } from "@/app/exitcontext";
+import { motion } from "framer-motion";
 
 export const ExitAnimation: React.FC = () => {
     const { isExit } = useExitAnimation();
     const [isAnimating, setIsAnimating] = useState(false);
+    const currentPath = usePathname();
+    const [previousPath, setPreviousPath] = useState<string | null>(null);
 
     useEffect(() => {
         if (isExit) {
@@ -14,11 +17,13 @@ export const ExitAnimation: React.FC = () => {
         }
     }, [isExit]);
 
-    const handleAnimationComplete = () => {
-        setTimeout(() => {
+    useEffect(() => {
+        if (previousPath && previousPath !== currentPath) {
             setIsAnimating(false);
-        }, 875);
-    };
+        }
+
+        setPreviousPath(currentPath);
+    }, [currentPath, previousPath]);
 
     return (
         <>
@@ -28,7 +33,6 @@ export const ExitAnimation: React.FC = () => {
                     animate={{ y: 0 }}
                     transition={{ duration: 1, ease: [0.65, 0, 0.35, 1] }}
                     className="fixed inset-0 z-50 bg-middle-colour"
-                    onAnimationComplete={handleAnimationComplete}
                 />
             )}
         </>

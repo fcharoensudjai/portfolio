@@ -22,8 +22,8 @@ export const ImageViewer: React.FC<ViewerProps> = ({ src, alt, name, toggleViewe
 
     return (
         <div className={`fixed flex justify-center items-center h-[100dvh] inset-0 z-30`}>
-            <div className={``}>
-                <div className={`flex flex-col space-y-3 md:space-y-5 justify-center items-center`}>
+            <div className={` mt-[75.58px] xl:mt-[103.22px]`}>
+                <div className={`flex flex-col space-y-3 md:space-y-5 justify-center items-center py-3 lg:py-5`}>
 
                     <div className={`md:text-sm xl:text-md text-xs`}>[ <Scramble delay={750} hover={true} interval={30} navigate={true}>{name}</Scramble> ]
                     </div>

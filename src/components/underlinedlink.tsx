@@ -19,13 +19,14 @@ interface UnderlinedLinkProps {
     isVisible?: boolean;
     scroll?: boolean;
     toggleNav?: () => void;
+    line?: boolean;
 }
 
 function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, onClick, isExternal = false, exitDuration = 800, underline = true, isVisible = false, scroll = false, toggleNav }) => {
+export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, onClick, isExternal = false, exitDuration = 800, underline = true, isVisible = false, scroll = false, toggleNav, line = true }) => {
     const [hovered, setHovered] = useState(false);
     const { theme } = useTheme();
     const path = usePathname();
@@ -50,16 +51,24 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
 
     const handleClick = async (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
 
+        // for scrolling to the bottom
+
         if (scroll) {
-            // if scroll is true, perform scrolling to the bottom and exit
             event.preventDefault();
             if (toggleNav) toggleNav();
             scrollToBottom();
             return;
         }
 
-        // handle navigation and exit animation logic only if not scrolling
-        if (isExternal || !isCurrentPath || (isCurrentPath && currentHash === targetHash)) {
+        // for external links
+
+        if (isExternal) {
+            event.preventDefault();
+            await sleep(10);
+            window.open(href, "_blank", "noopener,noreferrer");
+
+        } else if (!isCurrentPath || (isCurrentPath && currentHash === targetHash)) {
+            // internal navigation
             if (!isCurrentPath) {
                 event.preventDefault();
                 setIsExit(true);
@@ -76,14 +85,14 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
         }
 
         setHovered(false);
+        setIsExit(false);
     };
+
 
     const content = isExternal ? (
         <a
             href={href}
             onClick={handleClick}
-            target="_blank"
-            rel="noopener noreferrer"
             className="relative inline-block"
         >
             {children}
@@ -106,7 +115,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
                 className={`
                 border-t-[3px] transition-all duration-[350ms] ease-in-out
                 ${theme === "dark" ? "border-accent-dark" : "border-accent-light"} 
-                ${hovered || isActive || isVisible ? "w-full" : "w-0"} 
+                ${hovered && line || isActive || isVisible ? "w-full" : "w-0"} 
             `}>
             </div>
         </motion.div> )

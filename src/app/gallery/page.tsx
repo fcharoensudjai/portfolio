@@ -34,7 +34,7 @@ export default function Gallery() {
             <MobileNav isNavOpen={isNavOpen} toggleNav={() => setIsNavOpen(!isNavOpen)}/>
 
             <Fader enterDelay={1.2} once={true}>
-                <div className="min-h-[100dvh] flex flex-col justify-center items-start px-6 md:px-16 xl:px-20 space-y-3 lg:space-y-7 xl:space-y-12">
+                <div className="min-h-[100dvh] flex flex-col justify-center items-start px-6 md:px-16 xl:px-20 space-y-3 lg:space-y-7 xl:space-y-10">
                     <Title size="large">gallery</Title>
                     <div className="lg:w-[65%] flex flex-col space-y-6 lg:space-y-7 xl:space-y-10">
                         <div className={`min-h-200px sm:min-h-0`}><Textbox caret={false}>

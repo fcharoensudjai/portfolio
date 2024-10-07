@@ -18,10 +18,10 @@ export const Card: React.FC<CardProps> = ({ src, alt, className, onClick }) => {
         e.preventDefault();
     };
 
+    const { theme } = useTheme();
+
     const [showOverlay, setShowOverlay] = useState(false);
     const toggleOverlay = () => setShowOverlay(!showOverlay);
-
-    const { theme } = useTheme();
 
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
@@ -45,7 +45,7 @@ export const Card: React.FC<CardProps> = ({ src, alt, className, onClick }) => {
             onHoverStart={toggleOverlay}
             onHoverEnd={toggleOverlay}
             onMouseMove={handleMouseMove}
-            onClick={onClick} // Call onClick passed from Gallery
+            onClick={onClick}
         >
             <Fader once={true} threshold={0.4}>
                 <AnimatePresence>

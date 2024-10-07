@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { useTheme } from "next-themes";
-import {UnderlinedLink} from "@/components/underlinedlink";
+import { UnderlinedLink } from "@/components/underlinedlink";
 
 export const SocialIcons = () => {
     const { theme } = useTheme();
@@ -63,7 +63,7 @@ export const SocialIcons = () => {
                 </a>
 
                 <a
-                    href="https://www.instagram.com/fuzz_ch/"
+                    href="https://www.youtube.com/@fuzz_ch"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="relative inline-block"
@@ -80,11 +80,9 @@ export const SocialIcons = () => {
 
 
             <div className="hidden md:flex space-x-3 md:text-sm xl:text-md text-xs font-mono md:space-x-5">
-                <UnderlinedLink href="https://www.linkedin.com/in/fasaich/"
-                                isExternal={true}> linkedin </UnderlinedLink>
+                <UnderlinedLink href="https://www.linkedin.com/in/fasaich/" isExternal={true}> linkedin </UnderlinedLink>
                 <UnderlinedLink href="https://www.instagram.com/fuzz_ch/" isExternal={true}> instagram </UnderlinedLink>
-                <UnderlinedLink href="https://www.artstation.com/fuzz_ch"
-                                isExternal={true}> artstation </UnderlinedLink>
+                <UnderlinedLink href="https://www.artstation.com/fuzz_ch" isExternal={true}> artstation </UnderlinedLink>
                 <UnderlinedLink href="https://www.youtube.com/@fuzz_ch" isExternal={true}> youtube </UnderlinedLink>
             </div>
         </div>
