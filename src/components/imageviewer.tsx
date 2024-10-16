@@ -33,7 +33,7 @@ export const ImageViewer: React.FC<ViewerProps> = ({ src, alt, name, toggleViewe
                         <div className={`flex flex-row space-x-1 md:space-x-7 px-1 md:px-3 lg:px-7`}>
                             <button onClick={prevImage}>
                                 <Image
-                                    src={theme === "dark" ? "/icons/dark/leftarrowdark.svg" : "/icons/light/leftarrow.svg"}
+                                    src={theme === "dark" ? "/portfolio/icons/dark/leftarrowdark.svg" : "/portfolio/icons/light/leftarrow.svg"}
                                     alt="previous image"
                                     width={35}
                                     height={35}
@@ -58,7 +58,7 @@ export const ImageViewer: React.FC<ViewerProps> = ({ src, alt, name, toggleViewe
 
                             <button onClick={nextImage}>
                                 <Image
-                                    src={theme === "dark" ? "/icons/dark/rightarrowdark.svg" : "/icons/light/rightarrow.svg"}
+                                    src={theme === "dark" ? "/portfolio/icons/dark/rightarrowdark.svg" : "/portfolio/icons/light/rightarrow.svg"}
                                     alt="next image"
                                     width={35}
                                     height={35}
@@ -71,7 +71,7 @@ export const ImageViewer: React.FC<ViewerProps> = ({ src, alt, name, toggleViewe
 
                 <button onClick={toggleViewer} aria-label="close viewer">
                     <Image
-                        src={theme === "dark" ? "/icons/dark/closedark.svg" : "/icons/light/close.svg"}
+                        src={theme === "dark" ? "/portfolio/icons/dark/closedark.svg" : "/portfolio/icons/light/close.svg"}
                         alt="close navigation"
                         width={35}
                         height={35}
