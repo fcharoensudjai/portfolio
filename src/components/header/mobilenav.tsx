@@ -76,7 +76,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
                             </UnderlinedLink>
                         </li>
                         <li>
-                            <UnderlinedLink href="/portfolio/#recents" onClick={toggleNav} isVisible={isRecentsInView}>
+                            <UnderlinedLink href="/#recents" onClick={toggleNav} isVisible={isRecentsInView}>
                                 recents
                             </UnderlinedLink>
                         </li>
