@@ -36,7 +36,7 @@ export const Header = () => {
                         <nav className="hidden md:flex md:items-center">
                             <ul className="flex space-x-4 md:text-sm xl:text-md text-xs">
                                 <li>
-                                    <UnderlinedLink exitDuration={1100} href="/#recents" isVisible={isRecentsInView}>
+                                    <UnderlinedLink exitDuration={1100} href="/portfolio/#recents" isVisible={isRecentsInView}>
                                         recents
                                     </UnderlinedLink>
                                 </li>
@@ -46,7 +46,7 @@ export const Header = () => {
                                     </UnderlinedLink>
                                 </li>
                                 <li>
-                                    <UnderlinedLink exitDuration={1100} href="/#intro" isVisible={isIntroInView}>
+                                    <UnderlinedLink exitDuration={1100} href="/portfolio/#intro" isVisible={isIntroInView}>
                                         intro
                                     </UnderlinedLink>
                                 </li>
@@ -56,7 +56,7 @@ export const Header = () => {
                                     </UnderlinedLink>
                                 </li>
                                 <li>
-                                    <UnderlinedLink exitDuration={1100} href="/#contact" scroll={true} isVisible={isContactInView}>
+                                    <UnderlinedLink exitDuration={1100} href="/portfolio/#contact" scroll={true} isVisible={isContactInView}>
                                         contact
                                     </UnderlinedLink>
                                 </li>
