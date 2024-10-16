@@ -90,7 +90,7 @@ export const Petal : React.FC<PetalProps> = ({ positioning, enterDelay = 0.75, s
                 style={{ transformOrigin: "10% 100%" }}
             >
                 <Image
-                    src={theme === "dark" ? "/icons/dark/petaldark.svg" : "/icons/light/petal.svg"}
+                    src={theme === "dark" ? "/portfolio/icons/dark/petaldark.svg" : "/portfolio/icons/light/petal.svg"}
                     alt={"petal"}
                     width={38.45}
                     height={49.29}

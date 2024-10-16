@@ -79,139 +79,139 @@ interface btsData {
 export const bts: btsData[] = [
     {
         id: 2,
-        screenshot: "/images/raven/bts/raven-bts-1.png",
+        screenshot: "/portfolio/images/raven/bts/raven-bts-1.png",
         alt: "a picture of the drawing process for raven",
     },
 
     {
         id: 2,
-        screenshot: "/images/raven/bts/raven-bts-2.png",
+        screenshot: "/portfolio/images/raven/bts/raven-bts-2.png",
         alt: "a picture of the drawing process for raven",
     },
 
     {
         id: 2,
-        screenshot: "/images/raven/bts/raven-bts-3.png",
+        screenshot: "/portfolio/images/raven/bts/raven-bts-3.png",
         alt: "a picture of the drawing process for raven",
     },
 
     {
         id: 2,
-        screenshot: "/images/raven/bts/raven-bts-4.png",
+        screenshot: "/portfolio/images/raven/bts/raven-bts-4.png",
         alt: "a picture of the drawing process for raven",
     },
 
     {
         id: 2,
-        screenshot: "/images/raven/bts/raven-bts-5.png",
+        screenshot: "/portfolio/images/raven/bts/raven-bts-5.png",
         alt: "a picture of the drawing process for raven",
     },
 
     {
         id: 2,
-        screenshot: "/images/raven/bts/raven-bts-6.png",
+        screenshot: "/portfolio/images/raven/bts/raven-bts-6.png",
         alt: "a picture of the drawing process for raven",
     },
 
     {
         id: 2,
-        screenshot: "/images/raven/bts/raven-bts-7.png",
+        screenshot: "/portfolio/images/raven/bts/raven-bts-7.png",
         alt: "a picture of the drawing process for raven",
     },
 
     {
         id: 2,
-        screenshot: "/images/raven/bts/raven-bts-8.png",
+        screenshot: "/portfolio/images/raven/bts/raven-bts-8.png",
         alt: "a picture of the drawing process for raven",
     },
 
     {
         id: 2,
-        screenshot: "/images/raven/bts/raven-bts-9.png",
+        screenshot: "/portfolio/images/raven/bts/raven-bts-9.png",
         alt: "a picture of the drawing process for raven",
     },
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/bts/raiden-bts-1.PNG",
+        screenshot: "/portfolio/images/raiden-shogun/bts/raiden-bts-1.PNG",
         alt: "a picture of the drawing process for raiden shogun",
     },
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/bts/raiden-bts-2.jpg",
+        screenshot: "/portfolio/images/raiden-shogun/bts/raiden-bts-2.jpg",
         alt: "a picture of the drawing process for raiden shogun",
     },
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/bts/raiden-bts-3.jpg",
+        screenshot: "/portfolio/images/raiden-shogun/bts/raiden-bts-3.jpg",
         alt: "a picture of the drawing process for raiden shogun",
     },
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/bts/raiden-bts-4.jpg",
+        screenshot: "/portfolio/images/raiden-shogun/bts/raiden-bts-4.jpg",
         alt: "a picture of the drawing process for raiden shogun",
     },
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/bts/raiden-bts-5.jpg",
+        screenshot: "/portfolio/images/raiden-shogun/bts/raiden-bts-5.jpg",
         alt: "a picture of the drawing process for raiden shogun",
     },
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/bts/raiden-bts-6.jpg",
+        screenshot: "/portfolio/images/raiden-shogun/bts/raiden-bts-6.jpg",
         alt: "a picture of the drawing process for raiden shogun",
     },
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/bts/raiden-bts-7.jpg",
+        screenshot: "/portfolio/images/raiden-shogun/bts/raiden-bts-7.jpg",
         alt: "a picture of the drawing process for raiden shogun",
     },
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/bts/raiden-bts-8.jpg",
+        screenshot: "/portfolio/images/raiden-shogun/bts/raiden-bts-8.jpg",
         alt: "a picture of the drawing process for raiden shogun",
     },
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/bts/raiden-bts-9.jpg",
+        screenshot: "/portfolio/images/raiden-shogun/bts/raiden-bts-9.jpg",
         alt: "a picture of the drawing process for raiden shogun",
     },
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/bts/raiden-bts-10.jpg",
+        screenshot: "/portfolio/images/raiden-shogun/bts/raiden-bts-10.jpg",
         alt: "a picture of the drawing process for raiden shogun",
     },
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/bts/raiden-bts-11.jpeg",
+        screenshot: "/portfolio/images/raiden-shogun/bts/raiden-bts-11.jpeg",
         alt: "a picture of the drawing process for raiden shogun",
     },
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/bts/raiden-bts-12.jpeg",
+        screenshot: "/portfolio/images/raiden-shogun/bts/raiden-bts-12.jpeg",
         alt: "a picture of the drawing process for raiden shogun",
     },
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/bts/raiden-bts-13.jpeg",
+        screenshot: "/portfolio/images/raiden-shogun/bts/raiden-bts-13.jpeg",
         alt: "a picture of the drawing process for raiden shogun",
     },
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/raidenshogun-gallery.png",
+        screenshot: "/portfolio/images/raiden-shogun/raidenshogun-gallery.png",
         alt: "a picture of the drawing process for raiden shogun",
     },
 

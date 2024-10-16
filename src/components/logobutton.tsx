@@ -68,7 +68,7 @@ export const LogoButton = ({ size = "small", exitDuration = 800 }: LogoButtonPro
         <Link href="/#home" onClick={handleClick}>
             <div className={logoButtonVariants({ size })}>
                 <Image
-                    src={theme === "dark" ? "/portfolio/icons/dark/fulllogodark.svg" : "/icons/light/fulllogo.svg"}
+                    src={theme === "dark" ? "/portfolio/icons/dark/fulllogodark.svg" : "/portfolio/icons/light/fulllogo.svg"}
                     alt="full logo"
                     width={500}
                     height={500}

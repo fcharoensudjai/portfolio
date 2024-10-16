@@ -273,7 +273,7 @@ export default function Home() {
 
 
                                         <Image
-                                            src="/images/raiden-shogun/raiden-home.png"
+                                            src="/portfolio/images/raiden-shogun/raiden-home.png"
                                             alt="snippet of raiden shogun"
                                             width={1183}
                                             height={851}
@@ -382,7 +382,7 @@ export default function Home() {
 
 
                                         <Image
-                                            src="/images/raven/raven-home.png"
+                                            src="/portfolio/images/raven/raven-home.png"
                                             alt="snippet of raven"
                                             width={1183}
                                             height={851}
@@ -484,7 +484,7 @@ export default function Home() {
                                 }}
                             >
                                 <Image
-                                    src={theme === "dark" ? "/icons/dark/logodark.svg" : "/icons/light/logo.svg"}
+                                    src={theme === "dark" ? "/portfolio/icons/dark/logodark.svg" : "/portfolio/icons/light/logo.svg"}
                                     alt="logo"
                                     width={1000}
                                     height={1000}
