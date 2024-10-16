@@ -50,9 +50,9 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
     };
 
     const handleClick = async (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        const isAnchorLink = href.startsWith('#');
 
-        // for scrolling to the bottom
-
+        // scrolling to the bottom
         if (scroll) {
             event.preventDefault();
             if (toggleNav) toggleNav();
@@ -60,27 +60,38 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
             return;
         }
 
-        // for external links
-
+        // external links
         if (isExternal) {
             event.preventDefault();
             await sleep(10);
             window.open(href, "_blank", "noopener,noreferrer");
+            return;
+        }
 
-        } else if (!isCurrentPath || (isCurrentPath && currentHash === targetHash)) {
-            // internal navigation
-            if (!isCurrentPath) {
-                event.preventDefault();
-                setIsExit(true);
-                await sleep(exitDuration);
-                router.push(href);
-                setIsExit(false);
-                resetRecentsVisibility();
-                resetIntroVisibility();
-            } else {
-                onClick?.();
+        // internal navigation
+        const isCurrentHash = currentHash === targetHash;
+        const isNavigatingToDifferentPath = !isCurrentPath || (isCurrentPath && !isCurrentHash);
+
+        if (isNavigatingToDifferentPath) {
+            event.preventDefault();
+
+            // trigger exit animation if navigating away
+            setIsExit(true);
+            await sleep(exitDuration);
+
+            router.push(href); // navigate to the new path
+            setIsExit(false);
+            resetRecentsVisibility();
+            resetIntroVisibility();
+        } else if (isAnchorLink) {
+            // anchor link on the same page, just scroll without triggering the exit
+            event.preventDefault();
+            const targetElement = document.getElementById(targetHash);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth' });
             }
         } else {
+            // handle normal click if on the same page and not an anchor link
             onClick?.();
         }
 
