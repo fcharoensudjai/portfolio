@@ -39,10 +39,7 @@ export default function Gallery() {
                     <div className="lg:w-[65%] flex flex-col space-y-6 lg:space-y-7 xl:space-y-10">
                         <div className={`min-h-200px sm:min-h-0`}><Textbox caret={false}>
                             <Scramble delay={1500}>
-                                Welcome to my gallery! Here, you’ll find a collection of pieces that have been a part of
-                                my journey in learning and growing as an artist. I mostly work in Procreate, but you'll
-                                see some studies in other mediums from my pieces in school. Click on the pieces to view
-                                them in detail, and feel free to see the progress I've made along the way :)
+                                {"Welcome to my gallery! Here, you’ll find a collection of pieces that have been a part of my journey in learning and growing as an artist. I mostly work in Procreate, but you'll see some studies in other mediums from my pieces in school. Click on the pieces to view them in detail, and feel free to see the progress I've made along the way :)"}
                             </Scramble>
                         </Textbox></div>
                         <Textbox>
