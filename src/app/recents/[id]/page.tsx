@@ -17,14 +17,6 @@ import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
-export async function generateStaticParams() {
-    const paths = artworks.map((artwork) => ({
-        id: artwork.id.toString(),
-    }));
-
-    return paths;
-}
-
 export default function Recent() {
     const { theme } = useTheme();
     const [isNavOpen, setIsNavOpen] = useState(false);
