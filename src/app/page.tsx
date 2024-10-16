@@ -391,7 +391,7 @@ export default function Home() {
                                                 objectPosition: "80% 50%"
                                             }}
                                             quality={80}
-                                            className="w-full h-auto lg:h-full lg:w-auto rounded-xl"
+                                            className="w-full h-auto lg:h-full lg:w-full rounded-xl"
                                         />
                                     </motion.div>
 
