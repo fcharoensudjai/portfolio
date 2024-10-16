@@ -23,7 +23,7 @@ export const Contact = () => {
     }, [isContactInView, setIsContactInView]);
 
     return (
-        <div ref={contactRef} id="contact" className="flex justify-center flex-col min-h-[50dvh] scroll-mt-[75.58px] xl:scroll-mt-[103.22px]">
+        <div ref={contactRef} id="contact" className="flex justify-center flex-col min-h-[70dvh] scroll-mt-[75.58px] xl:scroll-mt-[103.22px]">
 
             <div className={"flex flex-grow justify-center items-center w-full"}>
                 <div className={`relative`}>
