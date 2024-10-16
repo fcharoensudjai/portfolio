@@ -16,8 +16,9 @@ import { artworks, closerLook, bts } from "@/app/recents/[id]/artworks";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import PageServer from "@/app/recents/[id]/pageserver";
 
-export default function Recent() {
+export default function Recent({ params }: { params: { id: string } }) {
     const { theme } = useTheme();
     const [isNavOpen, setIsNavOpen] = useState(false);
     const toggleNav = () => setIsNavOpen(!isNavOpen);
@@ -87,6 +88,8 @@ export default function Recent() {
             className={`min-h-[100dvh] flex flex-col ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
 
             <Preloader texts={[artwork.title]} delay={200} interval={40}/>
+
+            <PageServer params={params} />
 
             <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav}/>
 
