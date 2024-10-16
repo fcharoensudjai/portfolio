@@ -70,7 +70,7 @@ export const Header = () => {
                         <ThemeSwitch/>
                         <button onClick={toggleNav} aria-label="toggle navigation">
                             <Image
-                                src={theme === "dark" ? "/icons/dark/hamburgerdark.svg" : "/icons/light/hamburger.svg"}
+                                src={theme === "dark" ? "/portfolio/icons/dark/hamburgerdark.svg" : "/portfolio/icons/light/hamburger.svg"}
                                 alt="hamburger"
                                 width={30}
                                 height={30}
