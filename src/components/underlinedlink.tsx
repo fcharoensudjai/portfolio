@@ -50,6 +50,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
     };
 
     const handleClick = async (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+
         const isAnchorLink = href.startsWith('#');
 
         // scrolling to the bottom
