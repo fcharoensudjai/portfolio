@@ -50,9 +50,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
     };
 
     const handleClick = async (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-
-        // for scrolling to the bottom
-
+        // Check if the link is for scrolling to the bottom
         if (scroll) {
             event.preventDefault();
             if (toggleNav) toggleNav();
@@ -60,33 +58,55 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
             return;
         }
 
-        // for external links
-
+        // For external links
         if (isExternal) {
             event.preventDefault();
             await sleep(10);
             window.open(href, "_blank", "noopener,noreferrer");
+            return;
+        }
 
-        } else if (!isCurrentPath || (isCurrentPath && currentHash === targetHash)) {
-            // internal navigation
-            if (!isCurrentPath) {
-                event.preventDefault();
-                setIsExit(true);
-                await sleep(exitDuration);
-                router.push(href);
-                setIsExit(false);
-                resetRecentsVisibility();
-                resetIntroVisibility();
-            } else {
-                onClick?.();
+        // Check if the href is an anchor link
+        const isAnchorLink = href.startsWith('#');
+        const targetHash = href.split('#')[1] || '';
+
+        // Internal navigation
+        if (!isCurrentPath) {
+            // If the current path is different from the href
+            event.preventDefault();
+            setIsExit(true); // Trigger exit animation
+            await sleep(exitDuration);
+            router.push(href); // Navigate to the new path
+            setIsExit(false);
+            resetRecentsVisibility();
+            resetIntroVisibility();
+        } else if (isCurrentPath && isAnchorLink && currentHash === targetHash) {
+            // If we are already on the same page and clicking the same anchor link
+            event.preventDefault(); // Prevent default behavior
+            const targetElement = document.getElementById(targetHash);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth' }); // Smooth scroll to target
             }
+            return; // Exit the function to avoid further navigation logic
         } else {
-            onClick?.();
+            // For internal navigation to a different section on the same page
+            if (isCurrentPath && isAnchorLink) {
+                const targetElement = document.getElementById(targetHash);
+                if (targetElement) {
+                    event.preventDefault(); // Prevent default behavior
+                    targetElement.scrollIntoView({ behavior: 'smooth' }); // Smooth scroll to target
+                }
+                return; // Exit the function to avoid triggering exit animation
+            }
+
+            // If we are navigating to a different section on the same page
+            onClick?.(); // Call any additional click handlers
         }
 
         setHovered(false);
-        setIsExit(false);
+        setIsExit(false); // Ensure exit animation state is reset
     };
+
 
 
     const content = isExternal ? (
