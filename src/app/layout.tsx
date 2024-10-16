@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             <VisibilityProvider3>
                                 <Highlighter/>
                                 <Header/>
-                                {children}
+                                <div className={`bg-middle-colour`}>{children}</div>
                             </VisibilityProvider3>
                     </VisibilityProvider2>
                 </VisibilityProvider>
