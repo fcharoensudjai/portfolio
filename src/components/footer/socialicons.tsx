@@ -18,7 +18,7 @@ export const SocialIcons = () => {
                     className="relative inline-block"
                 >
                     <Image
-                        src={theme === "dark" ? "/icons/dark/linkedindark.svg" : "/icons/light/linkedin.svg"}
+                        src={theme === "dark" ? "/portfolio/icons/dark/linkedindark.svg" : "/portfolio/icons/light/linkedin.svg"}
                         alt="linkedin"
                         width={30}
                         height={30}
@@ -33,7 +33,7 @@ export const SocialIcons = () => {
                     className="relative inline-block"
                 >
                     <Image
-                        src={theme === "dark" ? "/icons/dark/instagramdark.svg" : "/icons/light/instagram.svg"}
+                        src={theme === "dark" ? "/portfolio/icons/dark/instagramdark.svg" : "/portfolio/icons/light/instagram.svg"}
                         alt="instagram"
                         width={30}
                         height={30}
@@ -50,7 +50,7 @@ export const SocialIcons = () => {
                     <div className={"w-[30px]"}>
                         <div className={"relative w-[28px] h-[30px]"}>
                             <Image
-                                src={theme === "dark" ? "/icons/dark/artstationdark.svg" : "/icons/light/artstation.svg"}
+                                src={theme === "dark" ? "/portfolio/icons/dark/artstationdark.svg" : "/portfolio/icons/light/artstation.svg"}
                                 alt="artstation"
                                 width={30}
                                 height={30}
@@ -69,7 +69,7 @@ export const SocialIcons = () => {
                     className="relative inline-block"
                 >
                     <Image
-                        src={theme === "dark" ? "/icons/dark/youtubedark.svg" : "/icons/light/youtube.svg"}
+                        src={theme === "dark" ? "/portfolio/icons/dark/youtubedark.svg" : "/portfolio/icons/light/youtube.svg"}
                         alt="youtube"
                         width={30}
                         height={30}
