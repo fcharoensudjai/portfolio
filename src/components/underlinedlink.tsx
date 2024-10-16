@@ -50,9 +50,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
     };
 
     const handleClick = async (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-
-        // for scrolling to the bottom
-
+        // For scrolling to the bottom
         if (scroll) {
             event.preventDefault();
             if (toggleNav) toggleNav();
@@ -60,33 +58,43 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
             return;
         }
 
-        // for external links
-
+        // For external links
         if (isExternal) {
             event.preventDefault();
             await sleep(10);
             window.open(href, "_blank", "noopener,noreferrer");
+            return;
+        }
 
-        } else if (!isCurrentPath || (isCurrentPath && currentHash === targetHash)) {
-            // internal navigation
-            if (!isCurrentPath) {
-                event.preventDefault();
-                setIsExit(true);
-                await sleep(exitDuration);
-                router.push(href);
-                setIsExit(false);
-                resetRecentsVisibility();
-                resetIntroVisibility();
+        // Internal navigation
+        if (isCurrentPath) {
+            // If we're on the same page
+            if (currentHash !== targetHash) {
+                // Hash has changed, so we need to scroll to the new section
+                event.preventDefault(); // Prevent default anchor behavior
+                const targetElement = document.getElementById(targetHash);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+                onClick?.(); // Call any onClick handler if provided
             } else {
-                onClick?.();
+                onClick?.(); // No hash change, just call onClick if provided
             }
         } else {
-            onClick?.();
+            // Different page navigation
+            event.preventDefault();
+            setIsExit(true);
+            await sleep(exitDuration);
+            router.push(href); // Navigate to the new page
+            setIsExit(false);
+            resetRecentsVisibility();
+            resetIntroVisibility();
         }
 
         setHovered(false);
         setIsExit(false);
     };
+
 
 
     const content = isExternal ? (
