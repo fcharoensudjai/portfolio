@@ -46,7 +46,7 @@ export const Header = () => {
                                     </UnderlinedLink>
                                 </li>
                                 <li>
-                                    <UnderlinedLink exitDuration={1100} href="#intro" isVisible={isIntroInView}>
+                                    <UnderlinedLink exitDuration={1100} href="/#intro" isVisible={isIntroInView}>
                                         intro
                                     </UnderlinedLink>
                                 </li>
@@ -56,7 +56,7 @@ export const Header = () => {
                                     </UnderlinedLink>
                                 </li>
                                 <li>
-                                    <UnderlinedLink exitDuration={1100} href="#contact" scroll={true} isVisible={isContactInView}>
+                                    <UnderlinedLink exitDuration={1100} href="/#contact" scroll={true} isVisible={isContactInView}>
                                         contact
                                     </UnderlinedLink>
                                 </li>
