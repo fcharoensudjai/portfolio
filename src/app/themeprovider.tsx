@@ -11,7 +11,9 @@ export function ProviderTheme({ children }: { children: React.ReactNode }) {
     }, []);
 
     // avoid hydration mismatch by only rendering provider after the client has mounted
-    if (!mounted) return null;
+    if (!mounted) return (
+        <div className={`inset-0 bg-middle-colour`}> </div>
+    );
 
     return (
         <ThemeProvider
