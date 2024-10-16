@@ -32,8 +32,8 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
     const path = usePathname();
     const baseCurrentPath = path.split('#')[0];
     const baseHref = href.split('#')[0];
-    const currentHash = path.split('#')[1];
-    const targetHash = href.split('#')[1];
+    const currentHash = path.split('#')[1] || '';
+    const targetHash = href.split('#')[1] || '';
     const isCurrentPath = baseCurrentPath === baseHref;
     const router = useRouter();
     const { setIsExit } = useExitAnimation();
