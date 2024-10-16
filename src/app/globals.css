@@ -12,6 +12,10 @@
     display: none;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     scrollbar-width: none;
 }

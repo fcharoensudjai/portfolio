@@ -50,7 +50,9 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
     };
 
     const handleClick = async (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+
         // for scrolling to the bottom
+
         if (scroll) {
             event.preventDefault();
             if (toggleNav) toggleNav();
@@ -59,27 +61,25 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
         }
 
         // for external links
+
         if (isExternal) {
             event.preventDefault();
             await sleep(10);
             window.open(href, "_blank", "noopener,noreferrer");
-            return; // Add return to stop further processing
-        }
 
-        // Internal navigation
-        if (isCurrentPath && currentHash === targetHash) {
-            // If already on the correct section, prevent default to allow scrolling
-            event.preventDefault();
-            // Logic to scroll to the specific section
-            document.querySelector(targetHash)?.scrollIntoView({ behavior: 'smooth' });
-        } else if (!isCurrentPath) {
-            event.preventDefault();
-            setIsExit(true);
-            await sleep(exitDuration);
-            router.push(href); // Change route without hash
-            setIsExit(false);
-            resetRecentsVisibility();
-            resetIntroVisibility();
+        } else if (!isCurrentPath || (isCurrentPath && currentHash === targetHash)) {
+            // internal navigation
+            if (!isCurrentPath) {
+                event.preventDefault();
+                setIsExit(true);
+                await sleep(exitDuration);
+                router.push(href);
+                setIsExit(false);
+                resetRecentsVisibility();
+                resetIntroVisibility();
+            } else {
+                onClick?.();
+            }
         } else {
             onClick?.();
         }
