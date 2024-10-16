@@ -35,37 +35,37 @@ interface closerLookData {
 export const closerLook: closerLookData[] = [
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/raiden-close-1.png",
+        screenshot: "/portfolio/images/raiden-shogun/raiden-close-1.png",
         alt: "a closeup shot of a drawing of raiden shogun",
     },
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/raiden-close-2.png",
+        screenshot: "/portfolio/images/raiden-shogun/raiden-close-2.png",
         alt: "a closeup shot of a drawing of raiden shogun",
     },
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/raiden-close-3.png",
+        screenshot: "/portfolio/images/raiden-shogun/raiden-close-3.png",
         alt: "a closeup shot of a drawing of raiden shogun",
     },
 
     {
         id: 2,
-        screenshot: "/images/raven/raven-close-1.png",
+        screenshot: "/portfolio/images/raven/raven-close-1.png",
         alt: "a closeup shot of a drawing of raven",
     },
 
     {
         id: 2,
-        screenshot: "/images/raven/raven-close-2.png",
+        screenshot: "/portfolio/images/raven/raven-close-2.png",
         alt: "a closeup shot of a drawing of raven",
     },
 
     {
         id: 2,
-        screenshot: "/images/raven/raven-close-3.png",
+        screenshot: "/portfolio/images/raven/raven-close-3.png",
         alt: "a closeup shot of a drawing of raven",
     }
 ]
