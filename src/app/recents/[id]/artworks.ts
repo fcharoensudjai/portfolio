@@ -133,7 +133,7 @@ export const bts: btsData[] = [
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/bts/raiden-bts-1.jpg",
+        screenshot: "/images/raiden-shogun/bts/raiden-bts-1.PNG",
         alt: "a picture of the drawing process for raiden shogun",
     },
 
@@ -193,7 +193,7 @@ export const bts: btsData[] = [
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/bts/raiden-bts-13.jpeg",
+        screenshot: "/images/raiden-shogun/bts/raiden-bts-11.jpeg",
         alt: "a picture of the drawing process for raiden shogun",
     },
 
@@ -205,7 +205,7 @@ export const bts: btsData[] = [
 
     {
         id: 1,
-        screenshot: "/images/raiden-shogun/bts/raiden-bts-11.jpeg",
+        screenshot: "/images/raiden-shogun/bts/raiden-bts-13.jpeg",
         alt: "a picture of the drawing process for raiden shogun",
     },
 
