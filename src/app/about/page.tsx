@@ -83,7 +83,7 @@ export default function Gallery() {
                             <div
                                 className="lg:sticky lg:top-0 lg:pt-[10dvh] lg:min-h-[100dvh] flex items-center justify-center">
                                 <div
-                                    className={`lg:h-[50dvh] flex justify-center items-center ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
+                                    className={`lg:h-[60dvh] flex justify-center items-center ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
                                     <Textbox>
                                         <Scramble>
                                             Hi, I’m Fasai Charoensudjai, a 20-year-old Economics student at the
