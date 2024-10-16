@@ -201,10 +201,9 @@ export default function Home() {
                                 <div className="lg:w-[65%]">
                                     <Textbox>
                                         <Scramble>
-                                            Here are the previews for some of the pieces I've been working on lately.
-                                            Feel
-                                            free to click on them to see the full image, view some more details,
-                                            or click on the gallery button to view all of them!
+                                            {`Here are the previews for some of the pieces I've been working on lately.
+                                                Feel free to click on them to see the full image, view some more details,
+                                                or click on the gallery button to view all of them!`}
                                         </Scramble>
                                     </Textbox>
                                 </div>
@@ -298,13 +297,13 @@ export default function Home() {
                                                     className={`flex flex-grow items-center justify-center min-h-[100px] md:min-h-[150px] lg:min-h-[250px]`}>
                                                     <Textbox>
                                                         <Scramble>
-                                                            Raiden Shogun has been my favourite character from Genshin
-                                                            Impact
-                                                            for the longest time, and so I wanted to capture her energy.
-                                                            Inspired by the League of Legends splash art styles, this is
-                                                            one of the biggest digital canvases I've ever worked on, and
-                                                            I’m
-                                                            really happy with how it turned out.
+                                                            {`Raiden Shogun has been my favourite character from Genshin
+                                                                Impact
+                                                                for the longest time, and so I wanted to capture her energy.
+                                                                Inspired by the League of Legends splash art styles, this is
+                                                                one of the biggest digital canvases I've ever worked on, and
+                                                                I’m
+                                                                really happy with how it turned out.`}
                                                         </Scramble>
                                                     </Textbox>
                                                 </div>
@@ -411,12 +410,12 @@ export default function Home() {
                                                     className={`flex flex-grow items-center justify-center min-h-[135px] md:min-h-[150px] lg:min-h-[250px] lg:text-end`}>
                                                     <Textbox>
                                                         <Scramble>
-                                                            I joined a "Draw This In Your Style Challenge" for
-                                                            Raven, a character by another artist.
-                                                            It was a great learning experience, especially for
-                                                            drawing metal and improving on backgrounds.
-                                                            This project helped me grow as an artist, and I was very
-                                                            happy to be featured on the front of the artist's post!
+                                                            {`I joined a "Draw This In Your Style Challenge" for
+                                                                Raven, a character by another artist.
+                                                                It was a great learning experience, especially for
+                                                                drawing metal and improving on backgrounds.
+                                                                This project helped me grow as an artist, and I was very
+                                                                happy to be featured on the front of the artist's post!`}
                                                         </Scramble>
                                                     </Textbox>
                                                 </div>
@@ -509,13 +508,13 @@ export default function Home() {
                                 <div className="flex flex-col justify-center items-center">
                                     <Textbox>
                                         <Scramble>
-                                            Hi, I’m Fasai, an artist from Thailand and an Economics student at the
-                                            University of Warwick!
-                                            I created this website to showcase my passion for illustration, concept art
-                                            and
-                                            fanart, combining my love for art with web design in a way that's true to my
-                                            style.
-                                            Click the button below to learn more about my journey!
+                                            {`Hi, I’m Fasai, an artist from Thailand and an Economics student at the
+                                                University of Warwick!
+                                                I created this website to showcase my passion for illustration, concept art
+                                                and
+                                                fanart, combining my love for art with web design in a way that's true to my
+                                                style.
+                                                Click the button below to learn more about my journey!`}
                                         </Scramble>
                                     </Textbox>
                                 </div>

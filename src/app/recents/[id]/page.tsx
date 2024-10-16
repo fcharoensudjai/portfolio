@@ -28,16 +28,6 @@ export default function Recent() {
 
     const artwork = artworks.find((artwork) => artwork.id === artworkId);
 
-    if (!artwork) {
-        return (
-            <div className={`h-[100dvh] inset-0 flex flex-col space-y-3 md:space-y-5 justify-center items-center ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
-                <div> artwork not found! </div>
-                <Button href="/#home"> return home </Button>
-            </div>
-
-            )
-    }
-
     const handleContextMenu = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
         e.preventDefault();
     };
@@ -82,6 +72,14 @@ export default function Recent() {
         };
     }, []);
 
+    if (!artwork) {
+        return (
+            <div className={`h-[100dvh] inset-0 flex flex-col space-y-3 md:space-y-5 justify-center items-center ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
+                <div> artwork not found! </div>
+                <Button href="/#home"> return home </Button>
+            </div>
+        )
+    }
 
     return (
 
