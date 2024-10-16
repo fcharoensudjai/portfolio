@@ -114,7 +114,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
             <div
                 className={`
                 border-t-[3px] transition-all duration-[350ms] ease-in-out
-                ${theme === "dark" ? "border-accent-dark" : "border-accent-light"} 
+                ${theme === "dark" ? "border-accent-dark" : "border-accent-light"}
                 ${hovered && line || isActive || isVisible ? "w-full" : "w-0"} 
             `}>
             </div>

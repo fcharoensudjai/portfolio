@@ -74,7 +74,7 @@ export default function Gallery() {
                                 height={5000}
                                 style={{objectFit: "cover"}}
                                 quality={80}
-                                className="w-full h-auto max-h-[70vh]"
+                                className="w-full h-auto max-h-[70vh] rounded-xl"
                             />
                         </div>
 
@@ -105,7 +105,7 @@ export default function Gallery() {
                             <div
                                 className="lg:sticky lg:top-0 lg:pt-[10.5dvh] lg:min-h-[100dvh] flex items-center justify-center">
                                 <div
-                                    className={`lg:h-[50dvh] flex justify-center items-center ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
+                                    className={`lg:h-[60dvh] flex justify-center items-center ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
                                     <Textbox>
                                         <Scramble>
                                             Art has always been a part of my life, and even though university keeps

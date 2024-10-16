@@ -24,7 +24,7 @@ const config: Config = {
         "3xl": "3.052rem", // h3 (48.83px)
         "4xl": "3.815rem", // h2 (61.04px)
         "5xl": "4.688rem", // h1 (75px)
-        "6xl": "6.125rem", // tablet title (98px) – Adjusted from 4.688rem
+        "6xl": "6.125rem", // tablet title (98px) – adjusted from 4.688rem
         "7xl": "8.125rem", // desktop title (130px)
       },
       colors: {

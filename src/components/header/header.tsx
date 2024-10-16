@@ -30,7 +30,7 @@ export const Header = () => {
 
                 <div className="flex items-center justify-between px-4 py-2 md:px-6">
 
-                    <LogoButton/>
+                   <LogoButton/>
 
                     <div className="flex items-center space-x-4">
                         <nav className="hidden md:flex md:items-center">

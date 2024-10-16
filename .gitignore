@@ -26,7 +26,3 @@ yarn-error.log*
 
 *.tsbuildinfo
 next-env.d.ts
-
-/public/images
-/public/icons/dark
-/public/icons/light
