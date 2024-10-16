@@ -25,7 +25,7 @@ export default function ThemeSwitch() {
     return (
         <button onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}>
             {resolvedTheme === 'dark' ? (
-                <Image src="/icons/dark/sun.svg"
+                <Image src="/portfolio/icons/dark/sun.svg"
                        alt="switch to light mode"
                        width={30}
                        height={30}
@@ -33,7 +33,7 @@ export default function ThemeSwitch() {
                 />
             ) : (
                 <Image
-                    src="/icons/light/moon.svg"
+                    src="/portfolio/icons/light/moon.svg"
                     alt="switch to dark mode"
                     width={30}
                     height={30}
