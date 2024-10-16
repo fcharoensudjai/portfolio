@@ -439,7 +439,7 @@ export default function Home() {
                 </div>
 
                 <div className={`sticky top-0 z-10 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
-                    <Fader enterDelay={0.6} threshold={0.3}>
+                    <Fader enterDelay={0.6} threshold={0.2}>
                         <div className="flex h-[100dvh] justify-center items-center">
                             <div className="mt-[75.48px] lg:mt-[103.22px]">
                                 <div className="flex justify-center items-center">
