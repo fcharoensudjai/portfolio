@@ -36,7 +36,7 @@ export const Header = () => {
                         <nav className="hidden md:flex md:items-center">
                             <ul className="flex space-x-4 md:text-sm xl:text-md text-xs">
                                 <li>
-                                    <UnderlinedLink exitDuration={1100} href="#/recents" isVisible={isRecentsInView}>
+                                    <UnderlinedLink exitDuration={1100} href="/#recents" isVisible={isRecentsInView}>
                                         recents
                                     </UnderlinedLink>
                                 </li>
