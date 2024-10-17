@@ -49,12 +49,22 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
         });
     };
 
+    const scrollToSection = (hash: string) => {
+        const targetElement = document.getElementById(hash.replace('#', ''));
+        if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     const handleClick = async (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         // For scrolling to the bottom
         if (scroll) {
             event.preventDefault();
             if (toggleNav) toggleNav();
-            scrollToBottom();
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'smooth',
+            });
             return;
         }
 
@@ -67,21 +77,8 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
         }
 
         // Internal navigation
-        if (isCurrentPath) {
-            // If we're on the same page
-            if (currentHash !== targetHash) {
-                // Hash has changed, so we need to scroll to the new section
-                event.preventDefault(); // Prevent default anchor behavior
-                const targetElement = document.getElementById(targetHash);
-                if (targetElement) {
-                    targetElement.scrollIntoView({ behavior: 'smooth' });
-                }
-                onClick?.(); // Call any onClick handler if provided
-            } else {
-                onClick?.(); // No hash change, just call onClick if provided
-            }
-        } else {
-            // Different page navigation
+        if (baseCurrentPath !== baseHref) {
+            // If navigating to a different page
             event.preventDefault();
             setIsExit(true);
             await sleep(exitDuration);
@@ -89,6 +86,19 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
             setIsExit(false);
             resetRecentsVisibility();
             resetIntroVisibility();
+            // Wait for the new page to load before scrolling
+            setTimeout(() => {
+                scrollToSection(targetHash); // Scroll to the target section
+            }, 0); // Using setTimeout to ensure the new page is loaded
+        } else {
+            // Same page, just scroll to the section if needed
+            if (currentHash !== targetHash) {
+                event.preventDefault(); // Prevent default anchor behavior
+                scrollToSection(targetHash); // Scroll to the target section
+                onClick?.(); // Call any onClick handler if provided
+            } else {
+                onClick?.(); // No hash change, just call onClick if provided
+            }
         }
 
         setHovered(false);
