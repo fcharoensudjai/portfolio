@@ -119,7 +119,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
     return underline ? (
         <motion.div
             className="relative inline-block"
-            onClick={() => setHovered(true)}
+            onClick={() => setHovered(false)}
             onMouseDown={() => setHovered(false)}
             onTouchStart={ () => setHovered(false)}
             onHoverStart={() => setHovered(true)}
