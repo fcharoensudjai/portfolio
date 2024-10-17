@@ -96,6 +96,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
             if (currentHash !== targetHash) {
                 event.preventDefault(); // Prevent default anchor behavior
                 scrollToSection(targetHash); // Scroll to the target section
+                setHovered(false);
                 onClick?.(); // Call any onClick handler if provided
             } else {
                 onClick?.(); // No hash change, just call onClick if provided
