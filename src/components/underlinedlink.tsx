@@ -34,20 +34,13 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
     const baseHref = href.split('#')[0];
     const currentHash = path.split('#')[1] || '';
     const targetHash = href.split('#')[1] || '';
-    const isCurrentPath = baseCurrentPath === baseHref;
+
     const router = useRouter();
     const { setIsExit } = useExitAnimation();
     const isActive = href === path
 
     const { resetRecentsVisibility } = useVisibility();
     const { resetIntroVisibility } = useVisibility2();
-
-    const scrollToBottom = () => {
-        window.scrollTo({
-            top: document.body.scrollHeight,
-            behavior: 'smooth',
-        });
-    };
 
     const scrollToSection = (hash: string) => {
         const targetElement = document.getElementById(hash.replace('#', ''));
