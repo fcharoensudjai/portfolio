@@ -65,6 +65,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
                 top: document.body.scrollHeight,
                 behavior: 'smooth',
             });
+            setHovered(false);
             return;
         }
 
