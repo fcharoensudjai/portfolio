@@ -290,7 +290,7 @@ export default function Home() {
 
                                         <div className="hidden lg:block"><Title size="small"> raiden shogun </Title> </div>
 
-                                        <div className="flex flex-col justify-evenly lg:space-y-7">
+                                        <div className="flex flex-col justify-evenly lg:space-y-5">
 
                                             <div className={`flex flex-grow w-full`}>
                                                 <div
