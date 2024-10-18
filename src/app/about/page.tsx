@@ -74,7 +74,7 @@ export default function Gallery() {
                                 height={5000}
                                 style={{objectFit: "cover"}}
                                 quality={80}
-                                className="w-full h-auto max-h-[70vh] rounded-xl"
+                                className="w-full h-auto max-h-[70dvh] rounded-xl"
                             />
                         </div>
 
