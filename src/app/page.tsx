@@ -505,7 +505,7 @@ export default function Home() {
 
                                 </div>
 
-                                <div className="flex flex-col justify-center items-center">
+                                <div className="flex flex-col justify-center items-center min-h-[350px]">
                                     <Textbox>
                                         <Scramble>
                                             {`Hi, I’m Fasai, an artist from Thailand and an Economics student at the
