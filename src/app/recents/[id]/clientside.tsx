@@ -113,7 +113,7 @@ export default function Recent() {
 
                 <Fader enterDelay={1.2} once={true}>
                     <div className={'flex flex-col space-y-5 px-6 md:px-16 xl:px-20'}>
-                        <div className={`lg:w-[70%] lg:min-h-[285px] flex items-center`}><Textbox
+                        <div className={`w-full xl:w-[65%] lg:min-h-[285px] flex items-center`}><Textbox
                             caret={false}><Scramble delay={1500}>{String(artwork.description)}</Scramble></Textbox>
                         </div>
 
@@ -132,7 +132,7 @@ export default function Recent() {
                         <Title size={"medium"}> a closer look </Title>
                     </div>
 
-                    <div className={`px-6 md:px-16 xl:px-20`}>
+                    <div className={`px-6 md:px-16 xl:px-20 max-h-[70dvh]`}>
                         <div className={`grid gap-4 xl:gap-5 auto-rows-min lg:grid-cols-2`}>
                             {closerLook.filter((closerLook) => closerLook.id === artwork.id)
                                 .map((closerLook, index) => (
