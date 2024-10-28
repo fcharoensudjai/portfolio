@@ -50,7 +50,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
     };
 
     const handleClick = async (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        // For scrolling to the bottom
+        // for scrolling to the bottom
         if (scroll) {
             event.preventDefault();
             if (toggleNav) toggleNav();
@@ -62,7 +62,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
             return;
         }
 
-        // For external links
+        // for external links
         if (isExternal) {
             event.preventDefault();
             await sleep(10);
@@ -70,29 +70,30 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
             return;
         }
 
-        // Internal navigation
+        // internal navigation
         if (baseCurrentPath !== baseHref) {
-            // If navigating to a different page
+            // if navigating to a different page
             event.preventDefault();
             setIsExit(true);
             await sleep(exitDuration);
-            router.push(href); // Navigate to the new page
+            router.push(href); // navigate to the new page
             setIsExit(false);
             resetRecentsVisibility();
             resetIntroVisibility();
-            // Wait for the new page to load before scrolling
+            // wait for the new page to load before scrolling
             setTimeout(() => {
-                scrollToSection(targetHash); // Scroll to the target section
-            }, 0); // Using setTimeout to ensure the new page is loaded
+                if (targetHash) scrollToSection(targetHash);
+            }, 100);
         } else {
-            // Same page, just scroll to the section if needed
+
+            // same page, just scroll to the section if needed
             if (currentHash !== targetHash) {
-                event.preventDefault(); // Prevent default anchor behavior
-                scrollToSection(targetHash); // Scroll to the target section
+                event.preventDefault();
+                scrollToSection(targetHash);
                 setHovered(false);
-                onClick?.(); // Call any onClick handler if provided
+                onClick?.();
             } else {
-                onClick?.(); // No hash change, just call onClick if provided
+                onClick?.();
             }
         }
 
