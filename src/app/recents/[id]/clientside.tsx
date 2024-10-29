@@ -113,7 +113,7 @@ export default function Recent() {
 
                 <Fader enterDelay={1.2} once={true}>
                     <div className={'flex flex-col space-y-5 px-6 md:px-16 xl:px-20'}>
-                        <div className={`w-full xl:w-[65%] lg:min-h-[285px] flex items-center`}><Textbox
+                        <div className={`w-full 2xl:w-[65%] lg:min-h-[285px] flex items-center`}><Textbox
                             caret={false}><Scramble delay={1500}>{String(artwork.description)}</Scramble></Textbox>
                         </div>
 
