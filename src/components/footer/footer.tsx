@@ -23,30 +23,27 @@ export const Footer = ( { exitDuration = 800 }) => {
     const { resetRecentsVisibility } = useVisibility();
     const { resetIntroVisibility } = useVisibility2();
 
-    const baseCurrentPath = path.split('#')[0];
-    const currentHash = path.split('#')[1];
-    const targetHash = "home";
-    const isCurrentPath = baseCurrentPath === "/";
+    const baseCurrentPath = path.split("#")[0];
+    const isCurrentPage = baseCurrentPath === "/";
 
-    const scrollToTop = async (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        if (!isCurrentPath || (isCurrentPath && currentHash === targetHash)) {
-            if (!isCurrentPath) {
-                event.preventDefault();
-                setIsExit(true);
-                await sleep(exitDuration);
-                router.push("/#home");
-                setIsExit(false);
-                resetRecentsVisibility();
-                resetIntroVisibility();
-            } else {
-                event.preventDefault();
-                window.scrollTo({
-                    top: document.getElementById("home")?.offsetTop || 0,
-                    behavior: "smooth",
-                });
-            }
+    const handleClick = async (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        event.preventDefault();
+
+        if (isCurrentPage) {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+            });
+        } else {
+            setIsExit(true);
+            await sleep(exitDuration);
+            router.push("/#home");
+            setIsExit(false);
+            resetRecentsVisibility();
+            resetIntroVisibility();
         }
     };
+
 
     return (
         <div>
@@ -59,7 +56,7 @@ export const Footer = ( { exitDuration = 800 }) => {
                         <div className="hidden xl:block"><LogoButton size="medium"/></div>
 
                         <div className="hidden sm:block xl:hidden h-[80%] w-auto">
-                            <Link href="/#home" onClick={scrollToTop}>
+                            <Link href="/#home" onClick={handleClick}>
                                 <Image
                                 src={theme === "dark" ? "/portfolio/icons/dark/logodark.svg" : "/portfolio/icons/light/logo.svg"}
                                 alt={"logo"}
