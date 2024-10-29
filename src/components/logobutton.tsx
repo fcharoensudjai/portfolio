@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useTheme } from "next-themes";
 import { cva } from "class-variance-authority";
 import React from "react";
@@ -64,7 +65,7 @@ export const LogoButton = ({ size = "small", exitDuration = 800 }: LogoButtonPro
     };
 
     return (
-        <a href="/#home" onClick={handleClick}>
+        <Link href="/#home" onClick={handleClick}>
             <div className={logoButtonVariants({ size })}>
                 <Image
                     src={theme === "dark" ? "/portfolio/icons/dark/fulllogodark.svg" : "/portfolio/icons/light/fulllogo.svg"}
@@ -76,6 +77,6 @@ export const LogoButton = ({ size = "small", exitDuration = 800 }: LogoButtonPro
                     }}
                 />
             </div>
-        </a>
+        </Link>
     );
 };

@@ -38,6 +38,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
     const router = useRouter();
     const { setIsExit } = useExitAnimation();
     const isActive = href === path
+
     const { resetRecentsVisibility } = useVisibility();
     const { resetIntroVisibility } = useVisibility2();
 
@@ -79,6 +80,11 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
             setIsExit(false);
             resetRecentsVisibility();
             resetIntroVisibility();
+            // wait for the new page to load before scrolling
+            setTimeout(() => {
+                if (targetHash) scrollToSection(targetHash);
+            }, 100);
+        } else {
 
             // same page, just scroll to the section if needed
             if (currentHash !== targetHash) {
