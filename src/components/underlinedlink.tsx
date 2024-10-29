@@ -83,7 +83,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({ href, children, 
             // wait for the new page to load before scrolling
             setTimeout(() => {
                 if (targetHash) scrollToSection(targetHash);
-            }, 100);
+            }, 1000);
         } else {
 
             // same page, just scroll to the section if needed
