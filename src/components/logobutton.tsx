@@ -39,28 +39,24 @@ export const LogoButton = ({ size = "small", exitDuration = 800 }: LogoButtonPro
     const { resetRecentsVisibility } = useVisibility();
     const { resetIntroVisibility } = useVisibility2();
 
-    const baseCurrentPath = path.split('#')[0];
-    const currentHash = path.split('#')[1];
-    const targetHash = "home";
-    const isCurrentPath = baseCurrentPath === "/";
+    const baseCurrentPath = path.split("#")[0];
+    const isCurrentPage = baseCurrentPath === "/";
 
     const handleClick = async (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        if (!isCurrentPath || (isCurrentPath && currentHash === targetHash)) {
-            if (!isCurrentPath) {
-                event.preventDefault();
-                setIsExit(true);
-                await sleep(exitDuration);
-                router.push("/#home");
-                setIsExit(false);
-                resetRecentsVisibility();
-                resetIntroVisibility();
-            } else {
-                event.preventDefault();
-                window.scrollTo({
-                    top: document.getElementById("home")?.offsetTop || 0,
-                    behavior: "smooth",
-                });
-            }
+        event.preventDefault();
+
+        if (isCurrentPage) {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+            });
+        } else {
+            setIsExit(true);
+            await sleep(exitDuration);
+            router.push("/#home");
+            setIsExit(false);
+            resetRecentsVisibility();
+            resetIntroVisibility();
         }
     };
 
