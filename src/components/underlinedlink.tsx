@@ -84,11 +84,9 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
             router.push(href);
 
             setTimeout(() => {
-                const targetElement = document.getElementById(targetHash.replace('#', ''));
-                if (targetElement) {
-                    targetElement.scrollIntoView({ behavior: 'smooth' });
-                }
+                scrollToSection(targetHash)
             }, 1500);
+
         } else if (currentHash !== targetHash) {
             event.preventDefault();
             scrollToSection(targetHash);
