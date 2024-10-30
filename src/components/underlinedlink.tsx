@@ -73,11 +73,6 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({href, children, o
             resetIntroVisibility();
 
             router.push(href);
-
-            if (targetHash) {
-                scrollToSection(targetHash);
-            }
-
         } else if (currentHash !== targetHash) {
             event.preventDefault();
             scrollToSection(targetHash);
@@ -89,6 +84,14 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({href, children, o
 
         setHovered(false);
     };
+
+    useEffect(() => {
+        const targetElement = document.getElementById(targetHash.replace('#', ''));
+        if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [path, targetHash, baseCurrentPath, baseHref]);
+
 
 
     useEffect(() => {
