@@ -87,7 +87,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({href, children, o
     };
 
     useEffect(() => {
-        if (baseCurrentPath === baseHref && targetHash) {
+        if (path.includes('#') && baseCurrentPath === baseHref && targetHash) {
             scrollToSection(targetHash);
         }
     }, [path, targetHash, baseCurrentPath, baseHref]);
