@@ -34,6 +34,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({href, children, o
     const baseHref = href.split('#')[0];
     const currentHash = path.split('#')[1] || '';
     const targetHash = href.split('#')[1] || '';
+    const [previousPath, setPreviousPath] = useState<string | null>(null);
 
     const router = useRouter();
     const { setIsExit } = useExitAnimation();
@@ -67,24 +68,36 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({href, children, o
             event.preventDefault();
             setIsExit(true);
             await sleep(exitDuration);
-
-            router.push(href);
             setIsExit(false);
             resetRecentsVisibility();
             resetIntroVisibility();
-        } else {
-            if (currentHash !== targetHash) {
-                event.preventDefault();
+
+            router.push(href);
+
+            if (targetHash) {
                 scrollToSection(targetHash);
-                setHovered(false);
-                onClick?.();
-            } else {
-                onClick?.();
             }
+
+        } else if (currentHash !== targetHash) {
+            event.preventDefault();
+            scrollToSection(targetHash);
+            setHovered(false);
+            onClick?.();
+        } else {
+            onClick?.();
         }
 
         setHovered(false);
     };
+
+
+    useEffect(() => {
+        if (previousPath && previousPath !== baseCurrentPath) {
+            scrollToSection(targetHash);
+        }
+        setPreviousPath(baseCurrentPath);
+    }, [baseCurrentPath, targetHash]);
+
 
     useEffect(() => {
         if (path.includes('#') && baseCurrentPath === baseHref && targetHash) {
