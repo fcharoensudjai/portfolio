@@ -26,7 +26,18 @@ function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({href, children, onClick, isExternal = false, exitDuration = 800, underline = true, isVisible = false, scroll = false, toggleNav, line = true}) => {
+export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
+                                                                  href,
+                                                                  children,
+                                                                  onClick,
+                                                                  isExternal = false,
+                                                                  exitDuration = 800,
+                                                                  underline = true,
+                                                                  isVisible = false,
+                                                                  scroll = false,
+                                                                  toggleNav,
+                                                                  line = true,
+                                                              }) => {
     const [hovered, setHovered] = useState(false);
     const { theme } = useTheme();
     const path = usePathname();
@@ -34,7 +45,6 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({href, children, o
     const baseHref = href.split('#')[0];
     const currentHash = path.split('#')[1] || '';
     const targetHash = href.split('#')[1] || '';
-    const [previousPath, setPreviousPath] = useState<string | null>(null);
 
     const router = useRouter();
     const { setIsExit } = useExitAnimation();
@@ -71,8 +81,14 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({href, children, o
             setIsExit(false);
             resetRecentsVisibility();
             resetIntroVisibility();
-
             router.push(href);
+
+            setTimeout(() => {
+                const targetElement = document.getElementById(targetHash.replace('#', ''));
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 1500);
         } else if (currentHash !== targetHash) {
             event.preventDefault();
             scrollToSection(targetHash);
@@ -84,23 +100,6 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({href, children, o
 
         setHovered(false);
     };
-
-    useEffect(() => {
-        const targetElement = document.getElementById(targetHash.replace('#', ''));
-        if (targetElement) {
-            targetElement.scrollIntoView({ behavior: 'smooth' });
-        }
-    }, [path, targetHash, baseCurrentPath, baseHref]);
-
-
-
-    useEffect(() => {
-        if (previousPath && previousPath !== baseCurrentPath) {
-            scrollToSection(targetHash);
-        }
-        setPreviousPath(baseCurrentPath);
-    }, [baseCurrentPath, targetHash]);
-
 
     useEffect(() => {
         if (path.includes('#') && baseCurrentPath === baseHref && targetHash) {
