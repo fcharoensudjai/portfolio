@@ -33,9 +33,9 @@ export const Contact = () => {
             </div>
 
             <div className="flex justify-end items-center p-3 md:p-5">
-                <Textbox>
+                <a href="mailto:fuzz.ch04@gmail.com"><Textbox>
                     <Scramble delay={2000} interval={15}> [ mail | fuzz.ch04@gmail.com ]</Scramble>
-                </Textbox>
+                </Textbox></a>
             </div>
         </div>
     )
