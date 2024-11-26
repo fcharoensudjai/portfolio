@@ -220,6 +220,7 @@ export const imageData: CustomImageData[] = [
         alt: "drawing of makima",
         date: "2024-09-23",
         name: "makima (train scene)",
+        wide: true,
     },
 
 ];
