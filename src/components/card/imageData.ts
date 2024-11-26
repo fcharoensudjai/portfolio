@@ -215,5 +215,12 @@ export const imageData: CustomImageData[] = [
         name: "orchid study (IGCSE)",
     },
 
+    {
+        src:"/portfolio/images/makima-gallery2.png",
+        alt: "drawing of makima",
+        date: "2024-09-23",
+        name: "makima (train scene)",
+    },
+
 ];
 
