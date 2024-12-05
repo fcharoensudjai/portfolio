@@ -407,7 +407,7 @@ export default function Home() {
 
                                             <div className={`flex flex-grow w-full`}>
                                                 <div
-                                                    className={`flex flex-grow items-center justify-center min-h-[175px] lg:min-h-[250px] lg:text-end`}>
+                                                    className={`flex flex-grow items-center justify-center min-h-[195px] lg:min-h-[250px] lg:text-end`}>
                                                     <Textbox>
                                                         <Scramble>
                                                             {`I joined a "Draw This In Your Style Challenge" for
