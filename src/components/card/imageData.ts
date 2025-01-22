@@ -223,5 +223,13 @@ export const imageData: CustomImageData[] = [
         wide: true,
     },
 
+    {
+        src:"/portfolio/images/yae-gallery.png",
+        alt: "drawing of yae miko",
+        date: "2024-12-23",
+        name: "yae miko",
+        wide: true,
+    },
+
 ];
 
