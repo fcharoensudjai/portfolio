@@ -12,19 +12,9 @@ import { VisibilityProvider3 } from "@/app/contactvisibilitycontext";
 export const metadata: Metadata = {
     title: "fuzzch | portfolio",
     description: "welcome to my portfolio!",
-    openGraph: {
-        title: "fuzzch | portfolio",
-        description: "welcome to my portfolio!",
-        images: [
-            {
-                url: "/portfolio/icons/dark/logodark.svg",
-                width: 1200,
-                height: 630,
-                alt: "fuzzch portfolio preview",
-            },
-        ],
+    icons: {
+        icon: "/portfolio/icons/light/logo.svg"
     },
-
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
