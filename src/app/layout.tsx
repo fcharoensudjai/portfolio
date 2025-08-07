@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     title: "fuzzch | portfolio",
     description: "welcome to my portfolio!",
     icons: {
-        icon: "/portfolio/icons/light/logo.svg" // logo for thumbnail
+        icon: "/portfolio/icons/dark/logodark.svg" // logo for thumbnail
     },
 };
 
