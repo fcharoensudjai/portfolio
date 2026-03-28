@@ -27,19 +27,14 @@ export const ScrambleEnglish: React.FC<ScrambleProps> = ({ children }) => {
   });
 
   function scrambleText(text: string, intervalCount: number) {
-    const chars = text.split("");
-    const spaces = chars.map((char, index) => (char === " " ? index : -1)).filter((index) => index !== -1);
-    const shuffledSpaces = shuffleArray([...spaces]);
-
-    return chars
+    const segmenter = new Intl.Segmenter(undefined, { granularity: "grapheme" });
+    const graphemes = [...segmenter.segment(text)].map(({ segment }) => segment);
+    return graphemes
       .map((char, index) => {
-        //if space, leave it alone
-        if (char === " ") {
-          return shuffledSpaces.includes(index) ? " " : " ";
-        }
+        if (char === " ") return " ";
         return index < intervalCount ? char : letters[Math.floor(Math.random() * letters.length)];
       })
-      .join(""); // if not a space, shuffle randomly, and choose letters from "letters" constant
+      .join("");
   }
 
   function handleScramble() {
@@ -80,7 +75,7 @@ export const ScrambleEnglish: React.FC<ScrambleProps> = ({ children }) => {
 
   return (
     <motion.span onHoverStart={handleScramble} onClick={handleScramble} ref={ref}>
-      {scrambled.split(" ").map((word, wi) => (
+      {[...scrambled.split(" ")].map((word, wi) => (
         <React.Fragment key={wi}>
           <span
             style={{
@@ -89,7 +84,7 @@ export const ScrambleEnglish: React.FC<ScrambleProps> = ({ children }) => {
               marginRight: wi < scrambled.split(" ").length - 1 ? "1.25ch" : undefined,
             }}
           >
-            {word.split("").map((char, ci) => (
+            {[...new Intl.Segmenter(undefined, { granularity: "grapheme" }).segment(word)].map(({ segment }, ci) => (
               <span
                 key={ci}
                 style={{
@@ -98,7 +93,7 @@ export const ScrambleEnglish: React.FC<ScrambleProps> = ({ children }) => {
                   textAlign: "center",
                 }}
               >
-                {char}
+                {segment}
               </span>
             ))}
           </span>

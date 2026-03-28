@@ -39,7 +39,7 @@ export default function ThemeSwitch() {
           alt="switch to dark mode"
           width={30}
           height={30}
-          className={"lg:w-[36px] lg:h-[36px]"}
+          className={"w-[28px] h-[28px] xl:w-[32px] xl:h-[32px]"}
         />
       )}
     </button>
