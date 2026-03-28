@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { useExitAnimation } from "@/app/exitcontext";
+import { useExitAnimation } from "@/app/contexts/exitcontext";
 import { motion } from "framer-motion";
 
 export const ExitAnimation: React.FC = () => {

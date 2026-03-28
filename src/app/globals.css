@@ -12,10 +12,6 @@
     display: none;
 }
 
-html {
-    scroll-behavior: smooth;
-}
-
 body {
     scrollbar-width: none;
 }
@@ -35,7 +31,6 @@ body {
 * {
     margin: 0;
     padding: 0;
-    scroll-behavior: smooth;
     line-height: 1.75em;
 }
 

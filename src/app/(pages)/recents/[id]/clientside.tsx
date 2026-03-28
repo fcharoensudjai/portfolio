@@ -12,7 +12,7 @@ import { Textbox } from "@/components/textbox";
 import { Scramble } from "@/components/stylers/scramblerthai";
 import Image from "next/image";
 import { Button } from "@/components/button";
-import { artworks, closerLook, bts } from "@/app/recents/[id]/artworks";
+import { artworks, closerLook, bts } from "@/app/(pages)/recents/[id]/artworks";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";

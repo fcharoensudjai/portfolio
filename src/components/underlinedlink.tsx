@@ -5,9 +5,9 @@ import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import { useExitAnimation } from "@/app/exitcontext";
-import { useVisibility } from "@/app/recentsvisibilitycontext";
-import { useVisibility2 } from "@/app/introvisibilitycontext";
+import { useExitAnimation } from "@/app/contexts/exitcontext";
+import { useVisibility } from "@/app/contexts/recentsvisibilitycontext";
+import { useVisibility2 } from "@/app/contexts/introvisibilitycontext";
 
 interface UnderlinedLinkProps {
     children: React.ReactNode;

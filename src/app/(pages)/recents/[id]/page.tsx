@@ -1,4 +1,4 @@
-import { artworks } from "@/app/recents/[id]/artworks";
+import { artworks } from "@/app/(pages)/recents/[id]/artworks";
 import RecentClient from './clientside';
 
 export function generateStaticParams() {

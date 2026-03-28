@@ -6,9 +6,9 @@ import { useTheme } from "next-themes";
 import { cva } from "class-variance-authority";
 import React from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { useExitAnimation } from "@/app/exitcontext";
-import { useVisibility } from "@/app/recentsvisibilitycontext";
-import { useVisibility2 } from "@/app/introvisibilitycontext";
+import { useExitAnimation } from "@/app/contexts/exitcontext";
+import { useVisibility } from "@/app/contexts/recentsvisibilitycontext";
+import { useVisibility2 } from "@/app/contexts/introvisibilitycontext";
 
 interface LogoButtonProps {
     size?: "small" | "medium";

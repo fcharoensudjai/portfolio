@@ -103,7 +103,18 @@ export const Scramble: React.FC<ScrambleProps> = ({ children, delay = 500, hover
             onHoverStart={() => { if (hover) { handleScramble() } } }
             onClick={() => { if (hover) { handleScramble() } } }
         >
-            {scrambled}
+            {scrambled.split("").map((char, i) => (
+                <span
+                    key={i}
+                    style={{
+                        display: 'inline-block',
+                        width: char === ' ' ? '0.3em' : '1ch',
+                        textAlign: 'center',
+                    }}
+                >
+                    {char === ' ' ? '\u00A0' : char}
+                </span>
+            ))}
         </motion.span>
     );
 };

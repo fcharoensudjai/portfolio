@@ -1,7 +1,7 @@
 import { Title } from "@/components/title";
 import { Textbox } from "@/components/textbox";
 import { Scramble } from "@/components/stylers/scramblerthai";
-import { useVisibility3 } from "@/app/contactvisibilitycontext";
+import { useVisibility3 } from "@/app/contexts/contactvisibilitycontext";
 import { useInView } from "react-intersection-observer";
 import React from "react";
 import { Petal } from "@/components/petal";

@@ -4,9 +4,9 @@ import Image from "next/image";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useExitAnimation } from "@/app/exitcontext";
-import { useVisibility } from "@/app/recentsvisibilitycontext";
-import { useVisibility2 } from "@/app/introvisibilitycontext";
+import { useExitAnimation } from "@/app/contexts/exitcontext";
+import { useVisibility } from "@/app/contexts/recentsvisibilitycontext";
+import { useVisibility2 } from "@/app/contexts/introvisibilitycontext";
 import React from "react";
 import { UnderlinedLink } from "@/components/underlinedlink";
 
