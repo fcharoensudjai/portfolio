@@ -18,7 +18,7 @@ const titleVariants = cva("font-sans", {
       small: "text-[clamp(1.125rem,2.5vw,1.875rem)]",
       medium: "text-[clamp(1.25rem,3.5vw,2.5rem)]",
       large: "text-[clamp(1.5rem,8vw,13vh)]",
-      about: "text-[clamp(1.125rem,2.5vw,3rem)]",
+      about: "text-lg md:text-2xl lg:text-3xl 2xl:text-5xl",
     },
   },
   defaultVariants: {

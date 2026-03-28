@@ -468,7 +468,7 @@ export default function Home() {
                 }}
               >
                 <Image
-                  src={theme === "dark" ? "/icons/dark/logodark.svg" : "/icons/light/logo.svg"}
+                  src={theme === "dark" ? `${basePath}/icons/dark/logodark.svg` : `${basePath}/icons/light/logo.svg`}
                   alt="logo"
                   width={1000}
                   height={1000}

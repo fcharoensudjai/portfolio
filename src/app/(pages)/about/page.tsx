@@ -73,7 +73,7 @@ export default function Gallery() {
               </div>
 
               <Image
-                src="/images/about.png"
+                src={`${basePath}/images/about.png`}
                 alt="a picture of me"
                 width={5000}
                 height={5000}

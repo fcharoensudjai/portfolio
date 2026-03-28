@@ -25,6 +25,7 @@ const petalVariants = cva("h-auto", {
 });
 
 export const Petal: React.FC<PetalProps> = ({ positioning, enterDelay = 0.75, size = "medium", autoWiggle = 3000 }) => {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const { theme } = useTheme();
   const { ref, inView } = useInView({
     triggerOnce: false,
@@ -90,7 +91,7 @@ export const Petal: React.FC<PetalProps> = ({ positioning, enterDelay = 0.75, si
         style={{ transformOrigin: "10% 100%" }}
       >
         <Image
-          src={theme === "dark" ? "/icons/dark/petaldark.svg" : "/icons/light/petal.svg"}
+          src={theme === "dark" ? `${basePath}/icons/dark/petaldark.svg` : `${basePath}/icons/light/petal.svg`}
           alt={"petal"}
           width={38.45}
           height={49.29}
