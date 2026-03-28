@@ -164,7 +164,7 @@ export default function Home() {
             <div className="my-4">
               <Textbox>
                 <Scramble delay={2000} hover={true} interval={20}>
-                  [ scroll to explore ]
+                  {"[ scroll to explore ] "}
                 </Scramble>
               </Textbox>
             </div>

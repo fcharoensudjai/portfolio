@@ -123,7 +123,7 @@ export default function Recent() {
 
             <Textbox>
               <Scramble delay={3750} hover={true} interval={20}>
-                {" [ scroll for more ] "}
+                {"[ scroll for more ] "}
               </Scramble>
             </Textbox>
           </div>

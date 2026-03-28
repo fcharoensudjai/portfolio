@@ -48,7 +48,7 @@ export default function Gallery() {
             </div>
             <Textbox>
               <Scramble delay={3250} hover={true} interval={20}>
-                {" [ scroll to explore ] "}
+                {"[ scroll to explore ] "}
               </Scramble>
             </Textbox>
           </div>
