@@ -55,7 +55,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
             <ThemeSwitch />
             <button onClick={toggleNav} aria-label="close navigation">
               <Image
-                src={theme === "dark" ? "/icons/dark/closedark.svg" : "/icons/light/close.svg"}
+                src={theme === "dark" ? `${basePath}/icons/dark/closedark.svg` : `${basePath}/icons/light/close.svg`}
                 alt="close navigation"
                 width={35}
                 height={35}

@@ -12,14 +12,17 @@ export function HashScrollHandler() {
     if (!hash) return;
 
     let attempts = 0;
-    const maxAttempts = 20; // ~1s if interval is 50ms
+    const maxAttempts = 60; // ~3s if interval is 50ms
     const interval = 50;
 
     const scrollToHash = () => {
       const el = document.getElementById(hash.replace("#", ""));
       if (el) {
+        console.log(`[HashScrollHandler] Found element for hash: ${hash} (attempt ${attempts})`);
         el.scrollIntoView({ behavior: "smooth" });
         return true;
+      } else {
+        console.log(`[HashScrollHandler] Element not found for hash: ${hash} (attempt ${attempts})`);
       }
       return false;
     };
@@ -28,6 +31,9 @@ export function HashScrollHandler() {
       const timer = setInterval(() => {
         attempts++;
         if (scrollToHash() || attempts >= maxAttempts) {
+          if (attempts >= maxAttempts) {
+            console.warn(`[HashScrollHandler] Failed to find element for hash: ${hash} after ${maxAttempts} attempts.`);
+          }
           clearInterval(timer);
         }
       }, interval);
