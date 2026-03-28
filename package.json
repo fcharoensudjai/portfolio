@@ -1,53 +1,53 @@
 {
-    "name": "portfolio",
-    "homepage": "https://fcharoensudjai.github.io/portfolio",
-    "version": "0.1.0",
-    "private": true,
-    "scripts": {
-        "dev": "next dev",
-        "build": "next build",
-        "start": "next start",
-        "lint": "next lint",
-        "prepare": "husky"
-    },
-    "dependencies": {
-        "class-variance-authority": "^0.7.0",
-        "classnames": "^2.5.1",
-        "framer-motion": "^11.3.30",
-        "intersection-observer": "^0.12.2",
-        "lenis": "^1.1.13",
-        "next": "^14.2.6",
-        "next-themes": "^0.3.0",
-        "react": "^18.3.1",
-        "react-dom": "^18",
-        "react-intersection-observer": "^9.13.0",
-        "react-live-clock": "^6.1.23-beta"
-    },
-    "devDependencies": {
-        "@types/node": "^20",
-        "@types/react": "^18",
-        "@types/react-dom": "^18",
-        "eslint": "^8",
-        "eslint-config-next": "14.2.5",
-        "eslint-config-prettier": "^10.1.8",
-        "husky": "^9.1.7",
-        "lint-staged": "^16.4.0",
-        "postcss": "^8",
-        "prettier": "^3.8.1",
-        "tailwindcss": "^3.4.10",
-        "tsc-files": "^1.1.4",
-        "typescript": "^5"
-    },
-    "lint-staged": {
-        "*.{ts,tsx,css,json}": [
-            "prettier --write"
-        ],
-        "*.{ts,tsx}": [
-            "next lint --fix --file",
-            "tsc-files --noEmit"
-        ]
-    },
-    "lint-staged-config": {
-        "verbose": true
-    }
+  "name": "portfolio",
+  "homepage": "https://fcharoensudjai.github.io/portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.0",
+    "classnames": "^2.5.1",
+    "framer-motion": "^11.3.30",
+    "intersection-observer": "^0.12.2",
+    "lenis": "^1.1.13",
+    "next": "^14.2.6",
+    "next-themes": "^0.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18",
+    "react-intersection-observer": "^9.13.0",
+    "react-live-clock": "^6.1.23-beta"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "postcss": "^8",
+    "prettier": "^3.8.1",
+    "tailwindcss": "^3.4.10",
+    "tsc-files": "^1.1.4",
+    "typescript": "^5"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,css,json}": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx}": [
+      "next lint --fix --file",
+      "tsc-files --noEmit"
+    ]
+  },
+  "lint-staged-config": {
+    "verbose": true
+  }
 }
