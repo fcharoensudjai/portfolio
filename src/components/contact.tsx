@@ -30,15 +30,21 @@ export const Contact = () => {
       <div className={"flex flex-grow justify-center items-center w-full"}>
         <div className={`relative`}>
           <Title size="large">
-            get in touch!{" "}
-            <Petal
-              enterDelay={0}
-              positioning="left-[31%] bottom-[66%] sm:left-[31%] sm:bottom-[66%] lg:bottom-[79%] xl:bottom-[78%] 2xl:left-[31.25%]"
-            />
+            get{" "}
+            <span className="relative inline-block align-baseline">
+              i
+              <span
+                className="absolute left-[12%] -translate-x-1/2 top-[12%] w-0 h-0"
+                style={{ pointerEvents: "none" }}
+                aria-hidden="true"
+              >
+                <Petal enterDelay={0} positioning="" />
+              </span>
+            </span>
+            n touch!
           </Title>
         </div>
       </div>
-
       <div className="flex justify-end items-center p-3 md:p-5">
         <a href="mailto:fuzz.ch04@gmail.com">
           <Textbox>
