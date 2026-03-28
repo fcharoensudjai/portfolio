@@ -23,8 +23,6 @@ import { Petal } from "@/components/petal";
 import { UnderlinedLink } from "@/components/underlinedlink";
 
 export default function Home() {
-  console.log("initial href on render:", typeof window !== "undefined" ? window.location.href : "SSR");
-
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const { theme } = useTheme();
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -66,11 +64,9 @@ export default function Home() {
 
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
-    console.log("useEffect hash:", hash);
     if (hash) {
       const attemptScroll = (retries = 20) => {
         const el = document.getElementById(hash);
-        console.log("trying to find el:", hash, el);
         if (el) {
           el.scrollIntoView({ behavior: "smooth" });
         } else if (retries > 0) {
