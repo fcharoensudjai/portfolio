@@ -14,9 +14,9 @@ import { useVisibility2 } from "@/app/contexts/introvisibilitycontext";
 import { useVisibility3 } from "@/app/contexts/contactvisibilitycontext";
 
 export const Header = () => {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const [isNavOpen, setIsNavOpen] = useState(false);
   const toggleNav = () => setIsNavOpen(!isNavOpen);
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
   const { theme } = useTheme();
   const { isRecentsInView } = useVisibility();
@@ -37,7 +37,7 @@ export const Header = () => {
             <nav className="hidden md:flex md:items-center">
               <ul className="flex space-x-4 md:text-sm xl:text-md text-xs">
                 <li>
-                  <UnderlinedLink exitDuration={1100} href={`${basePath}/#recents`} isVisible={isRecentsInView}>
+                  <UnderlinedLink exitDuration={1100} href={`/#recents`} isVisible={isRecentsInView}>
                     recents
                   </UnderlinedLink>
                 </li>
@@ -45,7 +45,7 @@ export const Header = () => {
                   <UnderlinedLink href="/gallery">gallery</UnderlinedLink>
                 </li>
                 <li>
-                  <UnderlinedLink exitDuration={1100} href={`${basePath}/#intro`} isVisible={isIntroInView}>
+                  <UnderlinedLink exitDuration={1100} href={`/#intro`} isVisible={isIntroInView}>
                     intro
                   </UnderlinedLink>
                 </li>
@@ -53,12 +53,7 @@ export const Header = () => {
                   <UnderlinedLink href="/about">about</UnderlinedLink>
                 </li>
                 <li>
-                  <UnderlinedLink
-                    exitDuration={1100}
-                    href={`${basePath}/#contact`}
-                    scroll={true}
-                    isVisible={isContactInView}
-                  >
+                  <UnderlinedLink exitDuration={1100} href={`/#contact`} scroll={true} isVisible={isContactInView}>
                     contact
                   </UnderlinedLink>
                 </li>
