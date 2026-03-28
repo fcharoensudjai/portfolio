@@ -10,11 +10,13 @@ import { VisibilityProvider2 } from "@/app/contexts/introvisibilitycontext";
 import { VisibilityProvider3 } from "@/app/contexts/contactvisibilitycontext";
 import LenisProvider from "@/app/providers/lenisprovider";
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 export const metadata: Metadata = {
   title: "fuzzch | portfolio",
   description: "welcome to my portfolio!",
   icons: {
-    icon: "/icons/dark/logodark.svg", // logo for thumbnail
+    icon: `${basePath}/icons/dark/logodark.svg`, // logo for thumbnail
   },
 };
 
