@@ -64,12 +64,17 @@ export default function Home() {
 
   useEffect(() => {
     const redirectPath = sessionStorage.getItem("redirectPath");
+    console.log("redirectPath from sessionStorage:", redirectPath);
+    console.log("window.location.hash:", window.location.hash);
+
     if (redirectPath) {
       sessionStorage.removeItem("redirectPath");
       const hash = redirectPath.split("#")[1];
+      console.log("hash:", hash);
       if (hash) {
         const attemptScroll = (retries = 20) => {
           const el = document.getElementById(hash);
+          console.log("attempting scroll to:", hash, "found el:", el);
           if (el) {
             el.scrollIntoView({ behavior: "smooth" });
           } else if (retries > 0) {
