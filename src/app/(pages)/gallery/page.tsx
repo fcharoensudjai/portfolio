@@ -16,6 +16,7 @@ import { ImageViewer } from "@/components/imageviewer";
 import { AnimatePresence, motion } from "framer-motion";
 
 export default function Gallery() {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const { theme } = useTheme();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isViewerOpen, setIsViewerOpen] = useState<number | null>(null);
@@ -59,7 +60,7 @@ export default function Gallery() {
         <div className={`grid gap-4 xl:gap-5 md:grid-cols-3 lg:grid-cols-4 grid-flow-row-dense`}>
           {sortedImageData.map((image, index) => (
             <Card
-              src={image.src}
+              src={`${basePath}${image.src}`}
               alt={image.alt}
               name={image.name}
               key={index}

@@ -23,6 +23,7 @@ import { Petal } from "@/components/petal";
 import { UnderlinedLink } from "@/components/underlinedlink";
 
 export default function Home() {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const { theme } = useTheme();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const toggleNav = () => setIsNavOpen(!isNavOpen);
@@ -264,7 +265,7 @@ export default function Home() {
                     </AnimatePresence>
 
                     <Image
-                      src="/images/raiden-shogun/raiden-home.png"
+                      src={`${basePath}/images/raiden-shogun/raiden-home.png`}
                       alt="snippet of raiden shogun"
                       width={1183}
                       height={851}
@@ -371,7 +372,7 @@ export default function Home() {
                     </AnimatePresence>
 
                     <Image
-                      src="/images/raven/raven-home.png"
+                      src={`${basePath}/images/raven/raven-home.png`}
                       alt="snippet of raven"
                       width={1183}
                       height={851}

@@ -18,6 +18,7 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
 export default function Recent() {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const { theme } = useTheme();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const toggleNav = () => setIsNavOpen(!isNavOpen);
@@ -94,7 +95,7 @@ export default function Recent() {
       <div className={`h-[100dvh] flex flex-col xl:space-y-2 2xl:space-y-4`}>
         <div className={`w-full h-[40dvh] md:h-[50dvh] relative flex justify-start items-end`}>
           <Image
-            src={artwork.banner}
+            src={`${basePath}${artwork.banner}`}
             alt={artwork.alt}
             layout="fill"
             onContextMenu={handleContextMenu}
@@ -143,7 +144,7 @@ export default function Recent() {
                 .map((closerLook, index) => (
                   <Image
                     key={closerLook.screenshot}
-                    src={closerLook.screenshot}
+                    src={`${basePath}${closerLook.screenshot}`}
                     alt={closerLook.alt}
                     height={1000}
                     width={1000}
@@ -206,7 +207,7 @@ export default function Recent() {
               .map((bts) => (
                 <Image
                   key={bts.screenshot}
-                  src={bts.screenshot}
+                  src={`${basePath}${bts.screenshot}`}
                   alt={bts.alt}
                   height={1000}
                   width={1000}

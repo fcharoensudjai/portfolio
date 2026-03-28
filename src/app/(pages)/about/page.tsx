@@ -15,6 +15,7 @@ import { Button } from "@/components/button";
 import { Petal } from "@/components/petal";
 
 export default function Gallery() {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const { theme } = useTheme();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const toggleNav = () => setIsNavOpen(!isNavOpen);

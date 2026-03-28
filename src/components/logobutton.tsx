@@ -32,6 +32,7 @@ function sleep(ms: number): Promise<void> {
 }
 
 export const LogoButton = ({ size = "small", exitDuration = 800 }: LogoButtonProps) => {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const { theme } = useTheme();
   const path = usePathname();
   const router = useRouter();
@@ -64,7 +65,7 @@ export const LogoButton = ({ size = "small", exitDuration = 800 }: LogoButtonPro
     <Link href="/#home" onClick={handleClick}>
       <div className={logoButtonVariants({ size })}>
         <Image
-          src={theme === "dark" ? "/icons/dark/fulllogodark.svg" : "/icons/light/fulllogo.svg"}
+          src={theme === "dark" ? `${basePath}/icons/dark/fulllogodark.svg` : `${basePath}/icons/light/fulllogo.svg`}
           alt="full logo"
           width={500}
           height={500}
