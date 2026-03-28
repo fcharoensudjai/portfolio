@@ -23,6 +23,8 @@ import { Petal } from "@/components/petal";
 import { UnderlinedLink } from "@/components/underlinedlink";
 
 export default function Home() {
+  console.log("initial href on render:", typeof window !== "undefined" ? window.location.href : "SSR");
+
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const { theme } = useTheme();
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -64,9 +66,6 @@ export default function Home() {
 
   useEffect(() => {
     const redirectPath = sessionStorage.getItem("redirectPath");
-    console.log("redirectPath from sessionStorage:", redirectPath);
-    console.log("window.location.hash:", window.location.hash);
-
     if (redirectPath) {
       sessionStorage.removeItem("redirectPath");
       const hash = redirectPath.split("#")[1];
