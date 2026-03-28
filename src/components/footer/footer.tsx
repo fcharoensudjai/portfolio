@@ -18,6 +18,7 @@ export const Footer = ({ exitDuration = 800 }) => {
   const { theme } = useTheme();
   const path = usePathname();
   const router = useRouter();
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const { setIsExit } = useExitAnimation();
   const { resetRecentsVisibility } = useVisibility();
   const { resetIntroVisibility } = useVisibility2();
@@ -55,7 +56,7 @@ export const Footer = ({ exitDuration = 800 }) => {
             <div className="hidden sm:block xl:hidden h-[80%] w-auto">
               <Link href="/#home" onClick={handleClick}>
                 <Image
-                  src={theme === "dark" ? "/icons/dark/logodark.svg" : "/icons/light/logo.svg"}
+                  src={theme === "dark" ? `${basePath}/icons/dark/logodark.svg` : `${basePath}/icons/light/logo.svg`}
                   alt={"logo"}
                   width={200}
                   height={200}
