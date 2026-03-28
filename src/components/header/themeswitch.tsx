@@ -5,6 +5,7 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 
 export default function ThemeSwitch() {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const [mounted, setMounted] = useState<boolean>(false);
   const { setTheme, resolvedTheme } = useTheme();
 
@@ -27,7 +28,7 @@ export default function ThemeSwitch() {
     <button onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}>
       {resolvedTheme === "dark" ? (
         <Image
-          src="/icons/dark/sun.svg"
+          src={`${basePath}/icons/dark/sun.svg`}
           alt="switch to light mode"
           width={30}
           height={30}
@@ -35,7 +36,7 @@ export default function ThemeSwitch() {
         />
       ) : (
         <Image
-          src="/icons/light/moon.svg"
+          src={`${basePath}/icons/light/moon.svg`}
           alt="switch to dark mode"
           width={30}
           height={30}
