@@ -25,6 +25,7 @@ interface MobileNavProps {
 }
 
 export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) => {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const { theme } = useTheme();
   const pathname = usePathname();
 
@@ -54,7 +55,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
             <ThemeSwitch />
             <button onClick={toggleNav} aria-label="close navigation">
               <Image
-                src={theme === "dark" ? "/icons/dark/closedark.svg" : "/icons/light/close.svg"}
+                src={theme === "dark" ? `${basePath}/icons/dark/closedark.svg` : `${basePath}/icons/light/close.svg`}
                 alt="close navigation"
                 width={35}
                 height={35}
@@ -72,22 +73,22 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
               </UnderlinedLink>
             </li>
             <li>
-              <UnderlinedLink href="/#recents" onClick={toggleNav} isVisible={isRecentsInView}>
+              <UnderlinedLink href={`${basePath}/#recents`} onClick={toggleNav} isVisible={isRecentsInView}>
                 recents
               </UnderlinedLink>
             </li>
             <li>
-              <UnderlinedLink href="/gallery" onClick={toggleNav}>
+              <UnderlinedLink href={`${basePath}/gallery`} onClick={toggleNav}>
                 gallery
               </UnderlinedLink>
             </li>
             <li>
-              <UnderlinedLink href="/#intro" onClick={toggleNav} isVisible={isIntroInView}>
+              <UnderlinedLink href={`${basePath}/#intro`} onClick={toggleNav} isVisible={isIntroInView}>
                 intro
               </UnderlinedLink>
             </li>
             <li>
-              <UnderlinedLink href="/about" onClick={toggleNav}>
+              <UnderlinedLink href={`${basePath}/about`} onClick={toggleNav}>
                 about
               </UnderlinedLink>
             </li>

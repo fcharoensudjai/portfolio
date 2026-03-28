@@ -5,6 +5,7 @@ import { UnderlinedLink } from "@/components/underlinedlink";
 
 export const SocialIcons = () => {
   const { theme } = useTheme();
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
   return (
     <div className="flex items-center space-x-2">
@@ -16,7 +17,7 @@ export const SocialIcons = () => {
           className="relative inline-block"
         >
           <Image
-            src={theme === "dark" ? "/icons/dark/linkedindark.svg" : "/icons/light/linkedin.svg"}
+            src={theme === "dark" ? `${basePath}/icons/dark/linkedindark.svg` : `${basePath}/icons/light/linkedin.svg`}
             alt="linkedin"
             width={30}
             height={30}
@@ -31,7 +32,9 @@ export const SocialIcons = () => {
           className="relative inline-block"
         >
           <Image
-            src={theme === "dark" ? "/icons/dark/instagramdark.svg" : "/icons/light/instagram.svg"}
+            src={
+              theme === "dark" ? `${basePath}/icons/dark/instagramdark.svg` : `${basePath}/icons/light/instagram.svg`
+            }
             alt="instagram"
             width={30}
             height={30}
@@ -48,7 +51,11 @@ export const SocialIcons = () => {
           <div className={"w-[30px]"}>
             <div className={"relative w-[28px] h-[30px]"}>
               <Image
-                src={theme === "dark" ? "/icons/dark/artstationdark.svg" : "/icons/light/artstation.svg"}
+                src={
+                  theme === "dark"
+                    ? `${basePath}/icons/dark/artstationdark.svg`
+                    : `${basePath}/icons/light/artstation.svg`
+                }
                 alt="artstation"
                 width={30}
                 height={30}
@@ -67,7 +74,7 @@ export const SocialIcons = () => {
           className="relative inline-block"
         >
           <Image
-            src={theme === "dark" ? "/icons/dark/youtubedark.svg" : "/icons/light/youtube.svg"}
+            src={theme === "dark" ? `${basePath}/icons/dark/youtubedark.svg` : `${basePath}/icons/light/youtube.svg`}
             alt="youtube"
             width={30}
             height={30}
