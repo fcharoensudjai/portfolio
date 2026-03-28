@@ -3,7 +3,6 @@ import React from "react";
 import { Header } from "@/components/header/header";
 import "./globals.css";
 import { ProviderTheme } from "@/app/providers/themeprovider";
-import { HashScrollHandler } from "@/app/hashscrollhandler";
 import Highlighter from "@/components/stylers/highlighter";
 import { ExitAnimationProvider } from "@/app/contexts/exitcontext";
 import { VisibilityProvider } from "@/app/contexts/recentsvisibilitycontext";
@@ -33,7 +32,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <VisibilityProvider3>
                     <Highlighter />
                     <Header />
-                    <HashScrollHandler />
                     <div className={`bg-middle-colour`}>{children}</div>
                   </VisibilityProvider3>
                 </VisibilityProvider2>
