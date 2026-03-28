@@ -58,7 +58,7 @@ export const Footer = ( { exitDuration = 800 }) => {
                         <div className="hidden sm:block xl:hidden h-[80%] w-auto">
                             <Link href="/#home" onClick={handleClick}>
                                 <Image
-                                src={theme === "dark" ? "/portfolio/icons/dark/logodark.svg" : "/portfolio/icons/light/logo.svg"}
+                                src={theme === "dark" ? "/icons/dark/logodark.svg" : "/icons/light/logo.svg"}
                                 alt={"logo"}
                                 width={200}
                                 height={200}

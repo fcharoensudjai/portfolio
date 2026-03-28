@@ -68,7 +68,7 @@ export default function Gallery() {
                             <div className={`lg:block hidden`}><Title> who am i? </Title></div>
 
                             <Image
-                                src="/portfolio/images/about.png"
+                                src="/images/about.png"
                                 alt="a picture of me"
                                 width={5000}
                                 height={5000}
