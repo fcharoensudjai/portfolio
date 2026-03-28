@@ -3,73 +3,65 @@
 @tailwind utilities;
 
 @layer base {
-    html {
-        @apply font-mono bg-middle-colour;
-    }
+  html {
+    @apply font-mono bg-middle-colour;
+  }
 }
 
 ::-webkit-scrollbar {
-    display: none;
-}
-
-html {
-    scroll-behavior: smooth;
+  display: none;
 }
 
 body {
-    scrollbar-width: none;
+  scrollbar-width: none;
 }
 
 body {
-    -ms-overflow-style: none;
+  -ms-overflow-style: none;
 }
 
 .text-responsive {
-    font-size: clamp(1rem, 4vw, 3rem);
+  font-size: clamp(1rem, 4vw, 3rem);
 }
 
 .fixed-line-spacing {
-    line-height: 1.2;
+  line-height: 1.2;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    scroll-behavior: smooth;
-    line-height: 1.75em;
+  margin: 0;
+  padding: 0;
+  line-height: 1.75em;
 }
 
 .caret-wrapper {
-    display: inline-block;
-    vertical-align: baseline;
-    font-size: 1em;
-    line-height: 1em;
+  display: inline-block;
+  vertical-align: baseline;
+  font-size: 1em;
+  line-height: 1em;
 }
 
 .border-corner {
-    position: relative;
-    border: 2px solid transparent;
+  position: relative;
+  border: 2px solid transparent;
 }
 .border-corner::before,
 .border-corner::after {
-    content: '';
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border: 2px solid
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid;
 }
 .border-corner::before {
-    top: 0;
-    left: 0;
-    border-bottom-width: 0;
-    border-right-width: 0;
+  top: 0;
+  left: 0;
+  border-bottom-width: 0;
+  border-right-width: 0;
 }
 .border-corner::after {
-    bottom: 0;
-    right: 0;
-    border-top-width: 0;
-    border-left-width: 0;
+  bottom: 0;
+  right: 0;
+  border-top-width: 0;
+  border-left-width: 0;
 }
-
-
-

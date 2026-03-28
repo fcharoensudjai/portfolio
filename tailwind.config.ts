@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  darkMode: 'class', // enable dark mode
+  darkMode: "class", // enable dark mode
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -33,7 +33,7 @@ const config: Config = {
         "text-dark": "#E8E7E2",
         "secondary-light": "#7A736F",
         "middle-colour": "#403B3B",
-        "text-light": '#242424',
+        "text-light": "#242424",
         black: "#000000",
         "secondary-dark": "#BFAF9C",
         "accent-light": "#DDA6A6",
@@ -70,8 +70,7 @@ const config: Config = {
         "50dvh": "50dvh",
         "25dvh": "25dvh",
         "15dvh": "15dvh",
-      }
-
+      },
     },
   },
   plugins: [],

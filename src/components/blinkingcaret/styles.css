@@ -1,16 +1,22 @@
 @keyframes blink {
-    0% { opacity: 1; }
-    50% { opacity: 0; }
-    100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .blinking-caret {
-    display: inline-block;
-    vertical-align: bottom;
-    width: 0.7em;
-    height: 1em;
-    background-color: currentColor;
-    animation: blink 1s step-start infinite;
-    margin-left: 0.5em;
-    line-height: 1em;
+  display: inline-block;
+  vertical-align: bottom;
+  width: 0.7em;
+  height: 1em;
+  background-color: currentColor;
+  animation: blink 1s step-start infinite;
+  margin-left: 0.5em;
+  line-height: 1em;
 }

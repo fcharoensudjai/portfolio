@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prepare": "husky"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.0",
@@ -28,8 +29,25 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "postcss": "^8",
+    "prettier": "^3.8.1",
     "tailwindcss": "^3.4.10",
+    "tsc-files": "^1.1.4",
     "typescript": "^5"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,css,json}": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx}": [
+      "next lint --fix --file",
+      "tsc-files --noEmit"
+    ]
+  },
+  "lint-staged-config": {
+    "verbose": true
   }
 }
