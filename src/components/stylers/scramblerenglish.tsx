@@ -2,13 +2,11 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
-
 interface ScrambleProps {
     children: string;
 }
 
 export const ScrambleEnglish: React.FC<ScrambleProps> = ({ children }) => {
-
     const letters = "abcdefghijklmnopqrstuvwxyz";
 
     const [scrambled, setScrambled] = useState<string>(children);
@@ -25,20 +23,23 @@ export const ScrambleEnglish: React.FC<ScrambleProps> = ({ children }) => {
 
     const [ref, inView] = useInView({
         triggerOnce: true,
-        threshold: 0.5
+        threshold: 0.5,
     });
 
     function scrambleText(text: string, intervalCount: number) {
         const chars = text.split("");
-        const spaces = chars.map((char, index) => (char === ' ' ? index : -1)).filter(index => index !== -1);
+        const spaces = chars.map((char, index) => (char === " " ? index : -1)).filter((index) => index !== -1);
         const shuffledSpaces = shuffleArray([...spaces]);
 
-        return chars.map((char, index) => { //if space, leave it alone
-            if (char === ' ') {
-                return shuffledSpaces.includes(index) ? ' ' : ' ';
-            }
-            return index < intervalCount ? char : letters[Math.floor(Math.random() * letters.length)];
-        }).join(""); // if not a space, shuffle randomly, and choose letters from "letters" constant
+        return chars
+            .map((char, index) => {
+                //if space, leave it alone
+                if (char === " ") {
+                    return shuffledSpaces.includes(index) ? " " : " ";
+                }
+                return index < intervalCount ? char : letters[Math.floor(Math.random() * letters.length)];
+            })
+            .join(""); // if not a space, shuffle randomly, and choose letters from "letters" constant
     }
 
     function handleScramble() {
@@ -46,7 +47,7 @@ export const ScrambleEnglish: React.FC<ScrambleProps> = ({ children }) => {
         setIntervalCount(0);
 
         const id = setInterval(() => {
-            setIntervalCount(prevCount => {
+            setIntervalCount((prevCount) => {
                 const newCount = prevCount + 1;
                 setScrambled(scrambleText(children, newCount));
                 return newCount;

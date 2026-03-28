@@ -8,9 +8,7 @@ export const SocialIcons = () => {
 
     return (
         <div className="flex items-center space-x-2">
-
             <div className="flex md:hidden space-x-2">
-
                 <a
                     href="https://www.linkedin.com/in/fasaich/"
                     target="_blank"
@@ -50,7 +48,9 @@ export const SocialIcons = () => {
                     <div className={"w-[30px]"}>
                         <div className={"relative w-[28px] h-[30px]"}>
                             <Image
-                                src={theme === "dark" ? "/icons/dark/artstationdark.svg" : "/icons/light/artstation.svg"}
+                                src={
+                                    theme === "dark" ? "/icons/dark/artstationdark.svg" : "/icons/light/artstation.svg"
+                                }
                                 alt="artstation"
                                 width={30}
                                 height={30}
@@ -78,12 +78,23 @@ export const SocialIcons = () => {
                 </a>
             </div>
 
-
             <div className="hidden md:flex space-x-3 md:text-sm xl:text-md text-xs font-mono md:space-x-5">
-                <UnderlinedLink href="https://www.linkedin.com/in/fasaich/" isExternal={true}> linkedin </UnderlinedLink>
-                <UnderlinedLink href="https://www.instagram.com/fuzz_ch/" isExternal={true}> instagram </UnderlinedLink>
-                <UnderlinedLink href="https://www.artstation.com/fuzz_ch" isExternal={true}> artstation </UnderlinedLink>
-                <UnderlinedLink href="https://www.youtube.com/@fuzz_ch" isExternal={true}> youtube </UnderlinedLink>
+                <UnderlinedLink href="https://www.linkedin.com/in/fasaich/" isExternal={true}>
+                    {" "}
+                    linkedin{" "}
+                </UnderlinedLink>
+                <UnderlinedLink href="https://www.instagram.com/fuzz_ch/" isExternal={true}>
+                    {" "}
+                    instagram{" "}
+                </UnderlinedLink>
+                <UnderlinedLink href="https://www.artstation.com/fuzz_ch" isExternal={true}>
+                    {" "}
+                    artstation{" "}
+                </UnderlinedLink>
+                <UnderlinedLink href="https://www.youtube.com/@fuzz_ch" isExternal={true}>
+                    {" "}
+                    youtube{" "}
+                </UnderlinedLink>
             </div>
         </div>
     );

@@ -8,7 +8,7 @@ import { LocalTime } from "@/components/footer/localtime";
 import { SocialIcons } from "@/components/footer/socialicons";
 import { Poppins } from "next/font/google";
 import { Scrollbar } from "@/components/header/scrollbar";
-import { UnderlinedLink } from "@/components/underlinedlink"
+import { UnderlinedLink } from "@/components/underlinedlink";
 import { useVisibility } from "@/app/contexts/recentsvisibilitycontext";
 import { useVisibility2 } from "@/app/contexts/introvisibilitycontext";
 import { useVisibility3 } from "@/app/contexts/contactvisibilitycontext";
@@ -25,7 +25,6 @@ interface MobileNavProps {
 }
 
 export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) => {
-
     const { theme } = useTheme();
     const pathname = usePathname();
 
@@ -40,7 +39,6 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
     const { isContactInView } = useVisibility3();
 
     return (
-
         <motion.div
             initial={{ x: "100%" }}
             animate={{ x: isNavOpen ? 0 : "100%" }}
@@ -50,7 +48,6 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
             <Scrollbar />
 
             <div className={`flex flex-col h-full ${poppins.className}`}>
-
                 <div className="flex items-center justify-between px-4 py-2">
                     <LogoButton />
                     <div className="flex items-center space-x-3">
@@ -69,7 +66,6 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
 
                 <div className="flex flex-grow justify-end items-center pe-8 pb-[68.38px]">
                     <ul className="flex flex-col space-y-3 text-xl text-right">
-
                         <li>
                             <UnderlinedLink href="/#home" onClick={toggleNav}>
                                 home
@@ -96,24 +92,27 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
                             </UnderlinedLink>
                         </li>
                         <li>
-                            <UnderlinedLink href="/#contact" scroll={true} isVisible={isContactInView} onClick={toggleNav} toggleNav={toggleNav}>
+                            <UnderlinedLink
+                                href="/#contact"
+                                scroll={true}
+                                isVisible={isContactInView}
+                                onClick={toggleNav}
+                                toggleNav={toggleNav}
+                            >
                                 contact
                             </UnderlinedLink>
                         </li>
-
                     </ul>
                 </div>
 
-                <div
-                    className="fixed bottom-0 left-0 right-0 flex justify-between items-center px-5 py-3 bg-transparent">
+                <div className="fixed bottom-0 left-0 right-0 flex justify-between items-center px-5 py-3 bg-transparent">
                     <div className="flex-grow flex justify-start">
-                        <LocalTime/>
+                        <LocalTime />
                     </div>
                     <div className="flex-grow flex justify-end">
                         <SocialIcons />
                     </div>
                 </div>
-
             </div>
         </motion.div>
     );

@@ -1,4 +1,4 @@
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import React from "react";
 
 export const Scrollbar = () => {
@@ -7,7 +7,7 @@ export const Scrollbar = () => {
     const scaleX = useSpring(reverseScrollYProgress, {
         stiffness: 100,
         damping: 50,
-        restDelta: 0.001
+        restDelta: 0.001,
     });
 
     return (

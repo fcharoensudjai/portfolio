@@ -19,9 +19,5 @@ export const useExitAnimation = () => {
 
 export const ExitAnimationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isExit, setIsExit] = useState(false);
-    return (
-        <ExitAnimationContext.Provider value={{ isExit, setIsExit }}>
-            {children}
-        </ExitAnimationContext.Provider>
-    );
+    return <ExitAnimationContext.Provider value={{ isExit, setIsExit }}>{children}</ExitAnimationContext.Provider>;
 };

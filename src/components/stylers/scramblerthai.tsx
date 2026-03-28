@@ -9,10 +9,17 @@ interface ScrambleProps {
     interval?: number; // how quickly stuff scrambles
     paragraphs?: boolean;
     navigate?: boolean;
-
 }
 
-export const Scramble: React.FC<ScrambleProps> = ({ children, delay = 500, hover = false, interval = 2, paragraphs=false, navigate = false }) => { // default delay is 500ms
+export const Scramble: React.FC<ScrambleProps> = ({
+    children,
+    delay = 500,
+    hover = false,
+    interval = 2,
+    paragraphs = false,
+    navigate = false,
+}) => {
+    // default delay is 500ms
 
     const letters = "กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮ";
 
@@ -35,15 +42,17 @@ export const Scramble: React.FC<ScrambleProps> = ({ children, delay = 500, hover
 
     function scrambleText(text: string, intervalCount: number) {
         const chars = text.split("");
-        const spaces = chars.map((char, index) => (char === ' ' ? index : -1)).filter(index => index !== -1);
+        const spaces = chars.map((char, index) => (char === " " ? index : -1)).filter((index) => index !== -1);
         const shuffledSpaces = shuffleArray([...spaces]);
 
-        return chars.map((char, index) => {
-            if (char === ' ') {
-                return shuffledSpaces.includes(index) ? ' ' : ' ';
-            }
-            return index < intervalCount ? char : letters[Math.floor(Math.random() * letters.length)];
-        }).join("");
+        return chars
+            .map((char, index) => {
+                if (char === " ") {
+                    return shuffledSpaces.includes(index) ? " " : " ";
+                }
+                return index < intervalCount ? char : letters[Math.floor(Math.random() * letters.length)];
+            })
+            .join("");
     }
 
     function handleScramble() {
@@ -51,7 +60,7 @@ export const Scramble: React.FC<ScrambleProps> = ({ children, delay = 500, hover
         setIntervalCount(0);
 
         const id = setInterval(() => {
-            setIntervalCount(prevCount => {
+            setIntervalCount((prevCount) => {
                 const newCount = prevCount + 1;
                 setScrambled(scrambleText(children, newCount));
                 return newCount;
@@ -98,22 +107,39 @@ export const Scramble: React.FC<ScrambleProps> = ({ children, delay = 500, hover
 
     return (
         <motion.span
-            style={{ whiteSpace: paragraphs ? 'pre-wrap' : 'normal' }}
+            style={{ whiteSpace: paragraphs ? "pre-wrap" : "normal" }}
             ref={ref}
-            onHoverStart={() => { if (hover) { handleScramble() } } }
-            onClick={() => { if (hover) { handleScramble() } } }
+            onHoverStart={() => {
+                if (hover) {
+                    handleScramble();
+                }
+            }}
+            onClick={() => {
+                if (hover) {
+                    handleScramble();
+                }
+            }}
         >
-            {scrambled.split("").map((char, i) => (
-                <span
-                    key={i}
-                    style={{
-                        display: 'inline-block',
-                        width: char === ' ' ? '0.3em' : '1ch',
-                        textAlign: 'center',
-                    }}
-                >
-                    {char === ' ' ? '\u00A0' : char}
-                </span>
+            {scrambled.split(" ").map((word, wi) => (
+                <React.Fragment key={wi}>
+                    <span style={{ display: "inline-block", whiteSpace: "nowrap" }}>
+                        {word.split("").map((char, ci) => (
+                            <span
+                                key={ci}
+                                style={{
+                                    display: "inline-block",
+                                    width: "1ch",
+                                    textAlign: "center",
+                                }}
+                            >
+                                {char}
+                            </span>
+                        ))}
+                    </span>
+                    {wi < scrambled.split(" ").length - 1 && (
+                        <span style={{ display: "inline-block", width: "0.3em" }}>{"\u00A0"}</span>
+                    )}
+                </React.Fragment>
             ))}
         </motion.span>
     );

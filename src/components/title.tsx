@@ -27,9 +27,5 @@ const titleVariants = cva("font-sans", {
 });
 
 export const Title = ({ children, size = "medium" }: TitleProps) => {
-    return (
-        <span className={`${titleVariants({ size })} ${poppins.className}`}>
-            {children}
-        </span>
-    );
+    return <span className={`${titleVariants({ size })} ${poppins.className}`}>{children}</span>;
 };

@@ -14,31 +14,30 @@ export const metadata: Metadata = {
     title: "fuzzch | portfolio",
     description: "welcome to my portfolio!",
     icons: {
-        icon: "/icons/dark/logodark.svg" // logo for thumbnail
+        icon: "/icons/dark/logodark.svg", // logo for thumbnail
     },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-
     return (
         <html lang="en" suppressHydrationWarning={true}>
-        <body>
-            <ProviderTheme>
-                <LenisProvider>
-                    <ExitAnimationProvider>
-                        <VisibilityProvider>
-                            <VisibilityProvider2>
-                                <VisibilityProvider3>
-                                    <Highlighter/>
-                                    <Header/>
-                                    <div className={`bg-middle-colour`}>{children}</div>
-                                </VisibilityProvider3>
-                            </VisibilityProvider2>
-                        </VisibilityProvider>
-                    </ExitAnimationProvider>
-                </LenisProvider>
-            </ProviderTheme>
-        </body>
+            <body>
+                <ProviderTheme>
+                    <LenisProvider>
+                        <ExitAnimationProvider>
+                            <VisibilityProvider>
+                                <VisibilityProvider2>
+                                    <VisibilityProvider3>
+                                        <Highlighter />
+                                        <Header />
+                                        <div className={`bg-middle-colour`}>{children}</div>
+                                    </VisibilityProvider3>
+                                </VisibilityProvider2>
+                            </VisibilityProvider>
+                        </ExitAnimationProvider>
+                    </LenisProvider>
+                </ProviderTheme>
+            </body>
         </html>
     );
 }

@@ -12,9 +12,9 @@ export const Textbox: React.FC<TextboxProps> = ({ children, caret = true }) => {
             {children}
             {caret && (
                 <span className="relative inline caret-wrapper">
-              <BlinkingCaret />
-            </span>
+                    <BlinkingCaret />
+                </span>
             )}
         </div>
     );
-}
+};

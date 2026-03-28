@@ -1,8 +1,8 @@
 import { artworks } from "@/app/(pages)/recents/[id]/artworks";
-import RecentClient from './clientside';
+import RecentClient from "./clientside";
 
 export function generateStaticParams() {
-    return artworks.map(artwork => ({
+    return artworks.map((artwork) => ({
         id: artwork.id.toString(),
     }));
 }

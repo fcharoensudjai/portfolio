@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from "react";
 
 interface VisibilityContextType {
     isRecentsInView: boolean;
@@ -16,7 +16,7 @@ export const VisibilityProvider: React.FC<{ children: ReactNode }> = ({ children
     const resetRecentsVisibility = () => setIsRecentsInView(false);
 
     return (
-        <Recentsvisibilitycontext.Provider value={{ isRecentsInView, setIsRecentsInView, resetRecentsVisibility}}>
+        <Recentsvisibilitycontext.Provider value={{ isRecentsInView, setIsRecentsInView, resetRecentsVisibility }}>
             {children}
         </Recentsvisibilitycontext.Provider>
     );
@@ -25,7 +25,7 @@ export const VisibilityProvider: React.FC<{ children: ReactNode }> = ({ children
 export const useVisibility = () => {
     const context = useContext(Recentsvisibilitycontext);
     if (!context) {
-        throw new Error('useVisibility must be used within a VisibilityProvider');
+        throw new Error("useVisibility must be used within a VisibilityProvider");
     }
     return context;
 };

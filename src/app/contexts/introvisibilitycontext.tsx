@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from "react";
 
 interface VisibilityContextType {
     isIntroInView: boolean;
@@ -25,7 +25,7 @@ export const VisibilityProvider2: React.FC<{ children: ReactNode }> = ({ childre
 export const useVisibility2 = () => {
     const context = useContext(Introvisibilitycontext);
     if (!context) {
-        throw new Error('useVisibility must be used within a VisibilityProvider');
+        throw new Error("useVisibility must be used within a VisibilityProvider");
     }
     return context;
 };

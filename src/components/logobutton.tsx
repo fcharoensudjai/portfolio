@@ -28,7 +28,7 @@ const logoButtonVariants = cva("relative", {
 });
 
 function sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export const LogoButton = ({ size = "small", exitDuration = 800 }: LogoButtonProps) => {

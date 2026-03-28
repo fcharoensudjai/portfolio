@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from "next/image";
 import Fader from "@/components/stylers/fader";
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -33,7 +33,7 @@ export const Card: React.FC<CardProps> = ({ src, alt, className, onClick }) => {
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
 
-        const clampedX = Math.min(Math.max(mouseX, textBoxWidth / 2), rect.width - textBoxWidth / 1.6 );
+        const clampedX = Math.min(Math.max(mouseX, textBoxWidth / 2), rect.width - textBoxWidth / 1.6);
         const clampedY = Math.min(Math.max(mouseY, textBoxHeight / 2), rect.height - textBoxHeight);
 
         setMousePosition({ x: clampedX, y: clampedY });
@@ -69,26 +69,22 @@ export const Card: React.FC<CardProps> = ({ src, alt, className, onClick }) => {
                                         width: textBoxWidth,
                                         height: textBoxHeight,
                                     }}
-                                    initial={{scale: 1.3}}
-                                    animate={{scale: 1}}
-                                    exit={{scale: 1.3}}
+                                    initial={{ scale: 1.3 }}
+                                    animate={{ scale: 1 }}
+                                    exit={{ scale: 1.3 }}
                                     transition={{ duration: 0.2, ease: [0.65, 0, 0.35, 1] }}
-                                    whileTap={{scale: 0.9}}
+                                    whileTap={{ scale: 0.9 }}
                                 >
-                                    <Scramble interval={20} hover={true}> see full image </Scramble>
+                                    <Scramble interval={20} hover={true}>
+                                        {" see full image "}
+                                    </Scramble>
                                 </motion.div>
                             </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
 
-                <Image
-                    src={src}
-                    alt={alt}
-                    style={{objectFit: "cover"}}
-                    fill
-                    onContextMenu={handleContextMenu}
-                />
+                <Image src={src} alt={alt} style={{ objectFit: "cover" }} fill onContextMenu={handleContextMenu} />
             </Fader>
         </motion.div>
     );

@@ -23,28 +23,28 @@ interface UnderlinedLinkProps {
 }
 
 function sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
-                                                                  href,
-                                                                  children,
-                                                                  onClick,
-                                                                  isExternal = false,
-                                                                  exitDuration = 800,
-                                                                  underline = true,
-                                                                  isVisible = false,
-                                                                  scroll = false,
-                                                                  toggleNav,
-                                                                  line = true,
-                                                              }) => {
+    href,
+    children,
+    onClick,
+    isExternal = false,
+    exitDuration = 800,
+    underline = true,
+    isVisible = false,
+    scroll = false,
+    toggleNav,
+    line = true,
+}) => {
     const [hovered, setHovered] = useState(false);
     const { theme } = useTheme();
     const path = usePathname();
-    const baseCurrentPath = path.split('#')[0];
-    const baseHref = href.split('#')[0];
-    const currentHash = path.split('#')[1] || '';
-    const targetHash = href.split('#')[1] || '';
+    const baseCurrentPath = path.split("#")[0];
+    const baseHref = href.split("#")[0];
+    const currentHash = path.split("#")[1] || "";
+    const targetHash = href.split("#")[1] || "";
 
     const router = useRouter();
     const { setIsExit } = useExitAnimation();
@@ -53,9 +53,9 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
     const { resetIntroVisibility } = useVisibility2();
 
     const scrollToSection = (hash: string) => {
-        const targetElement = document.getElementById(hash.replace('#', ''));
+        const targetElement = document.getElementById(hash.replace("#", ""));
         if (targetElement) {
-            targetElement.scrollIntoView({ behavior: 'smooth' });
+            targetElement.scrollIntoView({ behavior: "smooth" });
         }
     };
 
@@ -69,7 +69,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
         if (scroll) {
             event.preventDefault();
             if (toggleNav) toggleNav();
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
             setHovered(false);
             return;
         }
@@ -84,9 +84,8 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
             router.push(href);
 
             setTimeout(() => {
-                scrollToSection(targetHash)
+                scrollToSection(targetHash);
             }, 1500);
-
         } else if (currentHash !== targetHash) {
             event.preventDefault();
             scrollToSection(targetHash);
@@ -100,7 +99,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
     };
 
     useEffect(() => {
-        if (path.includes('#') && baseCurrentPath === baseHref && targetHash) {
+        if (path.includes("#") && baseCurrentPath === baseHref && targetHash) {
             scrollToSection(targetHash);
         }
     }, [path, targetHash, baseCurrentPath, baseHref]);
@@ -129,7 +128,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
                 className={`
                 border-t-[3px] transition-all duration-[350ms] ease-in-out
                 ${theme === "dark" ? "border-accent-dark" : "border-accent-light"}
-                ${hovered && line || isActive || isVisible ? "w-full" : "w-0"}
+                ${(hovered && line) || isActive || isVisible ? "w-full" : "w-0"}
             `}
             ></div>
         </motion.div>

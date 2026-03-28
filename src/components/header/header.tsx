@@ -26,11 +26,11 @@ export const Header = () => {
         <div>
             <Scrollbar />
 
-            <header className={`fixed top-0 left-0 bg-transparent backdrop-blur-[8px] w-screen z-40 ${theme === "dark" ? "text-text-dark" : "text-text-light"}`}>
-
+            <header
+                className={`fixed top-0 left-0 bg-transparent backdrop-blur-[8px] w-screen z-40 ${theme === "dark" ? "text-text-dark" : "text-text-light"}`}
+            >
                 <div className="flex items-center justify-between px-4 py-2 md:px-6">
-
-                   <LogoButton/>
+                    <LogoButton />
 
                     <div className="flex items-center space-x-4">
                         <nav className="hidden md:flex md:items-center">
@@ -41,9 +41,7 @@ export const Header = () => {
                                     </UnderlinedLink>
                                 </li>
                                 <li>
-                                    <UnderlinedLink href="/gallery">
-                                        gallery
-                                    </UnderlinedLink>
+                                    <UnderlinedLink href="/gallery">gallery</UnderlinedLink>
                                 </li>
                                 <li>
                                     <UnderlinedLink exitDuration={1100} href="/#intro" isVisible={isIntroInView}>
@@ -51,23 +49,26 @@ export const Header = () => {
                                     </UnderlinedLink>
                                 </li>
                                 <li>
-                                    <UnderlinedLink href="/about">
-                                        about
-                                    </UnderlinedLink>
+                                    <UnderlinedLink href="/about">about</UnderlinedLink>
                                 </li>
                                 <li>
-                                    <UnderlinedLink exitDuration={1100} href="/#contact" scroll={true} isVisible={isContactInView}>
+                                    <UnderlinedLink
+                                        exitDuration={1100}
+                                        href="/#contact"
+                                        scroll={true}
+                                        isVisible={isContactInView}
+                                    >
                                         contact
                                     </UnderlinedLink>
                                 </li>
                             </ul>
                         </nav>
                         <div className="invisible md:visible ml-4 flex justify-center items-center">
-                            <ThemeSwitch/>
+                            <ThemeSwitch />
                         </div>
                     </div>
                     <div className="flex md:hidden items-center space-x-3">
-                        <ThemeSwitch/>
+                        <ThemeSwitch />
                         <button onClick={toggleNav} aria-label="toggle navigation">
                             <Image
                                 src={theme === "dark" ? "/icons/dark/hamburgerdark.svg" : "/icons/light/hamburger.svg"}
@@ -81,10 +82,9 @@ export const Header = () => {
                 </div>
             </header>
 
-            <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav}/>
+            <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav} />
 
             <ExitAnimation />
-
         </div>
     );
 };

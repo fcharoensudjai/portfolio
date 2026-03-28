@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useTheme} from "next-themes";
+import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { cva } from "class-variance-authority";
@@ -24,8 +24,7 @@ const petalVariants = cva("h-auto", {
     },
 });
 
-export const Petal : React.FC<PetalProps> = ({ positioning, enterDelay = 0.75, size = "medium", autoWiggle = 3000}) => {
-
+export const Petal: React.FC<PetalProps> = ({ positioning, enterDelay = 0.75, size = "medium", autoWiggle = 3000 }) => {
     const { theme } = useTheme();
     const { ref, inView } = useInView({
         triggerOnce: false,
@@ -34,7 +33,6 @@ export const Petal : React.FC<PetalProps> = ({ positioning, enterDelay = 0.75, s
 
     const [isWiggling, setIsWiggling] = useState(false);
     const [isFlying, setIsFlying] = useState(false);
-
 
     const { ref: parentRef, inView: parentInView } = useInView({
         triggerOnce: false,
@@ -45,7 +43,7 @@ export const Petal : React.FC<PetalProps> = ({ positioning, enterDelay = 0.75, s
 
     useEffect(() => {
         if (!parentInView) {
-            setKey(key +1)
+            setKey(key + 1);
             setIsWiggling(false);
             setIsFlying(false);
         }
@@ -66,9 +64,11 @@ export const Petal : React.FC<PetalProps> = ({ positioning, enterDelay = 0.75, s
         return () => clearTimeout(timer);
     }, [isFlying, autoWiggle, inView]);
 
-
     return (
-        <div ref={parentRef} className={`absolute ${petalVariants({ size })} ${positioning} ${isFlying ? "bg-transparent" : (theme === "dark" ? "bg-text-light" : "bg-main-light")}`}>
+        <div
+            ref={parentRef}
+            className={`absolute ${petalVariants({ size })} ${positioning} ${isFlying ? "bg-transparent" : theme === "dark" ? "bg-text-light" : "bg-main-light"}`}
+        >
             <motion.div
                 ref={ref}
                 key={key}
@@ -78,14 +78,15 @@ export const Petal : React.FC<PetalProps> = ({ positioning, enterDelay = 0.75, s
                     x: isFlying ? 900 : 0,
                     y: isFlying ? -1700 : 0,
                     rotate: isFlying ? [0, 75, 200, 500, -500, -300] : isWiggling ? [0, -5, 5, -5, 5, -2.5] : 0,
-            }}
+                }}
                 transition={{
                     delay: inView ? enterDelay : 0,
                     duration: isWiggling ? 1.5 : 3,
                     ease: isWiggling ? "easeInOut" : [0.4, 0, 0.5, 1],
                     repeat: isWiggling ? 2 : 0,
-                    times: isWiggling || isFlying ? [0, 0.2, 0.4, 0.6, 0.8, 1] : parentInView ? undefined : [0,0,0,0],
-            }}
+                    times:
+                        isWiggling || isFlying ? [0, 0.2, 0.4, 0.6, 0.8, 1] : parentInView ? undefined : [0, 0, 0, 0],
+                }}
                 className={`rounded-md origin-bottom-left ${petalVariants({ size })}`}
                 style={{ transformOrigin: "10% 100%" }}
             >
@@ -98,5 +99,5 @@ export const Petal : React.FC<PetalProps> = ({ positioning, enterDelay = 0.75, s
                 />
             </motion.div>
         </div>
-    )
-}
+    );
+};
