@@ -63,6 +63,22 @@ export default function Home() {
   const [duration, setDuration] = useState(defaultDuration);
 
   useEffect(() => {
+    const scrollTarget = sessionStorage.getItem("scrollTarget");
+    if (scrollTarget) {
+      sessionStorage.removeItem("scrollTarget");
+      const attemptScroll = (retries = 10) => {
+        const el = document.getElementById(scrollTarget);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        } else if (retries > 0) {
+          setTimeout(() => attemptScroll(retries - 1), 150);
+        }
+      };
+      attemptScroll();
+    }
+  }, []);
+
+  useEffect(() => {
     let controls;
     const finalRotation = 360;
 
