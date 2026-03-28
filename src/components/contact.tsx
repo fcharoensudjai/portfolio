@@ -30,18 +30,10 @@ export const Contact = () => {
       <div className={"flex flex-grow justify-center items-center w-full"}>
         <div className={`relative`}>
           <Title size="large">
-            get{" "}
-            <span className="relative inline-block align-baseline">
-              i
-              <span
-                className="absolute left-[12%] -translate-x-1/2 top-[12%] w-0 h-0"
-                style={{ pointerEvents: "none" }}
-                aria-hidden="true"
-              >
-                <Petal enterDelay={0} positioning="" />
-              </span>
-            </span>
-            n touch!
+            <div className="relative fixed-line-spacing mt-[75.58px] xl:mt-[103.22px]">
+              {"get in touch!"}
+              <Petal positioning="left-[30.5%] bottom-[73.5%] sm:left-[30.75%] sm:bottom-[74%] 2xl:left-[31%]" />
+            </div>
           </Title>
         </div>
       </div>
@@ -49,7 +41,7 @@ export const Contact = () => {
         <a href="mailto:fuzz.ch04@gmail.com">
           <Textbox>
             <Scramble delay={2000} interval={15}>
-              {" [ mail | fuzz.ch04@gmail.com ] "}
+              {"[ mail | fuzz.ch04@gmail.com ]"}
             </Scramble>
           </Textbox>
         </a>
