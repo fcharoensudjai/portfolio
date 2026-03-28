@@ -65,23 +65,19 @@ export default function Home() {
   const [duration, setDuration] = useState(defaultDuration);
 
   useEffect(() => {
-    const redirectPath = sessionStorage.getItem("redirectPath");
-    if (redirectPath) {
-      sessionStorage.removeItem("redirectPath");
-      const hash = redirectPath.split("#")[1];
-      console.log("hash:", hash);
-      if (hash) {
-        const attemptScroll = (retries = 20) => {
-          const el = document.getElementById(hash);
-          console.log("attempting scroll to:", hash, "found el:", el);
-          if (el) {
-            el.scrollIntoView({ behavior: "smooth" });
-          } else if (retries > 0) {
-            setTimeout(() => attemptScroll(retries - 1), 200);
-          }
-        };
-        setTimeout(() => attemptScroll(), 1600);
-      }
+    const hash = window.location.hash.replace("#", "");
+    console.log("useEffect hash:", hash);
+    if (hash) {
+      const attemptScroll = (retries = 20) => {
+        const el = document.getElementById(hash);
+        console.log("trying to find el:", hash, el);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        } else if (retries > 0) {
+          setTimeout(() => attemptScroll(retries - 1), 200);
+        }
+      };
+      setTimeout(() => attemptScroll(), 1600);
     }
   }, []);
 
