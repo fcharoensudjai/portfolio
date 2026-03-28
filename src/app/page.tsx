@@ -73,7 +73,7 @@ export default function Home() {
           setTimeout(() => attemptScroll(retries - 1), 200);
         }
       };
-      setTimeout(() => attemptScroll(), 1200);
+      setTimeout(() => attemptScroll(), 1100);
     }
   }, []);
 
