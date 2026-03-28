@@ -80,7 +80,30 @@ export const ScrambleEnglish: React.FC<ScrambleProps> = ({ children }) => {
 
   return (
     <motion.span onHoverStart={handleScramble} onClick={handleScramble} ref={ref}>
-      {scrambled}
+      {scrambled.split(" ").map((word, wi) => (
+        <React.Fragment key={wi}>
+          <span
+            style={{
+              display: "inline-block",
+              whiteSpace: "nowrap",
+              marginRight: wi < scrambled.split(" ").length - 1 ? "1.25ch" : undefined,
+            }}
+          >
+            {word.split("").map((char, ci) => (
+              <span
+                key={ci}
+                style={{
+                  display: "inline-block",
+                  width: "1ch",
+                  textAlign: "center",
+                }}
+              >
+                {char}
+              </span>
+            ))}
+          </span>
+        </React.Fragment>
+      ))}
     </motion.span>
   );
 };

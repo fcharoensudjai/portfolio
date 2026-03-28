@@ -122,7 +122,13 @@ export const Scramble: React.FC<ScrambleProps> = ({
     >
       {scrambled.split(" ").map((word, wi) => (
         <React.Fragment key={wi}>
-          <span style={{ display: "inline-block", whiteSpace: "nowrap" }}>
+          <span
+            style={{
+              display: "inline-block",
+              whiteSpace: "nowrap",
+              marginRight: wi < scrambled.split(" ").length - 1 ? "1.25ch" : undefined,
+            }}
+          >
             {word.split("").map((char, ci) => (
               <span
                 key={ci}
@@ -136,9 +142,6 @@ export const Scramble: React.FC<ScrambleProps> = ({
               </span>
             ))}
           </span>
-          {wi < scrambled.split(" ").length - 1 && (
-            <span style={{ display: "inline-block", width: "0.3em" }}>{"\u00A0"}</span>
-          )}
         </React.Fragment>
       ))}
     </motion.span>
