@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      const path = window.location.pathname;
+      const hash = window.location.hash;
+      sessionStorage.setItem("redirectPath", path + hash);
+      window.location.replace("/portfolio/");
+    </script>
+  </head>
+</html>

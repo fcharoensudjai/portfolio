@@ -63,17 +63,21 @@ export default function Home() {
   const [duration, setDuration] = useState(defaultDuration);
 
   useEffect(() => {
-    const hash = window.location.hash.replace("#", "");
-    if (hash) {
-      const attemptScroll = (retries = 20) => {
-        const el = document.getElementById(hash);
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
-        } else if (retries > 0) {
-          setTimeout(() => attemptScroll(retries - 1), 200);
-        }
-      };
-      setTimeout(() => attemptScroll(), 1600);
+    const redirectPath = sessionStorage.getItem("redirectPath");
+    if (redirectPath) {
+      sessionStorage.removeItem("redirectPath");
+      const hash = redirectPath.split("#")[1];
+      if (hash) {
+        const attemptScroll = (retries = 20) => {
+          const el = document.getElementById(hash);
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth" });
+          } else if (retries > 0) {
+            setTimeout(() => attemptScroll(retries - 1), 200);
+          }
+        };
+        setTimeout(() => attemptScroll(), 1600);
+      }
     }
   }, []);
 
