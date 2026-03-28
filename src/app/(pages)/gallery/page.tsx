@@ -86,7 +86,7 @@ export default function Gallery() {
             className={`fixed h-[100dvh] inset-0 z-30 backdrop-blur-[8px] bg-opacity-50 ${theme === "dark" ? "bg-middle-colour" : "bg-text-dark"}`}
           >
             <ImageViewer
-              src={sortedImageData[isViewerOpen].src}
+              src={`${basePath}${sortedImageData[isViewerOpen].src}`}
               alt={sortedImageData[isViewerOpen].alt}
               name={sortedImageData[isViewerOpen].name}
               toggleViewer={() => toggleViewer()}
