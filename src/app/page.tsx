@@ -68,12 +68,12 @@ export default function Home() {
       const attemptScroll = (retries = 20) => {
         const el = document.getElementById(hash);
         if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
+          el.scrollIntoView({ behavior: "instant" });
         } else if (retries > 0) {
           setTimeout(() => attemptScroll(retries - 1), 200);
         }
       };
-      setTimeout(() => attemptScroll(), 1600);
+      setTimeout(() => attemptScroll(), 1500);
     }
   }, []);
 
