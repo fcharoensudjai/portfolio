@@ -63,18 +63,17 @@ export default function Home() {
   const [duration, setDuration] = useState(defaultDuration);
 
   useEffect(() => {
-    const scrollTarget = sessionStorage.getItem("scrollTarget");
-    if (scrollTarget) {
-      sessionStorage.removeItem("scrollTarget");
-      const attemptScroll = (retries = 10) => {
-        const el = document.getElementById(scrollTarget);
+    const hash = window.location.hash.replace("#", "");
+    if (hash) {
+      const attemptScroll = (retries = 20) => {
+        const el = document.getElementById(hash);
         if (el) {
           el.scrollIntoView({ behavior: "smooth" });
         } else if (retries > 0) {
-          setTimeout(() => attemptScroll(retries - 1), 150);
+          setTimeout(() => attemptScroll(retries - 1), 200);
         }
       };
-      attemptScroll();
+      setTimeout(() => attemptScroll(), 800);
     }
   }, []);
 

@@ -81,7 +81,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
       setIsExit(false);
       resetRecentsVisibility();
       resetIntroVisibility();
-      window.location.href = href;
+      router.push(href);
 
       setTimeout(() => {
         scrollToSection(targetHash);
