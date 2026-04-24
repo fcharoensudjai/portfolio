@@ -20,19 +20,23 @@ export default function ThemeSwitch() {
         alt="loading light/dark toggle"
         priority={false}
         title="loading light/dark toggle"
-        className={"md:w-[36px] md:h-[36px]"}
+        className={"w-[30px] h-[30px]"}
       />
     );
 
   return (
-    <button onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}>
+    <button
+      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+      className="flex h-[36px] w-[36px] items-center justify-center"
+      aria-label="toggle theme"
+    >
       {resolvedTheme === "dark" ? (
         <Image
           src={`${basePath}/icons/dark/sun.svg`}
           alt="switch to light mode"
           width={30}
           height={30}
-          className={"lg:w-[36px] lg:h-[36px]"}
+          className={"w-[30px] h-[30px]"}
         />
       ) : (
         <Image
@@ -40,7 +44,7 @@ export default function ThemeSwitch() {
           alt="switch to dark mode"
           width={30}
           height={30}
-          className={"w-[28px] h-[28px] xl:w-[32px] xl:h-[32px]"}
+          className={"w-[30px] h-[30px]"}
         />
       )}
     </button>
