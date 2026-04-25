@@ -74,7 +74,7 @@ export const Footer = ({ exitDuration = 800 }) => {
               </div>
 
               <div>
-                © 2024 - all rights
+                © 2026 - all rights
                 <br />
                 reserved
               </div>

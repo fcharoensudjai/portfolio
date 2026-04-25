@@ -20,6 +20,9 @@ interface UnderlinedLinkProps {
   scroll?: boolean;
   toggleNav?: () => void;
   line?: boolean;
+  linkClassName?: string;
+  wrapperClassName?: string;
+  disableMotion?: boolean;
 }
 
 function sleep(ms: number): Promise<void> {
@@ -37,6 +40,9 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
   scroll = false,
   toggleNav,
   line = true,
+  linkClassName,
+  wrapperClassName,
+  disableMotion = false,
 }) => {
   const [hovered, setHovered] = useState(false);
   const { theme } = useTheme();
@@ -106,33 +112,55 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
   }, [path, targetHash, baseCurrentPath, baseHref]);
 
   const content = isExternal ? (
-    <a href={href} onClick={handleClick} className="relative inline-block">
+    <a href={href} onClick={handleClick} className={`relative inline-block ${linkClassName ?? ""}`}>
       {children}
     </a>
   ) : (
-    <Link href={href} onClick={handleClick}>
+    <Link href={href} onClick={handleClick} className={linkClassName}>
       {children}
     </Link>
   );
 
+  const sharedProps = {
+    className: `relative inline-block ${wrapperClassName ?? ""}`,
+    onMouseDown: () => setHovered(true),
+    onTouchStart: () => setHovered(true),
+    onTouchEnd: () => setHovered(false),
+    onMouseEnter: () => setHovered(true),
+    onMouseLeave: () => setHovered(false),
+  };
+
   return underline ? (
-    <motion.div
-      className="relative inline-block"
-      onMouseDown={() => setHovered(true)}
-      onTouchStart={() => setHovered(true)}
-      onTouchEnd={() => setHovered(false)}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
-    >
-      {content}
-      <div
-        className={`
+    disableMotion ? (
+      <div {...sharedProps}>
+        {content}
+        <div
+          className={`
                 border-t-[3px] transition-all duration-[350ms] ease-in-out
                 ${theme === "dark" ? "border-accent-dark" : "border-accent-light"}
                 ${(hovered && line) || isActive || isVisible ? "w-full" : "w-0"}
             `}
-      ></div>
-    </motion.div>
+        ></div>
+      </div>
+    ) : (
+      <motion.div
+        className={`relative inline-block ${wrapperClassName ?? ""}`}
+        onMouseDown={() => setHovered(true)}
+        onTouchStart={() => setHovered(true)}
+        onTouchEnd={() => setHovered(false)}
+        onHoverStart={() => setHovered(true)}
+        onHoverEnd={() => setHovered(false)}
+      >
+        {content}
+        <div
+          className={`
+                border-t-[3px] transition-all duration-[350ms] ease-in-out
+                ${theme === "dark" ? "border-accent-dark" : "border-accent-light"}
+                ${(hovered && line) || isActive || isVisible ? "w-full" : "w-0"}
+            `}
+        ></div>
+      </motion.div>
+    )
   ) : (
     content
   );
