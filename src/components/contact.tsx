@@ -25,7 +25,7 @@ export const Contact = () => {
     <div
       ref={contactRef}
       id="contact"
-      className="flex justify-center flex-col lg:min-h-[85dvh] min-h-[70dvh] scroll-mt-[75.58px] xl:scroll-mt-[103.22px]"
+      className="flex justify-center flex-col lg:min-h-[100dvh] min-h-[70dvh] scroll-mt-[75.58px] xl:scroll-mt-[103.22px]"
     >
       <div className={"flex flex-grow justify-center items-center w-full"}>
         <div className={`relative`}>
