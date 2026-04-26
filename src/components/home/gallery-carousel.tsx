@@ -11,6 +11,8 @@ interface GalleryCarouselProps {
   isScrolling?: boolean;
 }
 
+const RECENTS_FEATURED_NAMES = new Set(["raiden shogun", "raven"]);
+
 export const GalleryCarousel: React.FC<GalleryCarouselProps> = ({ scrollDirection, isScrolling = false }) => {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const x = useMotionValue(0);
@@ -23,7 +25,10 @@ export const GalleryCarousel: React.FC<GalleryCarouselProps> = ({ scrollDirectio
   const isScrollingRef = useRef(isScrolling);
 
   const carouselItems = useMemo(() => {
-    return [...imageData].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 13);
+    return [...imageData]
+      .filter((item) => !RECENTS_FEATURED_NAMES.has(item.name.trim().toLowerCase()))
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 10);
   }, []);
 
   useEffect(() => {
@@ -63,7 +68,7 @@ export const GalleryCarousel: React.FC<GalleryCarouselProps> = ({ scrollDirectio
       const dt = (now - lastTime) / 1000;
       lastTime = now;
 
-      const baseSpeed = 82;
+      const baseSpeed = 75;
       const targetMultiplier = isHovered ? 0.45 : 1;
       const targetScrollBoost = isScrollingRef.current ? 1.65 : 1;
 

@@ -26,6 +26,7 @@ const NAV_LABELS: Record<NavKey, string> = {
 
 const DARK_TEXT_RGB = { r: 36, g: 36, b: 36 }; // text-light (#242424)
 const LIGHT_TEXT_RGB = { r: 232, g: 231, b: 226 }; // text-dark (#E8E7E2)
+const MIN_VISIBLE_IMAGE_ALPHA = 0.35;
 
 const smoothNeighbourBlend = (values: number[]): number[] => {
   if (values.length <= 1) return values;
@@ -90,6 +91,7 @@ const getImagePixelColor = (img: HTMLImageElement, x: number, y: number): RGB | 
 
   const rect = img.getBoundingClientRect();
   if (rect.width === 0 || rect.height === 0) return null;
+  if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) return null;
 
   const relX = (x - rect.left) / rect.width;
   const relY = (y - rect.top) / rect.height;
@@ -113,7 +115,7 @@ const getImagePixelColor = (img: HTMLImageElement, x: number, y: number): RGB | 
 };
 
 export const Header = () => {
-  const SAMPLE_INTERVAL_MS = 180;
+  const SAMPLE_INTERVAL_MS = 140;
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -134,7 +136,6 @@ export const Header = () => {
     contact: Array.from(NAV_LABELS.contact).map(() => null),
   });
   const headerRowRef = React.useRef<HTMLDivElement | null>(null);
-  const scrollTransitionTimeoutRef = React.useRef<number | null>(null);
   const toggleNav = () => setIsNavOpen(!isNavOpen);
 
   const { theme } = useTheme();
@@ -170,8 +171,12 @@ export const Header = () => {
     if (!isMounted) return;
 
     let rafId: number | null = null;
-    let timeoutId: number | null = null;
+    let isDisposed = false;
     let lastUpdatedAt = 0;
+    let hasAppliedInstantThemeSample = false;
+    let hasReenabledTransitions = false;
+
+    setEnableToneTransition(false);
 
     const updateTone = () => {
       const sampledTone: Record<NavKey, number[]> = {
@@ -200,12 +205,20 @@ export const Header = () => {
 
           if (underneath instanceof HTMLImageElement) {
             sampleColor = getImagePixelColor(underneath, x, y);
+
+            if (sampleColor && sampleColor.a < MIN_VISIBLE_IMAGE_ALPHA) {
+              sampleColor = null;
+            }
           }
 
           if (!sampleColor) {
             const possibleImage = underneath.querySelector?.("img");
             if (possibleImage instanceof HTMLImageElement) {
               sampleColor = getImagePixelColor(possibleImage, x, y);
+
+              if (sampleColor && sampleColor.a < MIN_VISIBLE_IMAGE_ALPHA) {
+                sampleColor = null;
+              }
             }
           }
 
@@ -234,58 +247,39 @@ export const Header = () => {
         );
         return same ? prev : nextTone;
       });
-    };
 
-    const requestUpdate = (force = false) => {
-      const now = Date.now();
-
-      if (!force && now - lastUpdatedAt < SAMPLE_INTERVAL_MS) {
-        if (timeoutId) window.clearTimeout(timeoutId);
-        timeoutId = window.setTimeout(
-          () => {
-            if (rafId) cancelAnimationFrame(rafId);
-            rafId = requestAnimationFrame(() => {
-              updateTone();
-              lastUpdatedAt = Date.now();
-            });
-          },
-          SAMPLE_INTERVAL_MS - (now - lastUpdatedAt)
-        );
+      if (!hasAppliedInstantThemeSample) {
+        hasAppliedInstantThemeSample = true;
         return;
       }
 
-      if (rafId) cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => {
-        updateTone();
-        lastUpdatedAt = Date.now();
+      if (!hasReenabledTransitions) {
+        hasReenabledTransitions = true;
+        if (!isDisposed) {
+          setEnableToneTransition(true);
+        }
+      }
+    };
+
+    const runSample = () => {
+      if (isDisposed) return;
+      rafId = requestAnimationFrame((now) => {
+        if (now - lastUpdatedAt >= SAMPLE_INTERVAL_MS) {
+          updateTone();
+          lastUpdatedAt = now;
+        }
+
+        runSample();
       });
     };
 
-    const handleScroll = () => {
-      setEnableToneTransition(true);
-      if (scrollTransitionTimeoutRef.current) {
-        window.clearTimeout(scrollTransitionTimeoutRef.current);
-      }
-      scrollTransitionTimeoutRef.current = window.setTimeout(() => {
-        setEnableToneTransition(false);
-      }, 160);
-
-      requestUpdate();
-    };
-    const handleResize = () => requestUpdate();
-
-    requestUpdate(true);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleResize);
+    updateTone();
+    lastUpdatedAt = performance.now();
+    runSample();
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleResize);
+      isDisposed = true;
       if (rafId) cancelAnimationFrame(rafId);
-      if (timeoutId) window.clearTimeout(timeoutId);
-      if (scrollTransitionTimeoutRef.current) {
-        window.clearTimeout(scrollTransitionTimeoutRef.current);
-      }
     };
   }, [isMounted, theme, SAMPLE_INTERVAL_MS]);
 
