@@ -22,6 +22,7 @@ export const Card: React.FC<CardProps> = ({ src, alt, className, onClick }) => {
 
   const [showOverlay, setShowOverlay] = useState(false);
   const toggleOverlay = () => setShowOverlay(!showOverlay);
+  const [isImageReady, setIsImageReady] = useState(false);
 
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
@@ -39,6 +40,18 @@ export const Card: React.FC<CardProps> = ({ src, alt, className, onClick }) => {
     setMousePosition({ x: clampedX, y: clampedY });
   };
 
+  const handleImageReady = async (img: HTMLImageElement) => {
+    try {
+      if (typeof img.decode === "function") {
+        await img.decode();
+      }
+    } catch {
+      // no-op: fall back to showing the image anyway
+    } finally {
+      setIsImageReady(true);
+    }
+  };
+
   return (
     <motion.div
       className={`relative overflow-hidden rounded-xl min-h-[300px] xl:min-h-[400px] 2xl:min-h-[500px] flex justify-center items-center ${className}`}
@@ -48,6 +61,24 @@ export const Card: React.FC<CardProps> = ({ src, alt, className, onClick }) => {
       onClick={onClick}
     >
       <Fader once={true} threshold={0.4}>
+        {!isImageReady && (
+          <div
+            className={`absolute inset-0 z-0 animate-pulse ${theme === "dark" ? "bg-middle-colour" : "bg-text-dark"}`}
+            aria-hidden="true"
+          />
+        )}
+
+        <Image
+          src={src}
+          alt={alt}
+          style={{ objectFit: "cover" }}
+          fill
+          onContextMenu={handleContextMenu}
+          onLoadingComplete={handleImageReady}
+          onError={() => setIsImageReady(true)}
+          className={`transition-opacity duration-500 ease-out ${isImageReady ? "opacity-100" : "opacity-0"}`}
+        />
+
         <AnimatePresence>
           {showOverlay && (
             <motion.div
@@ -83,8 +114,6 @@ export const Card: React.FC<CardProps> = ({ src, alt, className, onClick }) => {
             </motion.div>
           )}
         </AnimatePresence>
-
-        <Image src={src} alt={alt} style={{ objectFit: "cover" }} fill onContextMenu={handleContextMenu} />
       </Fader>
     </motion.div>
   );
