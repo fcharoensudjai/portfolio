@@ -59,9 +59,13 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
   const { resetIntroVisibility } = useVisibility2();
 
   const scrollToSection = (hash: string) => {
-    const targetElement = document.getElementById(hash.replace("#", ""));
+    const targetId = hash.replace("#", "");
+    const targetElement = document.getElementById(targetId);
     if (targetElement) {
-      targetElement.scrollIntoView({ behavior: "smooth" });
+      targetElement.scrollIntoView({
+        behavior: "smooth",
+        block: targetId === "contact" ? "end" : "start",
+      });
     }
   };
 
@@ -74,8 +78,26 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
 
     if (scroll) {
       event.preventDefault();
+
+      if (baseCurrentPath !== baseHref) {
+        setIsExit(true);
+        await sleep(exitDuration);
+        setIsExit(false);
+        resetRecentsVisibility();
+        resetIntroVisibility();
+        const base = process.env.NEXT_PUBLIC_BASE_PATH || "";
+        window.location.href = window.location.origin + base + href;
+        if (toggleNav) toggleNav();
+        setHovered(false);
+        return;
+      }
+
       if (toggleNav) toggleNav();
-      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      if (targetHash) {
+        scrollToSection(targetHash);
+      } else {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      }
       setHovered(false);
       return;
     }
