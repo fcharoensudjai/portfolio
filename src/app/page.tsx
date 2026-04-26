@@ -540,7 +540,7 @@ export default function Home() {
       </div>
 
       <div className={`${theme === "dark" ? "bg-text-light" : "bg-main-light"} px-6 md:px-16 xl:px-20`}>
-        <Fader>
+        <Fader once={true}>
           <div className="flex justify-center items-center py-10 md:py-12 lg:py-14">
             <GalleryCarousel scrollDirection={scrollDirection} isScrolling={isScrolling} />
           </div>

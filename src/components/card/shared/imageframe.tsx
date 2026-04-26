@@ -57,7 +57,7 @@ export const ImageFrame: React.FC<ImageFrameProps> = ({
         style={{ objectFit }}
         fill
         onContextMenu={onContextMenu}
-        onLoadingComplete={handleImageReady}
+        onLoad={(event) => handleImageReady(event.currentTarget)}
         onError={() => setIsImageReady(true)}
         className={`transition-opacity duration-500 ease-out ${isImageReady ? "opacity-100" : "opacity-0"} ${
           imageClassName ?? ""
