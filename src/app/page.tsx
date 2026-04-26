@@ -547,12 +547,19 @@ export default function Home() {
         </Fader>
       </div>
 
-      <Fader>
-        {" "}
-        <Contact />{" "}
-      </Fader>
+      <section className={`relative ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+        <div className="h-[145dvh]">
+          <div className="sticky top-0 z-10">
+            <Fader>
+              <Contact />
+            </Fader>
+          </div>
+        </div>
+      </section>
 
-      <Footer />
+      <section className={`relative z-20 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+        <Footer />
+      </section>
     </div>
   );
 }
