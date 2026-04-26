@@ -68,7 +68,7 @@ export const GalleryCarousel: React.FC<GalleryCarouselProps> = ({ scrollDirectio
       const dt = (now - lastTime) / 1000;
       lastTime = now;
 
-      const baseSpeed = 75;
+      const baseSpeed = 68;
       const targetMultiplier = isHovered ? 0.45 : 1;
       const targetScrollBoost = isScrollingRef.current ? 1.65 : 1;
 
@@ -76,7 +76,7 @@ export const GalleryCarousel: React.FC<GalleryCarouselProps> = ({ scrollDirectio
       scrollBoostRef.current += (targetScrollBoost - scrollBoostRef.current) * Math.min(1, dt * 4.5);
 
       const speed = baseSpeed * speedMultiplierRef.current * scrollBoostRef.current;
-      const direction = directionRef.current === "up" ? 1 : -1;
+      const direction = directionRef.current === "up" ? -1 : 1;
 
       let nextX = x.get() + direction * speed * dt;
 

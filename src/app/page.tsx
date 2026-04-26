@@ -18,7 +18,7 @@ import { Preloader } from "@/components/stylers/page-loading/preloader";
 import { useInView } from "react-intersection-observer";
 import { useVisibility } from "@/app/contexts/recentsvisibilitycontext";
 import { useVisibility2 } from "@/app/contexts/introvisibilitycontext";
-import { motion, useMotionValue, animate, AnimatePresence } from "framer-motion";
+import { motion, useMotionValue, AnimatePresence } from "framer-motion";
 import { Petal } from "@/components/petal";
 import { UnderlinedLink } from "@/components/underlinedlink";
 import { GalleryCarousel } from "@/components/home/gallery-carousel";
@@ -56,12 +56,14 @@ export default function Home() {
     setIsIntroInView(isIntroInView);
   }, [isIntroInView, setIsIntroInView]);
 
-  // flower rotating speed
+  // flower rotating speed (mirrors carousel motion profile)
   const rotateValue = useMotionValue(0);
-  const [mustFinish, setMustFinish] = useState(false);
-  const [rerender, setRerender] = useState(false);
-  const defaultDuration = 7;
-  const [duration, setDuration] = useState(defaultDuration);
+  const [isIntroFlowerHovered, setIsIntroFlowerHovered] = useState(false);
+  const flowerDirectionRef = React.useRef<"up" | "down" | null>(null);
+  const flowerScrollingRef = React.useRef(false);
+  const flowerHoverRef = React.useRef(false);
+  const flowerSpeedMultiplierRef = React.useRef(1);
+  const flowerScrollBoostRef = React.useRef(1);
 
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
@@ -77,34 +79,6 @@ export default function Home() {
       setTimeout(() => attemptScroll(), 1100);
     }
   }, []);
-
-  useEffect(() => {
-    let controls;
-    const finalRotation = 360;
-
-    if (mustFinish) {
-      controls = animate(rotateValue, [rotateValue.get(), finalRotation], {
-        ease: "linear",
-        duration: duration * (1 - rotateValue.get() / finalRotation),
-        onComplete: () => {
-          setMustFinish(false);
-          setRerender(!rerender);
-        },
-      });
-    } else {
-      controls = animate(rotateValue, [0, finalRotation], {
-        ease: "linear",
-        duration: duration,
-        repeat: Infinity,
-        repeatType: "loop",
-        repeatDelay: 0,
-      });
-    }
-
-    return controls?.stop;
-  }, [rerender, rotateValue, duration, mustFinish]);
-
-  // changing rotation direction of flower
 
   const [scrollDirection, setScrollDirection] = useState<"up" | "down" | null>(null);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -155,20 +129,56 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    let controls;
+    flowerDirectionRef.current = scrollDirection;
+  }, [scrollDirection]);
 
-    const rotationDirection = scrollDirection === "up" ? -360 : 360;
+  useEffect(() => {
+    flowerScrollingRef.current = isScrolling;
+  }, [isScrolling]);
 
-    controls = animate(rotateValue, [rotateValue.get(), rotationDirection], {
-      ease: "linear",
-      duration: duration,
-      repeat: Infinity,
-      repeatType: "loop",
-      repeatDelay: 0,
-    });
+  useEffect(() => {
+    flowerHoverRef.current = isIntroFlowerHovered;
+  }, [isIntroFlowerHovered]);
 
-    return () => controls?.stop();
-  }, [scrollDirection, rotateValue, duration]);
+  useEffect(() => {
+    let rafId: number;
+    let lastTime = performance.now();
+
+    const frame = (now: number) => {
+      const dt = (now - lastTime) / 1000;
+      lastTime = now;
+
+      const baseSpeed = 45;
+      const targetHoverMultiplier = flowerHoverRef.current ? 0.45 : 1;
+      const targetScrollBoost = flowerScrollingRef.current ? 1.65 : 1;
+
+      flowerSpeedMultiplierRef.current +=
+        (targetHoverMultiplier - flowerSpeedMultiplierRef.current) * Math.min(1, dt * 7);
+      flowerScrollBoostRef.current += (targetScrollBoost - flowerScrollBoostRef.current) * Math.min(1, dt * 4.5);
+
+      const speed = baseSpeed * flowerSpeedMultiplierRef.current * flowerScrollBoostRef.current;
+      const direction = flowerDirectionRef.current === "up" ? -1 : 1;
+
+      let nextRotation = rotateValue.get() + direction * speed * dt;
+
+      if (nextRotation >= 360) {
+        nextRotation -= 360;
+      }
+
+      if (nextRotation <= -360) {
+        nextRotation += 360;
+      }
+
+      rotateValue.set(nextRotation);
+      rafId = requestAnimationFrame(frame);
+    };
+
+    rafId = requestAnimationFrame(frame);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+    };
+  }, [rotateValue]);
 
   const [showOverlay, setShowOverlay] = useState(false);
   const toggleOverlay = () => setShowOverlay(!showOverlay);
@@ -486,14 +496,8 @@ export default function Home() {
               <motion.div
                 className="flex justify-center items-center"
                 style={{ rotate: rotateValue }}
-                onHoverStart={() => {
-                  setMustFinish(true);
-                  setDuration(15);
-                }}
-                onHoverEnd={() => {
-                  setMustFinish(true);
-                  setDuration(defaultDuration);
-                }}
+                onHoverStart={() => setIsIntroFlowerHovered(true)}
+                onHoverEnd={() => setIsIntroFlowerHovered(false)}
               >
                 <Image
                   src={theme === "dark" ? `${basePath}/icons/dark/logodark.svg` : `${basePath}/icons/light/logo.svg`}
