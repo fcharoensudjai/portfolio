@@ -226,7 +226,7 @@ export default function Home() {
           </Fader>
         </main>
 
-        <div className="flex justify-between items-center px-3 md:px-5 py-3 bg-transparent">
+        <div className="flex justify-between items-center px-3 md:px-6 pt-3 pb-3 xl:pb-7 bg-transparent">
           <LocalTime />
           <SocialIcons />
         </div>
@@ -234,10 +234,10 @@ export default function Home() {
         <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav} />
       </div>
 
-      <div id="recents" className="px-6 md:px-16 xl:px-20 md:space-y-[25dvh] lg:space-y-12 my-7">
-        <div ref={recentsRef} className="md:sticky md:top-0 md:z-10">
+      <div id="recents" className="px-6 md:px-16 xl:px-20 space-y-[10dvh] md:space-y-[14dvh] lg:space-y-16 my-7">
+        <div ref={recentsRef}>
           <Fader>
-            <div className="flex min-h-[100dvh] justify-center items-center">
+            <div className="flex justify-center items-center py-[10dvh] md:py-[12dvh] h-[100dvh]">
               <div className="flex flex-col space-y-6 lg:space-y-7 xl:space-y-10">
                 <Title size="medium">
                   <div className="fixed-line-spacing scroll-mt-[120.28px] lg:scroll-mt-[148.02px]"> recent works</div>
@@ -261,10 +261,10 @@ export default function Home() {
           </Fader>
         </div>
 
-        <div className={`md:sticky md:top-0 md:z-10 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+        <div className={`${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
           <Fader>
-            <div className="flex md:h-[100dvh] justify-center items-center my-[20dvh]">
-              <div className="py-20 xl:py-0 space-y-3 lg:space-y-5">
+            <div className="flex justify-center items-center py-[10dvh] md:py-[12dvh]">
+              <div className="space-y-3 lg:space-y-5">
                 <div className="lg:hidden">
                   <DottedLineSeparator align="left"> [ 01 ] </DottedLineSeparator>
                 </div>
@@ -368,10 +368,10 @@ export default function Home() {
           </Fader>
         </div>
 
-        <div className={`md:sticky md:top-0 md:z-10 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+        <div className={`${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
           <Fader>
-            <div className="flex md:h-[100dvh] justify-center items-center my-[20dvh]">
-              <div className="py-20 xl:py-0 lg:py-0 space-y-3 lg:space-y-5">
+            <div className="flex justify-center items-center py-[10dvh] md:py-[12dvh]">
+              <div className="space-y-3 lg:space-y-5">
                 <div className="lg:hidden">
                   <DottedLineSeparator align="left"> [ 02 ] </DottedLineSeparator>
                 </div>
@@ -547,12 +547,19 @@ export default function Home() {
         </Fader>
       </div>
 
-      <Fader>
-        {" "}
-        <Contact />{" "}
-      </Fader>
+      <section className={`relative ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+        <div className="md:h-[130vh]">
+          <div className="sticky top-0 z-10">
+            <Fader>
+              <Contact />
+            </Fader>
+          </div>
+        </div>
+      </section>
 
-      <Footer />
+      <section className={`relative z-20 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+        <Footer />
+      </section>
     </div>
   );
 }

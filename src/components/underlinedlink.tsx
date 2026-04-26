@@ -45,6 +45,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
   disableMotion = false,
 }) => {
   const [hovered, setHovered] = useState(false);
+  const [isScrollNavigating, setIsScrollNavigating] = useState(false);
   const { theme } = useTheme();
   const path = usePathname();
   const baseCurrentPath = path.split("#")[0];
@@ -59,9 +60,13 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
   const { resetIntroVisibility } = useVisibility2();
 
   const scrollToSection = (hash: string) => {
-    const targetElement = document.getElementById(hash.replace("#", ""));
+    const targetId = hash.replace("#", "");
+    const targetElement = document.getElementById(targetId);
     if (targetElement) {
-      targetElement.scrollIntoView({ behavior: "smooth" });
+      targetElement.scrollIntoView({
+        behavior: "smooth",
+        block: targetId === "contact" ? "end" : "start",
+      });
     }
   };
 
@@ -74,8 +79,14 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
 
     if (scroll) {
       event.preventDefault();
+      setIsScrollNavigating(true);
+
       if (toggleNav) toggleNav();
-      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      if (targetHash) {
+        scrollToSection(targetHash);
+      } else {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      }
       setHovered(false);
       return;
     }
@@ -95,6 +106,9 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
       }, 1500);
     } else if (currentHash !== targetHash) {
       event.preventDefault();
+      if (targetHash) {
+        setIsScrollNavigating(true);
+      }
       scrollToSection(targetHash);
       setHovered(false);
       onClick?.();
@@ -110,6 +124,23 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
       scrollToSection(targetHash);
     }
   }, [path, targetHash, baseCurrentPath, baseHref]);
+
+  useEffect(() => {
+    if (!isScrollNavigating) return;
+
+    if (isVisible) {
+      setIsScrollNavigating(false);
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setIsScrollNavigating(false);
+    }, 1400);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [isScrollNavigating, isVisible]);
 
   const content = isExternal ? (
     <a href={href} onClick={handleClick} className={`relative inline-block ${linkClassName ?? ""}`}>
@@ -138,7 +169,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
           className={`
                 border-t-[3px] transition-all duration-[350ms] ease-in-out
                 ${theme === "dark" ? "border-accent-dark" : "border-accent-light"}
-                ${(hovered && line) || isActive || isVisible ? "w-full" : "w-0"}
+                ${(hovered && line) || isActive || isVisible || isScrollNavigating ? "w-full" : "w-0"}
             `}
         ></div>
       </div>
@@ -156,7 +187,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
           className={`
                 border-t-[3px] transition-all duration-[350ms] ease-in-out
                 ${theme === "dark" ? "border-accent-dark" : "border-accent-light"}
-                ${(hovered && line) || isActive || isVisible ? "w-full" : "w-0"}
+                ${(hovered && line) || isActive || isVisible || isScrollNavigating ? "w-full" : "w-0"}
             `}
         ></div>
       </motion.div>

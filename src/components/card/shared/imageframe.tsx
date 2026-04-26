@@ -51,18 +51,20 @@ export const ImageFrame: React.FC<ImageFrameProps> = ({
         />
       )}
 
-      <Image
-        src={src}
-        alt={alt}
-        style={{ objectFit }}
-        fill
-        onContextMenu={onContextMenu}
-        onLoad={(event) => handleImageReady(event.currentTarget)}
-        onError={() => setIsImageReady(true)}
-        className={`transition-opacity duration-500 ease-out ${isImageReady ? "opacity-100" : "opacity-0"} ${
-          imageClassName ?? ""
-        }`}
-      />
+      <div className="relative w-full h-full">
+        <Image
+          src={src}
+          alt={alt}
+          style={{ objectFit }}
+          fill
+          onContextMenu={onContextMenu}
+          onLoad={(event) => handleImageReady(event.currentTarget)}
+          onError={() => setIsImageReady(true)}
+          className={`transition-opacity duration-500 ease-out ${isImageReady ? "opacity-100" : "opacity-0"} ${
+            imageClassName ?? ""
+          }`}
+        />
+      </div>
     </div>
   );
 };

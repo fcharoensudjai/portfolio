@@ -27,6 +27,8 @@ const NAV_LABELS: Record<NavKey, string> = {
 const DARK_TEXT_RGB = { r: 36, g: 36, b: 36 }; // text-light (#242424)
 const LIGHT_TEXT_RGB = { r: 232, g: 231, b: 226 }; // text-dark (#E8E7E2)
 const MIN_VISIBLE_IMAGE_ALPHA = 0.35;
+let sharedSampleCanvas: HTMLCanvasElement | null = null;
+let sharedSampleCtx: CanvasRenderingContext2D | null = null;
 
 const smoothNeighbourBlend = (values: number[]): number[] => {
   if (values.length <= 1) return values;
@@ -100,14 +102,18 @@ const getImagePixelColor = (img: HTMLImageElement, x: number, y: number): RGB | 
   const sy = Math.min(Math.max(relY, 0), 1) * (img.naturalHeight - 1);
 
   try {
-    const canvas = document.createElement("canvas");
-    canvas.width = 1;
-    canvas.height = 1;
-    const ctx = canvas.getContext("2d", { willReadFrequently: true });
-    if (!ctx) return null;
+    if (!sharedSampleCanvas || !sharedSampleCtx) {
+      sharedSampleCanvas = document.createElement("canvas");
+      sharedSampleCanvas.width = 1;
+      sharedSampleCanvas.height = 1;
+      sharedSampleCtx = sharedSampleCanvas.getContext("2d", { willReadFrequently: true });
+    }
 
-    ctx.drawImage(img, sx, sy, 1, 1, 0, 0, 1, 1);
-    const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
+    if (!sharedSampleCtx) return null;
+
+    sharedSampleCtx.clearRect(0, 0, 1, 1);
+    sharedSampleCtx.drawImage(img, sx, sy, 1, 1, 0, 0, 1, 1);
+    const [r, g, b, a] = sharedSampleCtx.getImageData(0, 0, 1, 1).data;
     return { r, g, b, a: a / 255 };
   } catch {
     return null;
@@ -195,35 +201,27 @@ export const Header = () => {
           const x = rect.left + rect.width / 2;
           const y = rect.top + rect.height / 2;
 
-          const underneath = document
-            .elementsFromPoint(x, y)
-            .find((el) => !el.closest("[data-nav-layer='desktop']") && !el.closest("[data-header-layer='blur']"));
-
-          if (!underneath) return;
-
           let sampleColor: RGB | null = null;
 
-          if (underneath instanceof HTMLImageElement) {
-            sampleColor = getImagePixelColor(underneath, x, y);
+          const stack = document
+            .elementsFromPoint(x, y)
+            .filter((el) => !el.closest("[data-nav-layer='desktop']") && !el.closest("[data-header-layer='blur']"));
 
-            if (sampleColor && sampleColor.a < MIN_VISIBLE_IMAGE_ALPHA) {
-              sampleColor = null;
-            }
-          }
-
-          if (!sampleColor) {
-            const possibleImage = underneath.querySelector?.("img");
-            if (possibleImage instanceof HTMLImageElement) {
-              sampleColor = getImagePixelColor(possibleImage, x, y);
-
-              if (sampleColor && sampleColor.a < MIN_VISIBLE_IMAGE_ALPHA) {
-                sampleColor = null;
+          for (const el of stack) {
+            if (el instanceof HTMLImageElement) {
+              const pixel = getImagePixelColor(el, x, y);
+              if (pixel && pixel.a >= MIN_VISIBLE_IMAGE_ALPHA) {
+                sampleColor = pixel;
+                break;
               }
+              continue;
             }
-          }
 
-          if (!sampleColor) {
-            sampleColor = getElementBgColor(underneath);
+            const bgColor = getElementBgColor(el);
+            if (bgColor && bgColor.a > 0) {
+              sampleColor = bgColor;
+              break;
+            }
           }
 
           if (!sampleColor) return;
