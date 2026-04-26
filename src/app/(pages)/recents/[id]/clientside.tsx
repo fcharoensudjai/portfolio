@@ -16,6 +16,7 @@ import { artworks, closerLook, bts } from "@/app/(pages)/recents/[id]/artworks";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { ImageFrame } from "@/components/card/shared/imageframe";
 
 export default function Recent() {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -142,19 +143,19 @@ export default function Recent() {
               {closerLook
                 .filter((closerLook) => closerLook.id === artwork.id)
                 .map((closerLook, index) => (
-                  <Image
+                  <div
                     key={closerLook.screenshot}
-                    src={`${basePath}${closerLook.screenshot}`}
-                    alt={closerLook.alt}
-                    height={1000}
-                    width={1000}
-                    quality={100}
-                    onContextMenu={handleContextMenu}
-                    style={{
-                      objectFit: "cover",
-                    }}
-                    className={`w-full h-auto lg:h-full lg:w-full rounded-xl ${index == 0 ? "lg:row-span-2" : ""}`}
-                  />
+                    className={`relative overflow-hidden rounded-xl w-full min-h-[260px] sm:min-h-[300px] lg:min-h-[380px] ${
+                      index === 0 ? "lg:row-span-2 lg:min-h-[760px]" : ""
+                    }`}
+                  >
+                    <ImageFrame
+                      src={`${basePath}${closerLook.screenshot}`}
+                      alt={closerLook.alt}
+                      onContextMenu={handleContextMenu}
+                      pulsePlaceholder={true}
+                    />
+                  </div>
                 ))}
             </div>
           </div>
