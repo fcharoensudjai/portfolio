@@ -5,6 +5,13 @@
 @layer base {
   html {
     @apply font-mono bg-middle-colour;
+    overflow-x: clip;
+    max-width: 100%;
+  }
+
+  body {
+    overflow-x: clip;
+    max-width: 100%;
   }
 }
 

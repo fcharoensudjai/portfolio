@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
 import React from "react";

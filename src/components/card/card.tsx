@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Fader from "@/components/stylers/fader";
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTheme } from "next-themes";
 import { Scramble } from "@/components/stylers/scramblerthai";
+import { ImageFrame } from "@/components/card/shared/imageframe";
 
 interface CardProps {
   src: string;
@@ -48,6 +48,8 @@ export const Card: React.FC<CardProps> = ({ src, alt, className, onClick }) => {
       onClick={onClick}
     >
       <Fader once={true} threshold={0.4}>
+        <ImageFrame src={src} alt={alt} onContextMenu={handleContextMenu} pulsePlaceholder={true} />
+
         <AnimatePresence>
           {showOverlay && (
             <motion.div
@@ -83,8 +85,6 @@ export const Card: React.FC<CardProps> = ({ src, alt, className, onClick }) => {
             </motion.div>
           )}
         </AnimatePresence>
-
-        <Image src={src} alt={alt} style={{ objectFit: "cover" }} fill onContextMenu={handleContextMenu} />
       </Fader>
     </motion.div>
   );

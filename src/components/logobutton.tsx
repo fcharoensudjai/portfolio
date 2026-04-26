@@ -69,6 +69,7 @@ export const LogoButton = ({ size = "small", exitDuration = 800 }: LogoButtonPro
           alt="full logo"
           width={500}
           height={500}
+          priority={size === "small"}
           style={{
             objectFit: "contain",
           }}
