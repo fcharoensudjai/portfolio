@@ -9,7 +9,7 @@ const poppins = Poppins({
 
 interface TitleProps {
   children: React.ReactNode;
-  size?: "small" | "medium" | "large" | "about";
+  size?: "small" | "medium" | "large" | "about" | "carousel";
 }
 
 const titleVariants = cva("font-sans", {
@@ -19,6 +19,7 @@ const titleVariants = cva("font-sans", {
       medium: "text-[clamp(1.25rem,3.5vw,2.5rem)]",
       large: "text-[clamp(1.5rem,8vw,13vh)]",
       about: "text-lg md:text-2xl lg:text-3xl 2xl:text-5xl",
+      carousel: "text-xs sm:text-sm lg:text-md",
     },
   },
   defaultVariants: {

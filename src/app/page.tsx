@@ -21,6 +21,7 @@ import { useVisibility2 } from "@/app/contexts/introvisibilitycontext";
 import { motion, useMotionValue, animate, AnimatePresence } from "framer-motion";
 import { Petal } from "@/components/petal";
 import { UnderlinedLink } from "@/components/underlinedlink";
+import { GalleryCarousel } from "@/components/home/gallery-carousel";
 
 export default function Home() {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -106,24 +107,52 @@ export default function Home() {
   // changing rotation direction of flower
 
   const [scrollDirection, setScrollDirection] = useState<"up" | "down" | null>(null);
-  const [prevScrollY, setPrevScrollY] = useState(0);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const previousScrollRef = React.useRef({ y: 0, t: 0 });
+  const speedDecayTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    previousScrollRef.current = { y: window.scrollY, t: performance.now() };
+
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      const now = performance.now();
+      const { y: prevY, t: prevT } = previousScrollRef.current;
+      const deltaY = currentScrollY - prevY;
+      const deltaT = Math.max(1, now - prevT);
 
-      if (currentScrollY > prevScrollY) {
+      if (deltaY > 0) {
         setScrollDirection("down");
-      } else if (currentScrollY < prevScrollY) {
+      } else if (deltaY < 0) {
         setScrollDirection("up");
       }
 
-      setPrevScrollY(currentScrollY);
+      const pxPerSecond = (Math.abs(deltaY) / deltaT) * 1000;
+      const hasMeaningfulScroll = Math.abs(deltaY) > 8 && pxPerSecond > 260;
+      if (hasMeaningfulScroll) {
+        setIsScrolling(true);
+      }
+
+      previousScrollRef.current = { y: currentScrollY, t: now };
+
+      if (speedDecayTimeoutRef.current) {
+        clearTimeout(speedDecayTimeoutRef.current);
+      }
+
+      speedDecayTimeoutRef.current = setTimeout(() => {
+        setIsScrolling(false);
+      }, 120);
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [prevScrollY]);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+
+      if (speedDecayTimeoutRef.current) {
+        clearTimeout(speedDecayTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     let controls;
@@ -438,22 +467,6 @@ export default function Home() {
             </div>
           </Fader>
         </div>
-
-        <div className={`sticky top-0 z-10 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
-          <Fader enterDelay={0.6} threshold={0.2}>
-            <div className="flex h-[100dvh] justify-center items-center">
-              <div className="mt-[75.48px] lg:mt-[103.22px]">
-                <div className="flex justify-center items-center">
-                  <Button href="/gallery"> view my gallery </Button>
-                </div>
-              </div>
-            </div>
-          </Fader>
-        </div>
-
-        <div className={`sticky top-0 z-0 bg-transparent`}>
-          <div className="flex h-[50dvh] justify-center items-center"></div>
-        </div>
       </div>
 
       <div
@@ -518,6 +531,14 @@ export default function Home() {
                 <Button href="/about"> read my story </Button>
               </div>
             </div>
+          </div>
+        </Fader>
+      </div>
+
+      <div className={`${theme === "dark" ? "bg-text-light" : "bg-main-light"} px-6 md:px-16 xl:px-20`}>
+        <Fader>
+          <div className="flex justify-center items-center py-10 md:py-12 lg:py-14">
+            <GalleryCarousel scrollDirection={scrollDirection} isScrolling={isScrolling} />
           </div>
         </Fader>
       </div>
