@@ -6,9 +6,10 @@ import { UnderlinedLink } from "@/components/underlinedlink";
 interface ButtonProps {
   children: React.ReactNode;
   href: string;
+  isExternal?: boolean;
 }
 
-export const Button = ({ children, href }: ButtonProps) => {
+export const Button = ({ children, href, isExternal = false }: ButtonProps) => {
   const { theme } = useTheme();
 
   return (
@@ -33,7 +34,7 @@ export const Button = ({ children, href }: ButtonProps) => {
         }}
         className={`rounded-full border-[2px] py-1 md:py-[0.5rem] px-3 lg:px-5 lg:py-2.5 md:text-sm lg:text-md text-xs`}
       >
-        <UnderlinedLink underline={false} href={href}>
+        <UnderlinedLink underline={false} href={href} isExternal={isExternal}>
           {children}
         </UnderlinedLink>
       </motion.button>

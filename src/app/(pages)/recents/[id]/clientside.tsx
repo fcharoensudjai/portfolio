@@ -37,6 +37,36 @@ export default function Recent() {
   const btsTriggerRef = useRef<HTMLDivElement>(null);
   const btsEndTriggerRef = useRef<HTMLDivElement>(null);
   const [isBtsExpanded, setIsBtsExpanded] = useState(false);
+  const [isBtsAreaHovered, setIsBtsAreaHovered] = useState(false);
+  const [isBtsCtaHovered, setIsBtsCtaHovered] = useState(false);
+  const btsHoverLeaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const shouldShowBtsCta = isBtsExpanded && (isBtsAreaHovered || isBtsCtaHovered);
+  const youtubeLink = process.env.NEXT_PUBLIC_YOUTUBE_URL || "https://www.youtube.com/";
+
+  const clearBtsHoverLeaveTimeout = () => {
+    if (btsHoverLeaveTimeoutRef.current) {
+      clearTimeout(btsHoverLeaveTimeoutRef.current);
+      btsHoverLeaveTimeoutRef.current = null;
+    }
+  };
+
+  const handleBtsAreaMouseEnter = () => {
+    clearBtsHoverLeaveTimeout();
+    setIsBtsAreaHovered(true);
+  };
+
+  const handleBtsAreaMouseLeave = () => {
+    clearBtsHoverLeaveTimeout();
+    btsHoverLeaveTimeoutRef.current = setTimeout(() => {
+      setIsBtsAreaHovered(false);
+    }, 120);
+  };
+
+  useEffect(() => {
+    return () => {
+      clearBtsHoverLeaveTimeout();
+    };
+  }, []);
 
   const [yBehind, setYBehind] = useState(0);
   const [yScenes, setYScenes] = useState(0);
@@ -197,7 +227,30 @@ export default function Recent() {
 
       <Fader threshold={0.05}>
         <div className={`min-h-[100dvh] relative flex flex-col justify-center items-center`}>
-          <motion.div className={`sticky top-0 bg-transparent h-[100dvh] w-[100%]`}>
+          <motion.div className={`sticky top-0 z-20 bg-transparent h-[100dvh] w-[100%] pointer-events-none`}>
+            <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none">
+              <div
+                className={`pointer-events-auto transition-opacity duration-200 ease-[cubic-bezier(0.65,0,0.35,1)] ${
+                  shouldShowBtsCta ? "opacity-100" : "opacity-0 pointer-events-none"
+                }`}
+                onMouseEnter={() => {
+                  clearBtsHoverLeaveTimeout();
+                  setIsBtsCtaHovered(true);
+                }}
+                onMouseLeave={() => setIsBtsCtaHovered(false)}
+              >
+                {shouldShowBtsCta && (
+                  <Fader threshold={0}>
+                    <div className="rounded-xl px-1.5 py-1 backdrop-blur-[2px] border-corner/70">
+                      <Button href={youtubeLink} isExternal={true}>
+                        see timelapse
+                      </Button>
+                    </div>
+                  </Fader>
+                )}
+              </div>
+            </div>
+
             <motion.div
               className={`relative w-[100%] h-[50dvh] ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}
               initial={{ y: 0 }}
@@ -237,7 +290,18 @@ export default function Recent() {
 
           <div ref={btsTriggerRef} className={`h-px w-full`} aria-hidden="true" />
 
-          <div className={`px-6 md:w-[70dvw] grid grid-cols-1 gap-4 xl:gap-5 auto-rows-min`}>
+          <div
+            className={`relative z-0 px-6 md:w-[70dvw] grid grid-cols-1 gap-4 xl:gap-5 auto-rows-min`}
+            onMouseEnter={handleBtsAreaMouseEnter}
+            onMouseLeave={handleBtsAreaMouseLeave}
+          >
+            <div
+              className={`absolute inset-0 z-10 pointer-events-none transition-opacity duration-200 ease-[cubic-bezier(0.65,0,0.35,1)] backdrop-blur-[2px] ${
+                theme === "dark" ? "bg-middle-colour" : "bg-text-dark"
+              } ${shouldShowBtsCta ? "opacity-55" : "opacity-0"}`}
+              aria-hidden="true"
+            />
+
             {bts
               .filter((bts) => bts.id === artwork.id)
               .map((bts) => (
