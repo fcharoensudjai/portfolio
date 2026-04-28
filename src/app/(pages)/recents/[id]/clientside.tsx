@@ -41,7 +41,7 @@ export default function Recent() {
   const [isBtsCtaHovered, setIsBtsCtaHovered] = useState(false);
   const btsHoverLeaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const shouldShowBtsCta = isBtsExpanded && (isBtsAreaHovered || isBtsCtaHovered);
-  const youtubeLink = process.env.NEXT_PUBLIC_YOUTUBE_URL || "https://www.youtube.com/";
+  const youtubeLink = artwork?.url ?? (process.env.NEXT_PUBLIC_YOUTUBE_URL || "https://www.youtube.com/");
 
   const clearBtsHoverLeaveTimeout = () => {
     if (btsHoverLeaveTimeoutRef.current) {
@@ -153,9 +153,7 @@ export default function Recent() {
       className={`min-h-[100dvh] flex flex-col ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}
     >
       <Preloader texts={[artwork.title]} delay={200} interval={40} />
-
       <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav} />
-
       <div className={`h-[100dvh] flex flex-col xl:space-y-2 2xl:space-y-4`}>
         <div className={`w-full h-[40dvh] md:h-[50dvh] relative flex justify-start items-end`}>
           <Image
@@ -194,7 +192,6 @@ export default function Recent() {
           </div>
         </Fader>
       </div>
-
       <Fader>
         <div className={`min-h-[100dvh] lg:h-[100dvh] lg:my-[20]`}>
           <div className={`flex flex-col px-6 md:px-16 xl:px-20 py-3 lg:py-6 xl:py-10`}>
@@ -224,7 +221,6 @@ export default function Recent() {
           </div>
         </div>
       </Fader>
-
       <Fader threshold={0.05}>
         <div className={`min-h-[100dvh] relative flex flex-col justify-center items-center`}>
           <motion.div className={`sticky top-0 z-20 bg-transparent h-[100dvh] w-[100%] pointer-events-none`}>
@@ -251,12 +247,14 @@ export default function Recent() {
               </div>
             </div>
 
-            <motion.div
-              className={`relative w-[100%] h-[50dvh] ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}
-              initial={{ y: 0 }}
-              animate={{ y: isBtsExpanded ? yBehind * 0.8 : 0 }}
-              transition={{ delay: 0, duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
-            />
+            <Fader threshold={0}>
+              <motion.div
+                className={`relative w-[100%] h-[50dvh] ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}
+                initial={{ y: 0 }}
+                animate={{ y: isBtsExpanded ? yBehind * 0.8 : 0 }}
+                transition={{ delay: 0, duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
+              />
+            </Fader>
 
             <div
               className={`flex flex-row space-x-[0.5rem] md:space-x-[1rem] justify-center items-center relative z-10`}
@@ -291,6 +289,7 @@ export default function Recent() {
           <div ref={btsTriggerRef} className={`h-px w-full`} aria-hidden="true" />
 
           <div
+            data-nav-sample-ignore="true"
             className={`relative z-0 px-6 md:w-[70dvw] grid grid-cols-1 gap-4 xl:gap-5 auto-rows-min`}
             onMouseEnter={handleBtsAreaMouseEnter}
             onMouseLeave={handleBtsAreaMouseLeave}
@@ -326,7 +325,6 @@ export default function Recent() {
           <div className={`h-[100dvh]`}> </div>
         </div>
       </Fader>
-
       <div className={`${theme === "dark" ? "bg-text-light" : "bg-main-light"} px-6 md:px-16 xl:px-20 my-7`}>
         <Fader enterDelay={0.6} threshold={0.2} once={true}>
           <div className="flex justify-center items-center py-10 md:py-12 lg:py-14">
@@ -334,7 +332,6 @@ export default function Recent() {
           </div>
         </Fader>
       </div>
-
       <section className={`relative ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
         <div className="md:h-[130vh]">
           <div className="sticky top-0 z-10">
@@ -344,7 +341,7 @@ export default function Recent() {
           </div>
         </div>
       </section>
-
+      ƒ
       <section className={`relative z-20 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
         <Footer />
       </section>

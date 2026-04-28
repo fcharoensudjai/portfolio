@@ -205,7 +205,12 @@ export const Header = () => {
 
           const stack = document
             .elementsFromPoint(x, y)
-            .filter((el) => !el.closest("[data-nav-layer='desktop']") && !el.closest("[data-header-layer='blur']"));
+            .filter(
+              (el) =>
+                !el.closest("[data-nav-layer='desktop']") &&
+                !el.closest("[data-header-layer='blur']") &&
+                !el.closest("[data-nav-sample-ignore='true']")
+            );
 
           for (const el of stack) {
             if (el instanceof HTMLImageElement) {

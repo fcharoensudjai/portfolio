@@ -80,8 +80,6 @@ export default function Home() {
     }
   }, []);
 
-  const [scrollDirection, setScrollDirection] = useState<"up" | "down" | null>(null);
-  const [isScrolling, setIsScrolling] = useState(false);
   const previousScrollRef = React.useRef({ y: 0, t: 0 });
   const speedDecayTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -96,15 +94,15 @@ export default function Home() {
       const deltaT = Math.max(1, now - prevT);
 
       if (deltaY > 0) {
-        setScrollDirection("down");
+        flowerDirectionRef.current = "down";
       } else if (deltaY < 0) {
-        setScrollDirection("up");
+        flowerDirectionRef.current = "up";
       }
 
       const pxPerSecond = (Math.abs(deltaY) / deltaT) * 1000;
       const hasMeaningfulScroll = Math.abs(deltaY) > 8 && pxPerSecond > 260;
       if (hasMeaningfulScroll) {
-        setIsScrolling(true);
+        flowerScrollingRef.current = true;
       }
 
       previousScrollRef.current = { y: currentScrollY, t: now };
@@ -114,7 +112,7 @@ export default function Home() {
       }
 
       speedDecayTimeoutRef.current = setTimeout(() => {
-        setIsScrolling(false);
+        flowerScrollingRef.current = false;
       }, 120);
     };
 
@@ -127,14 +125,6 @@ export default function Home() {
       }
     };
   }, []);
-
-  useEffect(() => {
-    flowerDirectionRef.current = scrollDirection;
-  }, [scrollDirection]);
-
-  useEffect(() => {
-    flowerScrollingRef.current = isScrolling;
-  }, [isScrolling]);
 
   useEffect(() => {
     flowerHoverRef.current = isIntroFlowerHovered;
@@ -542,7 +532,7 @@ export default function Home() {
       <div className={`${theme === "dark" ? "bg-text-light" : "bg-main-light"} px-6 md:px-16 xl:px-20`}>
         <Fader once={true}>
           <div className="flex justify-center items-center py-10 md:py-12 lg:py-14">
-            <GalleryCarousel scrollDirection={scrollDirection} isScrolling={isScrolling} />
+            <GalleryCarousel />
           </div>
         </Fader>
       </div>
