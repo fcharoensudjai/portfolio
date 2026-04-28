@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
 import { MobileNav } from "@/components/header/mobilenav";
 import { Footer } from "@/components/footer/footer";
@@ -15,7 +15,6 @@ import { Button } from "@/components/button";
 import { artworks, closerLook, bts } from "@/app/(pages)/recents/[id]/artworks";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
 import { ImageFrame } from "@/components/card/shared/imageframe";
 
 export default function Recent() {
@@ -34,9 +33,9 @@ export default function Recent() {
     e.preventDefault();
   };
 
-  const { ref, inView } = useInView({
-    threshold: 0.06,
-  });
+  const btsTriggerRef = useRef<HTMLDivElement>(null);
+  const btsEndTriggerRef = useRef<HTMLDivElement>(null);
+  const [isBtsExpanded, setIsBtsExpanded] = useState(false);
 
   const [yBehind, setYBehind] = useState(0);
   const [yScenes, setYScenes] = useState(0);
@@ -66,11 +65,44 @@ export default function Recent() {
   };
 
   useEffect(() => {
-    calculateYValues();
+    calculateXValues();
     window.addEventListener("resize", calculateXValues);
 
     return () => {
       window.removeEventListener("resize", calculateXValues);
+    };
+  }, []);
+
+  useEffect(() => {
+    let frameId = 0;
+
+    const updateBtsExpansionState = () => {
+      if (!btsTriggerRef.current || !btsEndTriggerRef.current) return;
+
+      const { top: startTop } = btsTriggerRef.current.getBoundingClientRect();
+      const { top: endTop } = btsEndTriggerRef.current.getBoundingClientRect();
+      const viewportMiddle = window.innerHeight / 2;
+      const hasReachedStart = startTop <= viewportMiddle;
+      const hasPassedEnd = endTop <= viewportMiddle;
+      const shouldExpand = hasReachedStart && !hasPassedEnd;
+
+      setIsBtsExpanded((prev) => (prev === shouldExpand ? prev : shouldExpand));
+    };
+
+    const handleScrollOrResize = () => {
+      cancelAnimationFrame(frameId);
+      frameId = window.requestAnimationFrame(updateBtsExpansionState);
+    };
+
+    updateBtsExpansionState();
+
+    window.addEventListener("scroll", handleScrollOrResize, { passive: true });
+    window.addEventListener("resize", handleScrollOrResize);
+
+    return () => {
+      cancelAnimationFrame(frameId);
+      window.removeEventListener("scroll", handleScrollOrResize);
+      window.removeEventListener("resize", handleScrollOrResize);
     };
   }, []);
 
@@ -168,7 +200,7 @@ export default function Recent() {
             <motion.div
               className={`relative w-[100%] h-[50dvh] ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}
               initial={{ y: 0 }}
-              animate={{ y: inView ? yBehind * 0.8 : 0 }}
+              animate={{ y: isBtsExpanded ? yBehind * 0.8 : 0 }}
               transition={{ delay: 0, duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
             />
 
@@ -177,7 +209,7 @@ export default function Recent() {
             >
               <motion.div
                 initial={{ y: 0 }}
-                animate={{ y: inView ? yBehind : 0, x: inView ? xBehind : 0 }}
+                animate={{ y: isBtsExpanded ? yBehind : 0, x: isBtsExpanded ? xBehind : 0 }}
                 transition={{ delay: 0, duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
                 className="relative z-10"
               >
@@ -186,7 +218,7 @@ export default function Recent() {
 
               <motion.div
                 initial={{ y: 0 }}
-                animate={{ y: inView ? yScenes : 0, x: inView ? xScenes : 0 }}
+                animate={{ y: isBtsExpanded ? yScenes : 0, x: isBtsExpanded ? xScenes : 0 }}
                 transition={{ delay: 0, duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
                 className="relative z-10"
               >
@@ -197,12 +229,14 @@ export default function Recent() {
             <motion.div
               className={`relative w-[100%] h-[50dvh] ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}
               initial={{ y: 0 }}
-              animate={{ y: inView ? yScenes * 0.8 : 0 }}
+              animate={{ y: isBtsExpanded ? yScenes * 0.8 : 0 }}
               transition={{ delay: 0, duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
             />
           </motion.div>
 
-          <div ref={ref} className={`px-6 md:w-[70dvw] grid grid-cols-1 gap-4 xl:gap-5 auto-rows-min`}>
+          <div ref={btsTriggerRef} className={`h-px w-full`} aria-hidden="true" />
+
+          <div className={`px-6 md:w-[70dvw] grid grid-cols-1 gap-4 xl:gap-5 auto-rows-min`}>
             {bts
               .filter((bts) => bts.id === artwork.id)
               .map((bts) => (
@@ -221,6 +255,8 @@ export default function Recent() {
                 />
               ))}
           </div>
+
+          <div ref={btsEndTriggerRef} className={`h-px w-full`} aria-hidden="true" />
 
           <div className={`h-[100dvh]`}> </div>
         </div>
