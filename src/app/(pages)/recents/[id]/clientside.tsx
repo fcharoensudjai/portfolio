@@ -263,7 +263,7 @@ export default function Recent() {
         </div>
       </Fader>
 
-      <div className={`${theme === "dark" ? "bg-text-light" : "bg-main-light"} px-6 md:px-16 xl:px-20`}>
+      <div className={`${theme === "dark" ? "bg-text-light" : "bg-main-light"} px-6 md:px-16 xl:px-20 my-7`}>
         <Fader enterDelay={0.6} threshold={0.2} once={true}>
           <div className="flex justify-center items-center py-10 md:py-12 lg:py-14">
             <GalleryCarousel labelText="see the gallery" />
