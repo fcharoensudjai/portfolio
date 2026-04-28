@@ -341,7 +341,7 @@ export default function Recent() {
           </div>
         </div>
       </section>
-      ƒ
+
       <section className={`relative z-20 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
         <Footer />
       </section>
