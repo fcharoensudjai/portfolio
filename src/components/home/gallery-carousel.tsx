@@ -7,13 +7,18 @@ import { CarouselCard } from "@/components/card/carousel-card";
 import { Title } from "@/components/title";
 
 interface GalleryCarouselProps {
-  scrollDirection: "up" | "down" | null;
+  scrollDirection?: "up" | "down" | null;
   isScrolling?: boolean;
+  labelText?: string;
 }
 
 const RECENTS_FEATURED_NAMES = new Set(["raiden shogun", "raven"]);
 
-export const GalleryCarousel: React.FC<GalleryCarouselProps> = ({ scrollDirection, isScrolling = false }) => {
+export const GalleryCarousel: React.FC<GalleryCarouselProps> = ({
+  scrollDirection = null,
+  isScrolling = false,
+  labelText = "from the gallery",
+}) => {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const x = useMotionValue(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -102,7 +107,7 @@ export const GalleryCarousel: React.FC<GalleryCarouselProps> = ({ scrollDirectio
   return (
     <div className="w-full space-y-3 md:space-y-6">
       <div>
-        <Title size="small">from the gallery</Title>
+        <Title size="small">{labelText}</Title>
       </div>
 
       <div
