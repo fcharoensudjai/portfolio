@@ -126,31 +126,33 @@ export default function Recent() {
     >
       <Preloader texts={[artwork.title]} delay={200} interval={40} />
       <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav} />
-      <div className="content-cap">
-        <div className={`h-[100dvh] flex flex-col xl:space-y-2 2xl:space-y-4`}>
-          <div className={`w-full h-[40dvh] md:h-[50dvh] relative flex justify-start items-end`}>
-            <Image
-              src={`${basePath}${artwork.banner}`}
-              alt={artwork.alt}
-              layout="fill"
-              crossOrigin="anonymous"
-              onContextMenu={handleContextMenu}
-              style={{
-                objectFit: "cover",
-                objectPosition: "50% 50%",
-              }}
-            />
-            <div
-              data-nav-sample-ignore="true"
-              className={`absolute inset-0 bg-gradient-to-b from-45% from-transparent ${theme === "dark" ? "to-text-light" : "to-main-light"} pointer-events-none`}
-            />
-            <div className={"absolute px-6 md:px-16 xl:px-20 py-3 lg:py-6"} data-nav-sample-ignore="true">
+      <div className={`h-[100dvh] flex flex-col xl:space-y-2 2xl:space-y-4`}>
+        <div className={`w-full h-[40dvh] md:h-[50dvh] relative flex justify-start items-end`}>
+          <Image
+            src={`${basePath}${artwork.banner}`}
+            alt={artwork.alt}
+            layout="fill"
+            crossOrigin="anonymous"
+            onContextMenu={handleContextMenu}
+            style={{
+              objectFit: "cover",
+              objectPosition: "50% 50%",
+            }}
+          />
+          <div
+            data-nav-sample-ignore="true"
+            className={`absolute inset-0 bg-gradient-to-b from-45% from-transparent ${theme === "dark" ? "to-text-light" : "to-main-light"} pointer-events-none`}
+          />
+          <div className="absolute inset-x-0 bottom-0" data-nav-sample-ignore="true">
+            <div className="content-cap px-6 md:px-16 xl:px-20 py-3 lg:py-6">
               <Fader enterDelay={1.2} once={true}>
                 <Title size={"large"}> {artwork.title} </Title>
               </Fader>
             </div>
           </div>
+        </div>
 
+        <div className="content-cap">
           <Fader enterDelay={1.2} once={true}>
             <div className={"flex flex-col space-y-5 px-6 md:px-16 xl:px-20"}>
               <div className={`w-full 2xl:w-[65%] lg:min-h-[285px] flex items-center`}>
@@ -167,6 +169,9 @@ export default function Recent() {
             </div>
           </Fader>
         </div>
+      </div>
+
+      <div className="content-cap">
         <Fader>
           <div className={`min-h-[100dvh] lg:h-[100dvh] lg:my-[20]`}>
             <div className={`flex flex-col px-6 md:px-16 xl:px-20 py-3 lg:py-6 xl:py-10`}>
