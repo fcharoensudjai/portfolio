@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useTheme } from "next-themes";
 import { Scramble } from "@/components/stylers/scramblerthai";
 import { ImageFrame } from "@/components/card/shared/imageframe";
+import { useHoverTracker } from "@/components/card/shared/use-hover-tracker";
 
 interface CardProps {
   src: string;
@@ -20,31 +21,30 @@ export const Card: React.FC<CardProps> = ({ src, alt, className, onClick }) => {
 
   const { theme } = useTheme();
 
-  const [showOverlay, setShowOverlay] = useState(false);
-  const toggleOverlay = () => setShowOverlay(!showOverlay);
-
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
   const textBoxWidth = 175;
   const textBoxHeight = 50;
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    const clampedX = Math.min(Math.max(mouseX, textBoxWidth / 2), rect.width - textBoxWidth / 1.6);
-    const clampedY = Math.min(Math.max(mouseY, textBoxHeight / 2), rect.height - textBoxHeight);
-
-    setMousePosition({ x: clampedX, y: clampedY });
-  };
+  const {
+    isHovered: showOverlay,
+    cursorPosition: mousePosition,
+    handleMouseEnter: toggleOverlayEnter,
+    handleMouseLeave: toggleOverlayLeave,
+    handleMouseMove,
+  } = useHoverTracker({
+    trackerWidth: textBoxWidth,
+    trackerHeight: textBoxHeight,
+    clampCursor: ({ mouseX, mouseY, containerWidth, containerHeight }) => ({
+      x: Math.min(Math.max(mouseX, textBoxWidth / 2), containerWidth - textBoxWidth / 1.6),
+      y: Math.min(Math.max(mouseY, textBoxHeight / 2), containerHeight - textBoxHeight),
+    }),
+  });
 
   return (
     <motion.div
       className={`relative overflow-hidden rounded-xl min-h-[300px] xl:min-h-[400px] 2xl:min-h-[500px] flex justify-center items-center ${className}`}
-      onHoverStart={toggleOverlay}
-      onHoverEnd={toggleOverlay}
-      onMouseMove={handleMouseMove}
+      onHoverStart={toggleOverlayEnter}
+      onHoverEnd={toggleOverlayLeave}
+      onMouseMove={(e: any) => handleMouseMove(e as React.MouseEvent<HTMLElement>)}
       onClick={onClick}
     >
       <Fader once={true} threshold={0.4}>

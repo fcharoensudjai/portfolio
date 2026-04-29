@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
 import { Scramble } from "@/components/stylers/scramblerthai";
+import { useHoverTracker } from "@/components/card/shared/use-hover-tracker";
 
 interface BtsCardProps {
   src: string;
@@ -18,25 +19,25 @@ const BTS_TRACKER_HEIGHT = 50;
 export const BtsCard: React.FC<BtsCardProps> = ({ src, alt, href, isBtsExpanded, onContextMenu }) => {
   const { theme } = useTheme();
 
-  const [isHovered, setIsHovered] = useState(false);
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
-
-  const handleMouseEnter = () => setIsHovered(true);
-  const handleMouseLeave = () => setIsHovered(false);
+  const {
+    isHovered,
+    cursorPosition,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleMouseMove: trackerMouseMove,
+  } = useHoverTracker({
+    trackerWidth: BTS_TRACKER_WIDTH,
+    trackerHeight: BTS_TRACKER_HEIGHT,
+    clampCursor: ({ mouseX, mouseY, containerWidth, containerHeight }) => ({
+      x: Math.min(Math.max(mouseX, BTS_TRACKER_WIDTH / 2), containerWidth - BTS_TRACKER_WIDTH / 1.6),
+      y: Math.min(Math.max(mouseY, BTS_TRACKER_HEIGHT / 2), containerHeight - BTS_TRACKER_HEIGHT),
+    }),
+  });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!isBtsExpanded) return;
-
-    const rect = e.currentTarget.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    const clampedX = Math.min(Math.max(mouseX, BTS_TRACKER_WIDTH / 2), rect.width - BTS_TRACKER_WIDTH / 1.6);
-    const clampedY = Math.min(Math.max(mouseY, BTS_TRACKER_HEIGHT / 2), rect.height - BTS_TRACKER_HEIGHT);
-
-    setCursorPosition({ x: clampedX, y: clampedY });
+    trackerMouseMove(e);
   };
-
   const showOverlay = isBtsExpanded && isHovered;
 
   return (
