@@ -134,6 +134,8 @@ export const Header = () => {
     about: Array.from(NAV_LABELS.about).map(() => 0),
     contact: Array.from(NAV_LABELS.contact).map(() => 0),
   });
+  const [themeSwitchTone, setThemeSwitchTone] = useState<number>(0);
+  const themeSwitchRef = React.useRef<HTMLDivElement | null>(null);
   const labelRefs = React.useRef<Record<NavKey, Array<HTMLSpanElement | null>>>({
     recents: Array.from(NAV_LABELS.recents).map(() => null),
     gallery: Array.from(NAV_LABELS.gallery).map(() => null),
@@ -205,7 +207,12 @@ export const Header = () => {
 
           const stack = document
             .elementsFromPoint(x, y)
-            .filter((el) => !el.closest("[data-nav-layer='desktop']") && !el.closest("[data-header-layer='blur']"));
+            .filter(
+              (el) =>
+                !el.closest("[data-nav-layer='desktop']") &&
+                !el.closest("[data-header-layer='blur']") &&
+                !el.closest("[data-nav-sample-ignore='true']")
+            );
 
           for (const el of stack) {
             if (el instanceof HTMLImageElement) {
@@ -238,6 +245,49 @@ export const Header = () => {
         about: smoothNeighbourBlend(sampledTone.about),
         contact: smoothNeighbourBlend(sampledTone.contact),
       };
+
+      let currentThemeSwitchTone = 0;
+      if (themeSwitchRef.current) {
+        const rect = themeSwitchRef.current.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          const x = rect.left + rect.width / 2;
+          const y = rect.top + rect.height / 2;
+          let sampleColor: RGB | null = null;
+          const stack = document
+            .elementsFromPoint(x, y)
+            .filter(
+              (el) =>
+                !el.closest("[data-nav-layer='desktop']") &&
+                !el.closest("[data-header-layer='blur']") &&
+                !el.closest("[data-nav-sample-ignore='true']")
+            );
+
+          for (const el of stack) {
+            if (el instanceof HTMLImageElement) {
+              const pixel = getImagePixelColor(el, x, y);
+              if (pixel && pixel.a >= MIN_VISIBLE_IMAGE_ALPHA) {
+                sampleColor = pixel;
+                break;
+              }
+              continue;
+            }
+            const bgColor = getElementBgColor(el);
+            if (bgColor && bgColor.a > 0) {
+              sampleColor = bgColor;
+              break;
+            }
+          }
+          if (!sampleColor) {
+            sampleColor = parseRgb(getComputedStyle(document.body).backgroundColor) || { r: 0, g: 0, b: 0, a: 1 };
+          }
+          const lum = luminance(sampleColor);
+          currentThemeSwitchTone = lum > 0.52 ? 0 : 1;
+        }
+      }
+
+      setThemeSwitchTone((prev) => {
+        return Math.abs(prev - currentThemeSwitchTone) < 0.01 ? prev : currentThemeSwitchTone;
+      });
 
       setNavTone((prev) => {
         const same = (Object.keys(prev) as NavKey[]).every((k) =>
@@ -394,7 +444,7 @@ export const Header = () => {
           </ul>
 
           <div className="invisible ml-4 flex justify-center items-center pointer-events-none">
-            <ThemeSwitch />
+            <ThemeSwitch color={letterColor(themeSwitchTone)} />
           </div>
         </div>
       </div>
@@ -413,12 +463,18 @@ export const Header = () => {
           <LogoButton />
 
           <div className="flex items-center space-x-4">
-            <div className="invisible md:visible ml-4 flex justify-center items-center">
-              <ThemeSwitch />
+            <div className="invisible md:visible ml-4 flex justify-center items-center" ref={themeSwitchRef}>
+              <ThemeSwitch
+                color={letterColor(themeSwitchTone)}
+                transitionDuration={enableToneTransition ? "500ms" : "0ms"}
+              />
             </div>
           </div>
           <div className="flex md:hidden items-center space-x-3">
-            <ThemeSwitch />
+            <ThemeSwitch
+              color={letterColor(themeSwitchTone)}
+              transitionDuration={enableToneTransition ? "500ms" : "0ms"}
+            />
             <button onClick={toggleNav} aria-label="toggle navigation">
               <Image
                 src={

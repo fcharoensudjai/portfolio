@@ -34,47 +34,58 @@ export default function Gallery() {
       <Preloader texts={["gallery"]} delay={200} interval={40} />
       <MobileNav isNavOpen={isNavOpen} toggleNav={() => setIsNavOpen(!isNavOpen)} />
 
-      <Fader enterDelay={1.2} once={true}>
-        <div className="min-h-[100dvh] flex flex-col justify-center items-start px-6 md:px-16 xl:px-20 space-y-3 lg:space-y-7 xl:space-y-10">
-          <Title size="large">gallery</Title>
-          <div className="lg:w-[65%] flex flex-col space-y-6 lg:space-y-7 xl:space-y-10">
-            <div className={`min-h-200px sm:min-h-0`}>
-              <Textbox caret={false}>
-                <Scramble delay={1500}>
-                  {
-                    "Welcome to my gallery! Here, you’ll find a collection of pieces that have been a part of my journey in learning and growing as an artist. I mostly work in Procreate, but you'll see some studies in other mediums from my pieces in school. Click on the pieces to view them in detail, and feel free to see the progress I've made along the way :)"
-                  }
+      <div className="content-cap">
+        <Fader enterDelay={1.2} once={true}>
+          <div className="min-h-[100dvh] flex flex-col justify-center items-start px-6 md:px-16 xl:px-20 space-y-3 lg:space-y-7 xl:space-y-10">
+            <Title size="large">gallery</Title>
+            <div className="lg:w-[65%] flex flex-col space-y-6 lg:space-y-7 xl:space-y-10">
+              <div className={`min-h-200px sm:min-h-0`}>
+                <Textbox caret={false}>
+                  <Scramble delay={1500}>
+                    {
+                      "Welcome to my gallery! Here, you’ll find a collection of pieces that have been a part of my journey in learning and growing as an artist. I mostly work in Procreate, but you'll see some studies in other mediums from my pieces in school. Click on the pieces to view them in detail, and feel free to see the progress I've made along the way :)"
+                    }
+                  </Scramble>
+                </Textbox>
+              </div>
+              <Textbox>
+                <Scramble delay={3250} hover={true} interval={20}>
+                  {"[ scroll to explore ] "}
                 </Scramble>
               </Textbox>
             </div>
-            <Textbox>
-              <Scramble delay={3250} hover={true} interval={20}>
-                {"[ scroll to explore ] "}
-              </Scramble>
-            </Textbox>
           </div>
-        </div>
-      </Fader>
+        </Fader>
 
-      <div className={`px-6 md:px-16 xl:px-20 lg:my-20`}>
-        <div className={`grid gap-4 xl:gap-5 md:grid-cols-3 lg:grid-cols-4 grid-flow-row-dense`}>
-          {sortedImageData.map((image, index) => (
-            <Card
-              src={`${basePath}${image.src}`}
-              alt={image.alt}
-              name={image.name}
-              key={index}
-              className={`${image.wide ? "md:col-span-2" : ""} ${image.tall ? "lg:row-span-2" : ""}`}
-              onClick={() => toggleViewer(index)}
-            />
-          ))}
+        <div className={`px-6 md:px-16 xl:px-20 lg:my-20`}>
+          <div className={`grid gap-4 xl:gap-5 md:grid-cols-3 lg:grid-cols-4 grid-flow-row-dense`}>
+            {sortedImageData.map((image, index) => (
+              <Card
+                src={`${basePath}${image.src}`}
+                alt={image.alt}
+                name={image.name}
+                key={index}
+                className={`${image.wide ? "md:col-span-2" : ""} ${image.tall ? "lg:row-span-2" : ""}`}
+                onClick={() => toggleViewer(index)}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
-      <Fader>
-        <Contact />
-      </Fader>
-      <Footer />
+      <section className={`relative ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+        <div className="md:h-[130vh]">
+          <div className="sticky top-0 z-10">
+            <Fader>
+              <Contact />
+            </Fader>
+          </div>
+        </div>
+      </section>
+
+      <section className={`relative z-20 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+        <Footer />
+      </section>
 
       <AnimatePresence>
         {isViewerOpen !== null && (

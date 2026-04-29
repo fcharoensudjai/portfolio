@@ -46,8 +46,8 @@ export const Footer = ({ exitDuration = 800 }) => {
 
   return (
     <div>
-      <div className="flex justify-between items-center min-h-15dvh lg:px-7 lg:min-h-25dvh p-4 text-xs lg:text-sm xl:text-md">
-        <div className="flex flex-row-reverse sm:flex-row items-center justify-start sm:space-x-5 h-full">
+      <div className="flex justify-between items-end min-h-15dvh lg:min-h-25dvh px-3 md:px-6 pt-3 md:pt-5 pb-5 xl:pb-7 text-xs lg:text-sm xl:text-md">
+        <div className="flex flex-row-reverse sm:flex-row items-end justify-start sm:space-x-5">
           <div className="space-x-0 w-[60px] md:w-auto h-full">
             <div className="hidden xl:block">
               <LogoButton size="medium" />
@@ -65,7 +65,7 @@ export const Footer = ({ exitDuration = 800 }) => {
             </div>
           </div>
 
-          <div className="flex flex-col justify-between space-y-5 h-full">
+          <div className="flex flex-col justify-end space-y-5">
             <div className={"space-y-2"}>
               <div>
                 artwork and website by
@@ -86,7 +86,7 @@ export const Footer = ({ exitDuration = 800 }) => {
           </div>
         </div>
 
-        <div className="flex flex-col justify-between space-y-[1rem] h-full">
+        <div className="flex flex-col justify-end space-y-[1rem]">
           <div className={`whitespace-nowrap`}> [ my socials ]</div>
 
           <div>

@@ -7,22 +7,33 @@ import { CarouselCard } from "@/components/card/carousel-card";
 import { Title } from "@/components/title";
 
 interface GalleryCarouselProps {
-  scrollDirection: "up" | "down" | null;
+  scrollDirection?: "up" | "down" | null;
   isScrolling?: boolean;
+  labelText?: string;
 }
 
 const RECENTS_FEATURED_NAMES = new Set(["raiden shogun", "raven"]);
 
-export const GalleryCarousel: React.FC<GalleryCarouselProps> = ({ scrollDirection, isScrolling = false }) => {
+export const GalleryCarousel: React.FC<GalleryCarouselProps> = ({
+  scrollDirection,
+  isScrolling,
+  labelText = "from the gallery",
+}) => {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const x = useMotionValue(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [internalScrollDirection, setInternalScrollDirection] = useState<"up" | "down" | null>(null);
+  const [internalIsScrolling, setInternalIsScrolling] = useState(false);
   const [setWidth, setSetWidth] = useState(0);
   const firstSetRef = useRef<HTMLDivElement | null>(null);
   const speedMultiplierRef = useRef(1);
   const scrollBoostRef = useRef(1);
-  const directionRef = useRef<"up" | "down" | null>(scrollDirection);
-  const isScrollingRef = useRef(isScrolling);
+  const activeScrollDirection = scrollDirection ?? internalScrollDirection;
+  const activeIsScrolling = isScrolling ?? internalIsScrolling;
+  const directionRef = useRef<"up" | "down" | null>(activeScrollDirection);
+  const isScrollingRef = useRef(activeIsScrolling);
+  const previousScrollRef = useRef({ y: 0, t: 0 });
+  const speedDecayTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const carouselItems = useMemo(() => {
     return [...imageData]
@@ -51,12 +62,64 @@ export const GalleryCarousel: React.FC<GalleryCarouselProps> = ({ scrollDirectio
   }, [carouselItems.length]);
 
   useEffect(() => {
-    directionRef.current = scrollDirection;
-  }, [scrollDirection]);
+    if (scrollDirection !== undefined && isScrolling !== undefined) {
+      return;
+    }
+
+    previousScrollRef.current = { y: window.scrollY, t: performance.now() };
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const now = performance.now();
+      const { y: prevY, t: prevT } = previousScrollRef.current;
+      const deltaY = currentScrollY - prevY;
+      const deltaT = Math.max(1, now - prevT);
+
+      if (scrollDirection === undefined) {
+        if (deltaY > 0) {
+          setInternalScrollDirection("down");
+        } else if (deltaY < 0) {
+          setInternalScrollDirection("up");
+        }
+      }
+
+      if (isScrolling === undefined) {
+        const pxPerSecond = (Math.abs(deltaY) / deltaT) * 1000;
+        const hasMeaningfulScroll = Math.abs(deltaY) > 8 && pxPerSecond > 260;
+        if (hasMeaningfulScroll) {
+          setInternalIsScrolling(true);
+        }
+
+        if (speedDecayTimeoutRef.current) {
+          clearTimeout(speedDecayTimeoutRef.current);
+        }
+
+        speedDecayTimeoutRef.current = setTimeout(() => {
+          setInternalIsScrolling(false);
+        }, 120);
+      }
+
+      previousScrollRef.current = { y: currentScrollY, t: now };
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+
+      if (speedDecayTimeoutRef.current) {
+        clearTimeout(speedDecayTimeoutRef.current);
+      }
+    };
+  }, [scrollDirection, isScrolling]);
 
   useEffect(() => {
-    isScrollingRef.current = isScrolling;
-  }, [isScrolling]);
+    directionRef.current = activeScrollDirection;
+  }, [activeScrollDirection]);
+
+  useEffect(() => {
+    isScrollingRef.current = activeIsScrolling;
+  }, [activeIsScrolling]);
 
   useEffect(() => {
     if (!setWidth) return;
@@ -102,7 +165,7 @@ export const GalleryCarousel: React.FC<GalleryCarouselProps> = ({ scrollDirectio
   return (
     <div className="w-full space-y-3 md:space-y-6">
       <div>
-        <Title size="small">from the gallery</Title>
+        <Title size="small">{labelText}</Title>
       </div>
 
       <div
