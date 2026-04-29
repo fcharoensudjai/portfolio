@@ -38,12 +38,7 @@ export default function Recent() {
   const btsTriggerRef = useRef<HTMLDivElement>(null);
   const btsEndTriggerRef = useRef<HTMLDivElement>(null);
   const [isBtsExpanded, setIsBtsExpanded] = useState(false);
-  const [activeBtsCard, setActiveBtsCard] = useState<string | null>(null);
-  const [btsMousePosition, setBtsMousePosition] = useState({ x: 0, y: 0 });
   const youtubeLink = artwork?.url ?? (process.env.NEXT_PUBLIC_YOUTUBE_URL || "https://www.youtube.com/");
-
-  const textBoxWidth = 175;
-  const textBoxHeight = 50;
 
   const [yBehind, setYBehind] = useState(0);
   const [yScenes, setYScenes] = useState(0);
@@ -137,6 +132,7 @@ export default function Recent() {
             src={`${basePath}${artwork.banner}`}
             alt={artwork.alt}
             layout="fill"
+            crossOrigin="anonymous"
             onContextMenu={handleContextMenu}
             style={{
               objectFit: "cover",
@@ -144,9 +140,10 @@ export default function Recent() {
             }}
           />
           <div
-            className={`absolute inset-0 bg-gradient-to-b from-45% from-transparent ${theme === "dark" ? "to-text-light" : "to-main-light"}`}
+            data-nav-sample-ignore="true"
+            className={`absolute inset-0 bg-gradient-to-b from-45% from-transparent ${theme === "dark" ? "to-text-light" : "to-main-light"} pointer-events-none`}
           />
-          <div className={"absolute px-6 md:px-16 xl:px-20 py-3 lg:py-6"}>
+          <div className={"absolute px-6 md:px-16 xl:px-20 py-3 lg:py-6"} data-nav-sample-ignore="true">
             <Fader enterDelay={1.2} once={true}>
               <Title size={"large"}> {artwork.title} </Title>
             </Fader>
