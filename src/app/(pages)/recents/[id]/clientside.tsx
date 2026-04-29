@@ -14,10 +14,9 @@ import Image from "next/image";
 import { Button } from "@/components/button";
 import { artworks, closerLook, bts } from "@/app/(pages)/recents/[id]/artworks";
 import { useParams } from "next/navigation";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ImageFrame } from "@/components/card/shared/imageframe";
 import { GalleryCarousel } from "@/components/home/gallery-carousel";
-import { BtsCard } from "@/components/card/bts-card";
 
 export default function Recent() {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -38,7 +37,12 @@ export default function Recent() {
   const btsTriggerRef = useRef<HTMLDivElement>(null);
   const btsEndTriggerRef = useRef<HTMLDivElement>(null);
   const [isBtsExpanded, setIsBtsExpanded] = useState(false);
+  const [activeBtsCard, setActiveBtsCard] = useState<string | null>(null);
+  const [btsMousePosition, setBtsMousePosition] = useState({ x: 0, y: 0 });
   const youtubeLink = artwork?.url ?? (process.env.NEXT_PUBLIC_YOUTUBE_URL || "https://www.youtube.com/");
+
+  const textBoxWidth = 175;
+  const textBoxHeight = 50;
 
   const [yBehind, setYBehind] = useState(0);
   const [yScenes, setYScenes] = useState(0);
@@ -244,13 +248,78 @@ export default function Recent() {
             {bts
               .filter((bts) => bts.id === artwork.id)
               .map((bts) => (
-                <BtsCard
+                <a
                   key={bts.screenshot}
-                  src={`${basePath}${bts.screenshot}`}
-                  alt={bts.alt}
                   href={youtubeLink}
-                  onContextMenu={handleContextMenu}
-                />
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="see timelapse"
+                  className="relative block overflow-hidden rounded-xl"
+                  onMouseEnter={() => setActiveBtsCard(bts.screenshot)}
+                  onMouseLeave={() => setActiveBtsCard(null)}
+                  onMouseMove={(e) => {
+                    const cardRect = e.currentTarget.getBoundingClientRect();
+                    const relativeX = e.clientX - cardRect.left;
+                    const relativeY = e.clientY - cardRect.top;
+                    const clampedRelativeX = Math.min(
+                      Math.max(relativeX, textBoxWidth / 2),
+                      cardRect.width - textBoxWidth / 1.6
+                    );
+                    const clampedRelativeY = Math.min(
+                      Math.max(relativeY, textBoxHeight / 2),
+                      cardRect.height - textBoxHeight
+                    );
+
+                    setBtsMousePosition({ x: clampedRelativeX, y: clampedRelativeY });
+                  }}
+                  style={{ cursor: activeBtsCard === bts.screenshot ? "none" : "pointer" }}
+                >
+                  <Image
+                    src={`${basePath}${bts.screenshot}`}
+                    alt={bts.alt}
+                    height={1000}
+                    width={1000}
+                    quality={100}
+                    onContextMenu={handleContextMenu}
+                    style={{
+                      objectFit: "cover",
+                    }}
+                    className={`rounded-xl w-full h-auto`}
+                  />
+
+                  <AnimatePresence>
+                    {activeBtsCard === bts.screenshot && (
+                      <motion.div
+                        className={`absolute inset-0 z-10 backdrop-blur-[2px] ${
+                          theme === "dark" ? "bg-middle-colour" : "bg-text-dark"
+                        } bg-opacity-60`}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2, ease: [0.65, 0, 0.35, 1] }}
+                      >
+                        <motion.div
+                          className="absolute border-corner z-20 flex justify-center items-center"
+                          style={{
+                            top: btsMousePosition.y - textBoxHeight / 2 + 10,
+                            left: btsMousePosition.x - textBoxWidth / 2 + 10,
+                            width: textBoxWidth,
+                            height: textBoxHeight,
+                          }}
+                          initial={{ scale: 1.3 }}
+                          animate={{ scale: 1 }}
+                          exit={{ scale: 1.3 }}
+                          transition={{ duration: 0.2, ease: [0.65, 0, 0.35, 1] }}
+                          whileTap={{ scale: 0.9 }}
+                        >
+                          <Scramble interval={20} hover={true}>
+                            {" see timelapse "}
+                          </Scramble>
+                        </motion.div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </a>
               ))}
           </div>
 
