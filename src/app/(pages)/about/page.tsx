@@ -10,12 +10,12 @@ import { Preloader } from "@/components/stylers/page-loading/preloader";
 import { Title } from "@/components/title";
 import { Textbox } from "@/components/textbox";
 import { Scramble } from "@/components/stylers/scramblerthai";
-import Image from "next/image";
 import { Button } from "@/components/button";
 import { Petal } from "@/components/petal";
+import { AboutSequence } from "./sequence";
 
 export default function Gallery() {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+  // const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const { theme } = useTheme();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const toggleNav = () => setIsNavOpen(!isNavOpen);
@@ -61,13 +61,18 @@ export default function Gallery() {
           </div>
         </Fader>
 
-        <div className="min-h-[100dvh] px-6 md:px-16 xl:px-20 lg:py-12 py-7">
-          <div className="flex flex-col space-y-5 md:space-y-7 mt-[75.58px] xl:mt-[103.22px]">
-            <div className={`lg:hidden`}>
+        <div className="min-h-[100dvh] lg:py-12 py-7 w-full px-0">
+          <div className="flex flex-col space-y-5 md:space-y-7 mt-[10vh] xl:mt-[15vh]">
+            <div className="w-full relative px-6 md:px-16 xl:px-20">
+              <AboutSequence theme={theme} />
+            </div>
+
+            {/* OLD "who am i" section is preserved below this point */}
+            {/* <div className={`lg:hidden pt-24 px-6 md:px-16 xl:px-20`}>
               <Title> who am i? </Title>
             </div>
 
-            <div className="flex flex-col lg:justify-between lg:flex-row items-start space-y-7 lg:space-y-0 lg:space-x-16">
+            <div className="flex flex-col lg:justify-between lg:flex-row items-start space-y-7 lg:space-y-0 lg:space-x-16 px-6 md:px-16 xl:px-20">
               <div className="lg:w-[45%] w-full h-full lg:sticky lg:top-0 lg:h-[100vh] flex flex-col justify-center items-start lg:space-y-7 lg:py-12 xl:py-20">
                 <div className={`lg:block hidden`}>
                   <Title> who am i? </Title>
@@ -173,7 +178,7 @@ export default function Gallery() {
                   </Textbox>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div
               className={`lg:min-h-[10dvh] flex justify-center items-center ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}

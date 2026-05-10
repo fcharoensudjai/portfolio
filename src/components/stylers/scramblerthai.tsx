@@ -9,6 +9,8 @@ interface ScrambleProps {
   interval?: number; // how quickly stuff scrambles
   paragraphs?: boolean;
   navigate?: boolean;
+  preScrambled?: boolean; // keeps the text completely scrambled from frame 0 until delay is met
+  renderCustom?: (scrambledNodes: React.ReactNode[]) => React.ReactNode; // custom render callback
 }
 
 export const Scramble: React.FC<ScrambleProps> = ({
@@ -18,12 +20,24 @@ export const Scramble: React.FC<ScrambleProps> = ({
   interval = 2,
   paragraphs = false,
   navigate = false,
+  preScrambled = false,
+  renderCustom,
 }) => {
   // default delay is 500ms
 
   const letters = "กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮ";
 
-  const [scrambled, setScrambled] = useState<string>(children);
+  const [scrambled, setScrambled] = useState<string>(() => {
+    if (preScrambled) {
+      return children
+        .split("")
+        .map((char) =>
+          char === " " || char === "\n" || char === "|" ? char : letters[Math.floor(Math.random() * letters.length)]
+        )
+        .join("");
+    }
+    return children;
+  });
   const [intervalCount, setIntervalCount] = useState<number>(0);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
@@ -47,8 +61,8 @@ export const Scramble: React.FC<ScrambleProps> = ({
 
     return chars
       .map((char, index) => {
-        if (char === " ") {
-          return shuffledSpaces.includes(index) ? " " : " ";
+        if (char === " " || char === "|") {
+          return char;
         }
         return index < intervalCount ? char : letters[Math.floor(Math.random() * letters.length)];
       })
@@ -104,6 +118,44 @@ export const Scramble: React.FC<ScrambleProps> = ({
       }
     };
   }, [intervalId]);
+
+  const rawParagraphs = scrambled.split("|||");
+
+  const paragraphNodes = rawParagraphs.map((paraText, pIndex) => (
+    <React.Fragment key={pIndex}>
+      {paraText.split(" ").map((word, wi) => (
+        <span
+          key={wi}
+          style={{
+            display: "inline-block",
+            whiteSpace: "nowrap",
+            marginRight: wi < paraText.split(" ").length - 1 ? "1.25ch" : undefined,
+          }}
+        >
+          {word.split("").map((char, ci) => (
+            <span
+              key={ci}
+              style={{
+                display: "inline-block",
+                width: "1ch",
+                textAlign: "center",
+              }}
+            >
+              {char}
+            </span>
+          ))}
+        </span>
+      ))}
+    </React.Fragment>
+  ));
+
+  if (renderCustom) {
+    return (
+      <span ref={ref} className="w-full">
+        {renderCustom(paragraphNodes)}
+      </span>
+    );
+  }
 
   return (
     <motion.span
