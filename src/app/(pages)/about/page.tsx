@@ -188,11 +188,19 @@ export default function Gallery() {
           </div>
         </div>
       </div>
-      <Fader>
-        <Contact />
-      </Fader>
-      ß
-      <Footer />
+      <section className={`relative ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+        <div className="md:h-[130vh]">
+          <div className="sticky top-0 z-10">
+            <Fader>
+              <Contact />
+            </Fader>
+          </div>
+        </div>
+      </section>
+
+      <section className={`relative z-20 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+        <Footer />
+      </section>
     </div>
   );
 }
