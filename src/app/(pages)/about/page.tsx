@@ -10,8 +10,8 @@ import { Preloader } from "@/components/stylers/page-loading/preloader";
 import { Title } from "@/components/title";
 import { Textbox } from "@/components/textbox";
 import { Scramble } from "@/components/stylers/scramblerthai";
-import { Button } from "@/components/button";
 import { Petal } from "@/components/petal";
+import { GalleryCarousel } from "@/components/home/gallery-carousel";
 import { AboutSequence } from "./sequence";
 
 export default function Gallery() {
@@ -23,17 +23,15 @@ export default function Gallery() {
   return (
     <div className={`${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
       <Preloader texts={["about"]} delay={200} interval={40} />
-
       <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav} />
-
       <div className="content-cap">
         <Fader enterDelay={1.2} once={true}>
           <div className="min-h-[100dvh] flex flex-col justify-between items-center px-6 md:px-16 xl:px-20">
             <div className="flex flex-col flex-grow justify-center items-center text-center lg:max-w-[1500px] mt-[75.58px] xl:mt-[103.22px]">
               <div>
                 <Title size="about">
-                  Economics student with a passion for finance and data science finding a creative outlet, dedicated to
-                  bringing ideas to life through vibrant and dynamic
+                  A finance and tech mind with a love for the creative space, dedicated to bringing ideas to life
+                  through vibrant and dynamic
                 </Title>
 
                 <span className={`relative`}>
@@ -180,23 +178,20 @@ export default function Gallery() {
               </div>
             </div> */}
 
-            <div
-              className={`lg:min-h-[10dvh] flex justify-center items-center ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}
-            >
-              <Fader enterDelay={0.3} threshold={0.3}>
-                <div className="flex justify-center items-center">
-                  <Button href="/gallery">view my gallery</Button>
+            <div className={`${theme === "dark" ? "bg-text-light" : "bg-main-light"} px-6 md:px-16 xl:px-20 my-7`}>
+              <Fader enterDelay={0.3} threshold={0.3} once={true}>
+                <div className="flex justify-center items-center py-10 md:py-12 lg:py-14">
+                  <GalleryCarousel labelText="see the gallery" />
                 </div>
               </Fader>
             </div>
           </div>
         </div>
       </div>
-
       <Fader>
         <Contact />
       </Fader>
-
+      ß
       <Footer />
     </div>
   );
