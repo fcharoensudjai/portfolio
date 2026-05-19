@@ -51,7 +51,7 @@ export const aboutSequenceItems: AboutSequenceItem[] = [
     title: "outside of work",
     paragraphs: [
       "Outside of that, I still spend a lot of time around art.",
-      "I draw (all pieces on here are my illustrations!), play games, and pay a bit too much attention to how things look and feel — whether that’s in a game, a UI, or something small that’s well put together.",
+      "I draw (all pieces on here are my illustrations!), play plenty of video games, and pay a bit too much attention to how things look and feel — whether that’s in a game, a UI, or something small that’s well put together.",
     ],
     image: {
       src: "/images/about/about-3.png",
@@ -62,8 +62,7 @@ export const aboutSequenceItems: AboutSequenceItem[] = [
     id: "05",
     title: "this site",
     paragraphs: [
-      "This site is my creative outlet.",
-      "It’s where I can experiment, try things out, and build in a way that feels more personal, without overthinking it too much.",
+      "This site is my creative outlet. It’s where I can experiment, try things out, and build in a way that feels more personal, without overthinking it too much.",
       "It also gives me a space to bring art, design, and the technical side of things together in a way that feels true to myself.",
     ],
     image: {

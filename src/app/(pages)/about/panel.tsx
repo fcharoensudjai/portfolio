@@ -35,12 +35,14 @@ export const AboutPanel: React.FC<AboutPanelProps> = ({ item, index, setActiveIn
       className="min-h-[100vh] w-full flex flex-col justify-center py-12 xl:py-0"
     >
       {/* Mobile Title (shown only on small screens) */}
-      <div className="xl:hidden w-full mb-4">
-        <div className="mb-2 font-mono text-sm opacity-100">
-          <DottedLineSeparator align="left"> [ {item.id} ] </DottedLineSeparator>
+      <Fader>
+        <div className="xl:hidden w-full mb-4">
+          <div className="mb-2 font-mono text-sm opacity-100">
+            <DottedLineSeparator align="left"> [ {item.id} ] </DottedLineSeparator>
+          </div>
+          <Title size="small">{item.title}</Title>
         </div>
-        <Title size="small">{item.title}</Title>
-      </div>
+      </Fader>
 
       <Fader>
         <div
