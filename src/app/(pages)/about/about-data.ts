@@ -6,6 +6,7 @@ export interface AboutSequenceItem {
     src: string;
     alt: string;
   };
+  hideImage?: boolean;
 }
 
 export const aboutSequenceItems: AboutSequenceItem[] = [
@@ -17,7 +18,7 @@ export const aboutSequenceItems: AboutSequenceItem[] = [
       "I’ve always been into art in some form. Drawing, games, anything that just looked good and felt good, even if I didn’t really know why at the time.",
     ],
     image: {
-      src: "/images/about.png",
+      src: "/images/about/about.png",
       alt: "Portrait of Fasai",
     },
   },
@@ -29,8 +30,8 @@ export const aboutSequenceItems: AboutSequenceItem[] = [
       "That shift changed my environment and pace, and introduced a different way of thinking about what I wanted to do.",
     ],
     image: {
-      src: "/images/about.png",
-      alt: "Transition and growth visual",
+      src: "/images/about/about-2.png",
+      alt: "London",
     },
   },
   {
@@ -41,8 +42,8 @@ export const aboutSequenceItems: AboutSequenceItem[] = [
       "Most of my time is spent working with data, building internal tools as a UX and front-end engineer, and figuring out how things actually get used.",
     ],
     image: {
-      src: "/images/about.png",
-      alt: "Finance and technology workflow visual",
+      src: "/images/about/about-4.png",
+      alt: "London",
     },
   },
   {
@@ -53,7 +54,7 @@ export const aboutSequenceItems: AboutSequenceItem[] = [
       "I draw (all pieces on here are my illustrations!), play games, and pay a bit too much attention to how things look and feel — whether that’s in a game, a UI, or something small that’s well put together.",
     ],
     image: {
-      src: "/images/about.png",
+      src: "/images/about/about-3.png",
       alt: "Personal interests visual",
     },
   },
@@ -66,8 +67,8 @@ export const aboutSequenceItems: AboutSequenceItem[] = [
       "It also gives me a space to bring art, design, and the technical side of things together in a way that feels true to myself.",
     ],
     image: {
-      src: "/images/about.png",
-      alt: "Portfolio purpose visual",
+      src: "/images/about/about-5.png",
+      alt: "Portfolio of Fasai",
     },
   },
 ];

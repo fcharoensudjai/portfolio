@@ -43,18 +43,24 @@ export const AboutPanel: React.FC<AboutPanelProps> = ({ item, index, setActiveIn
       </div>
 
       <Fader>
-        <div className="flex flex-col-reverse lg:flex-row gap-6 md:gap-8 lg:gap-10 2xl:gap-16 w-full items-center justify-between">
+        <div
+          className={`flex ${item.hideImage ? "flex-col" : "flex-col-reverse lg:flex-row"} gap-6 md:gap-8 lg:gap-10 2xl:gap-16 w-full ${item.hideImage ? "" : "items-center justify-between"}`}
+        >
           {/* Left Side: Image (Bottom on mobile) */}
-          <div className="w-full lg:w-[45%]">
-            <PlainCard
-              src={`${basePath}${item.image.src}`}
-              alt={item.image.alt}
-              className="w-full h-auto aspect-[4/5] object-cover max-h-[40vh] md:max-h-[50vh] lg:max-h-[75vh]"
-            />
-          </div>
+          {!item.hideImage && (
+            <div className="w-full lg:w-[45%]">
+              <PlainCard
+                src={`${basePath}${item.image.src}`}
+                alt={item.image.alt}
+                className="w-full h-auto aspect-[4/5] object-cover max-h-[40vh] md:max-h-[50vh] lg:max-h-[75vh]"
+              />
+            </div>
+          )}
 
           {/* Right Side: Text (Top on mobile) */}
-          <div className="w-full lg:w-[55%] flex flex-col justify-center text-xs md:text-sm xl:text-md text-justify font-mono leading-relaxed lg:leading-[1.8]">
+          <div
+            className={`${item.hideImage ? "w-full" : "w-full lg:w-[55%]"} flex flex-col justify-center text-xs md:text-sm xl:text-md text-justify font-mono leading-relaxed lg:leading-[1.8]`}
+          >
             <Scramble
               delay={100}
               interval={8}
