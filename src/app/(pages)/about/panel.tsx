@@ -53,7 +53,7 @@ export const AboutPanel: React.FC<AboutPanelProps> = ({ item, index, setActiveIn
               <PlainCard
                 src={`${basePath}${item.image.src}`}
                 alt={item.image.alt}
-                className="w-full h-auto aspect-[4/5] object-cover max-h-[40vh] md:max-h-[50vh] lg:max-h-[75vh]"
+                className="w-full h-auto aspect-[4/5] object-cover max-h-[40vh] md:max-h-[50vh] lg:max-h-[70vh]"
               />
             </div>
           )}
