@@ -29,22 +29,21 @@ export const AboutPanel: React.FC<AboutPanelProps> = ({ item, index, setActiveIn
   }, [inView, index, setActiveIndex]);
 
   return (
-    <div
-      id={`about-card-${index}`}
-      ref={ref}
-      className="min-h-[100vh] w-full flex flex-col justify-center py-12 xl:py-0"
-    >
-      {/* Mobile Title (shown only on small screens) */}
-      <Fader>
+    <Fader>
+      <div
+        id={`about-card-${index}`}
+        ref={ref}
+        className="min-h-[100vh] w-full flex flex-col justify-center py-12 xl:py-0"
+      >
+        {/* Mobile Title (shown only on small screens) */}
+
         <div className="xl:hidden w-full mb-4">
           <div className="mb-2 font-mono text-sm opacity-100">
             <DottedLineSeparator align="left"> [ {item.id} ] </DottedLineSeparator>
           </div>
           <Title size="small">{item.title}</Title>
         </div>
-      </Fader>
 
-      <Fader>
         <div
           className={`flex ${item.hideImage ? "flex-col" : "flex-col-reverse lg:flex-row"} gap-6 md:gap-8 lg:gap-10 2xl:gap-16 w-full ${item.hideImage ? "" : "items-center justify-between"}`}
         >
@@ -82,7 +81,7 @@ export const AboutPanel: React.FC<AboutPanelProps> = ({ item, index, setActiveIn
             </Scramble>
           </div>
         </div>
-      </Fader>
-    </div>
+      </div>
+    </Fader>
   );
 };
