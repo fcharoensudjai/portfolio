@@ -4,6 +4,7 @@ import { Header } from "@/components/header/header";
 import "./globals.css";
 import { ProviderTheme } from "@/app/providers/themeprovider";
 import Highlighter from "@/components/stylers/highlighter";
+import { PetalFollow } from "@/components/petalfollow";
 import { ExitAnimationProvider } from "@/app/contexts/exitcontext";
 import { VisibilityProvider } from "@/app/contexts/recentsvisibilitycontext";
 import { VisibilityProvider2 } from "@/app/contexts/introvisibilitycontext";
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <VisibilityProvider2>
                   <VisibilityProvider3>
                     <Highlighter />
+                    <PetalFollow />
                     <Header />
                     <div className={`bg-middle-colour`}>{children}</div>
                   </VisibilityProvider3>

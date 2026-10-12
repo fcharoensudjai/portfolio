@@ -9,7 +9,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
 <style>
-  body {
+  /* the two themes are just variable sets, so they're declared on a *class* as well as on body.
+     a tile's content copy carries the class, which is what makes it render in the incoming theme. */
+  body, .theme-dark {
     --bg: #242424; --ink: #e8e7e2; --page-bg: #242424;
     --alt-bg: #fefbfb; --alt-ink: #242424;
     --rose: #cd7a7a; --sand: #bfaf9c;
@@ -18,7 +20,7 @@
     --alt-dim: color-mix(in srgb, var(--alt-ink) 55%, transparent);
     --grain-opacity: 0.08; --grain-blend: overlay;
   }
-  body.light {
+  body.light, .theme-light {
     --bg: #fefbfb; --ink: #242424; --page-bg: #fefbfb;
     --alt-bg: #242424; --alt-ink: #e8e7e2;
     --rose: #dda6a6; --sand: #7a736f;
@@ -31,6 +33,12 @@
   html.lenis, html.lenis body { height: auto; }
   .lenis.lenis-smooth { scroll-behavior: auto !important; }
   body { background: var(--bg); color: var(--ink); font-family: "Roboto Mono", monospace; font-size: 16px; line-height: 1.75; overflow-x: clip; transition: background-color .5s ease, color .5s ease; }
+  /* The visible page background is painted on this element, not just the body. A body background
+     propagates to the canvas when html has none, and a propagated background does not animate as
+     painted — which is why the page background snapped while the profile band faded smoothly. It
+     must be FULL-BLEED: inset:0 sizes a fixed element to the layout viewport, which excludes the
+     scrollbar, and the 15px left over showed the un-faded canvas down the right edge as a strip. */
+  .page-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; z-index: -2; background: var(--page-bg); transition: background-color 500ms ease; }
   .display { font-family: "Poppins", sans-serif; font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; }
   .mono { font-family: "Roboto Mono", monospace; }
   .pad { padding-left: clamp(20px, 6vw, 100px); padding-right: clamp(20px, 6vw, 100px); }
@@ -59,7 +67,14 @@
   .ch { position: relative; display: inline-block; white-space: nowrap; text-align: center; animation: letter .9s cubic-bezier(.22,1,.36,1) backwards; animation-delay: calc(var(--i) * 45ms + 200ms); }
   .ch.sp { width: .26em; }
   .ch .probe { display: inline-block; width: 0; height: 0; }
+  /* name entry variants (dev rig — cycle with the chip bottom-left). flipy spins on the vertical
+     axis, which is the same axis the cover tiles turn on as they dissolve — so the name turns in
+     and later turns away on the same motion. flipx is a split-flap tip about the baseline. */
+  body[data-name-anim="flipy"] .ch { animation-name: letterFlipY; transform-origin: 50% 50%; animation-timing-function: cubic-bezier(.34,1.56,.64,1); }
+  body[data-name-anim="flipx"] .ch { animation-name: letterFlipX; transform-origin: 50% 100%; animation-timing-function: cubic-bezier(.34,1.56,.64,1); }
   @keyframes letter { from { opacity: 0; transform: translateY(45%); } }
+  @keyframes letterFlipY { from { opacity: 0; transform: perspective(700px) rotateY(-92deg); } }
+  @keyframes letterFlipX { from { opacity: 0; transform: perspective(700px) rotateX(-92deg); } }
 
   .dp { position: absolute; z-index: 5; pointer-events: none; transform: scale(0); transform-origin: 50% 100%; }
   .dp.in { transform: scale(1); transition: transform .7s cubic-bezier(.34,1.56,.64,1); }
@@ -86,6 +101,21 @@
   .t { position: absolute; perspective: 800px; }
   .t .flip { position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateY(var(--ry, 0deg)); transition: transform .85s cubic-bezier(.22,1,.36,1); transition-delay: var(--d, 0ms); }
   .tiles.notrans .flip { transition: none !important; }
+  /* Theme change is a plain cross-fade: the body's own colour transition, plus this rule on the
+     elements that paint a themed colour. The list is explicit so it can't clobber the transform
+     transitions the cards, the rig and the marquee rely on. No delay — everything changes as one. */
+  :is(h1, h2, h3, p, span, a:not(.card), footer, .bar, .profile, .display, .mono, .cn, .cy, .mail, .gallery-head) {
+    transition-property: background-color, color, border-color;
+    transition-duration: 500ms;
+    transition-timing-function: ease;
+  }
+  /* linear, NOT the cover's cubic-bezier(.22,1,.36,1): that ease-out front-loads the turn so tiles
+     blow past their covered window and the grid never all covers at once — which lets the theme swap
+     happen in the open. a constant rate is what makes the band travel and the burial line up. */
+  /* duration and easing are set inline on each tile in buildVeil — the #tv .flip selector lost a
+     specificity tie to the shared .t .flip shorthand further up, and a var()-based shorthand here
+     also silently failed to take. values live on the element now, so nothing can outrank them. */
+  #tv.notrans .flip { transition: none !important; }
   .t .back { position: absolute; inset: 0; overflow: hidden; transform: rotateY(180deg); backface-visibility: hidden; -webkit-backface-visibility: hidden; background: var(--alt-bg); --bg: var(--alt-bg); --ink: var(--alt-ink); --ink-dim: var(--alt-dim); color: var(--alt-ink); }
   .clone { position: absolute; pointer-events: none; }
   .clone, .clone * { animation: none !important; transition: none !important; }
@@ -123,7 +153,7 @@
   .stage-frame { position: relative; display: block; width: 100%; aspect-ratio: 1600 / 1151; max-height: 74vh; overflow: hidden; cursor: none; border-radius: 16px; }
   .stage-frame .layer { position: absolute; inset: 0; overflow: hidden; }
   .stage-frame .layer.two { clip-path: inset(calc((1 - var(--w, 0)) * 100%) 0 0 0); }
-  .stage-frame .drift-img { position: absolute; inset: -4%; transform: translate(calc(var(--mx, 0) * -16px), calc(var(--my, 0) * -12px)); transition: transform .7s cubic-bezier(.22,1,.36,1); }
+  .stage-frame .drift-img { position: absolute; inset: -4%; }
   .stage-frame .drift-img img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(var(--s, 1)); will-change: transform; }
   /* stage-frame corner brackets removed */
   .cursor { position: fixed; top: 0; left: 0; z-index: 80; pointer-events: none; opacity: 0; transition: opacity .2s ease; }
@@ -136,7 +166,9 @@
   /* gallery: the carousel, tiles flip to the other mode on hover */
   .gallery-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; margin-bottom: clamp(32px, 5vh, 56px); }
   .gallery-head h2 { font-size: clamp(1.6rem, 3.4vw, 2.6rem); text-transform: lowercase; }
-  .mq { overflow: hidden; padding: 6px 0; }
+  /* vertical padding is the room the hovered card needs to grow into — .mq clips on both axes
+     (overflow-x:hidden won't allow overflow-y:visible), so the scale would get its edges cut. */
+  .mq { overflow: hidden; padding: 16px 0; }
   .mq-track { display: flex; width: max-content; will-change: transform; }
   .mq-set { display: flex; }
   .mq:hover .card { opacity: .6; }
@@ -150,11 +182,19 @@
   /* same as the app: a bg-middle-colour panel, rising from the bottom on the preloader's easing */
   #tWipe { position: fixed; inset: 0; z-index: 90; background: var(--mid); transform: translateY(100%); pointer-events: none; }
   #tLabel { position: fixed; left: 50%; top: 50%; z-index: 95; transform: translate(-50%, -50%); opacity: 0; transition: opacity .25s ease; color: var(--mid-ink); font-family: "Poppins", sans-serif; font-weight: 400; font-size: clamp(2.2rem, 4.2vw, 3.8rem); line-height: 1; letter-spacing: -0.02em; text-transform: lowercase; white-space: nowrap; pointer-events: none; }
-  #tModeChip { position: fixed; left: 18px; bottom: 18px; z-index: 96; padding: 7px 13px; font-size: 11px; letter-spacing: .05em; color: var(--ink-dim); background: transparent; border: 1px solid currentColor; border-radius: 999px; cursor: pointer; opacity: .5; transition: opacity .2s ease; }
-  #tModeChip:hover { opacity: 1; }
-  .card { position: relative; flex-shrink: 0; display: block; height: clamp(220px, 38vh, 400px); margin-right: 16px; border-radius: 12px; overflow: hidden; text-decoration: none; transition: opacity .4s ease; }
-  .card .cf { display: block; height: 100%; width: auto; border-radius: 12px; transition: transform .7s cubic-bezier(.22,1,.36,1); }
-  .card:hover .cf { transform: scale(1.05); }
+  #tModeChip, #tNameChip { position: fixed; left: 18px; z-index: 96; padding: 7px 13px; font-size: 11px; letter-spacing: .05em; color: var(--ink-dim); background: transparent; border: 1px solid currentColor; border-radius: 999px; cursor: pointer; opacity: .5; transition: opacity .2s ease; }
+  #tModeChip { bottom: 18px; }
+  #tNameChip { bottom: 56px; }
+  #tModeChip:hover, #tNameChip:hover { opacity: 1; }
+  .card { position: relative; flex-shrink: 0; display: block; width: clamp(220px, 38vh, 400px); height: clamp(220px, 38vh, 400px); margin-right: 16px; border-radius: 12px; overflow: hidden; text-decoration: none; transition: opacity .4s ease, transform .5s cubic-bezier(.22,1,.36,1); }
+  /* the card grows, the artwork inside doesn't move within it — the crop stays exactly as it is.
+     z-index so the scaled card sits above its neighbour instead of being painted under it. */
+  .card:hover { transform: scale(var(--card-hover, 1.05)); z-index: 2; }
+  /* square frame. --crop is set per piece from its own aspect so every frame loses the same
+     *amount* of artwork — canvases of different shapes need different zoom to end up cropped
+     the same. --pos is that piece's focal point. deliberately no hover transform: the crop is the
+     piece's resting state, and opening it should be the only thing that shows more. */
+  .card .cf { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 32%); border-radius: 12px; transform: scale(var(--crop, 1.5)); transition: transform .7s cubic-bezier(.22,1,.36,1); }
   .card .cb { position: absolute; inset: 0; border-radius: 12px; display: flex; flex-direction: column; justify-content: flex-end; padding: 22px 24px; background: linear-gradient(180deg, rgba(18,18,18,0) 45%, rgba(18,18,18,.74)); opacity: 0; transition: opacity .35s ease; }
   .card:hover .cb { opacity: 1; }
   .card .cb .cn { font-size: clamp(1.2rem, 2vw, 1.7rem); text-transform: lowercase; color: #e8e7e2; }
@@ -187,6 +227,7 @@
   <div id="tWipe"></div>
   <div id="tLabel" class="mono"></div>
   <button id="tModeChip" class="mono" type="button">transition: flip</button>
+  <button id="tNameChip" class="mono" type="button">name: rise</button>
 
   <div class="bar">
     <img class="logo" id="navLogo" src="public/icons/dark/logodark.svg" alt="flower logo" />
@@ -271,7 +312,6 @@
   <section class="section-space" id="gallery">
     <div class="gallery-head pad reveal">
       <h2 class="display">from the gallery</h2>
-      <a class="btn mono" href="#" data-scramble="view my gallery">view my gallery</a>
     </div>
     <div class="mq" id="mq"><div class="mq-track" id="mqTrack"><div class="mq-set" id="mqSet"></div><div class="mq-set" id="mqClone" aria-hidden="true"></div></div></div>
   </section>
@@ -291,6 +331,10 @@
     </div>
     <div>[ GB | <span class="clk">0:00:00</span> ]</div>
   </footer>
+
+  <!-- theme-change tile grid. fixed to the viewport rather than the cover, so the flip happens
+       wherever you are on the page — not just on the landing section. -->
+  <div class="theme-veil" id="tv" aria-hidden="true"></div>
 
 <script>
   const $ = (id) => document.getElementById(id);
@@ -486,33 +530,185 @@
     });
   }
 
-  function applyTheme(t) {
-    document.body.classList.add("nt");
+  function applyTheme(t, instant = true) {
+    if (instant) document.body.classList.add("nt");
     document.body.classList.toggle("light", t === "light");
     document.querySelectorAll(".dp, .fp").forEach((p) => (p.src = icons[t].petal));
     $("themeBtn").textContent = icons[t].glyph;
     toneNav();
-    void document.body.offsetWidth;
-    setTimeout(() => document.body.classList.remove("nt"), 60);
+    if (instant) {
+      void document.body.offsetWidth;
+      setTimeout(() => document.body.classList.remove("nt"), 60);
+    }
   }
+  /* ---------- global theme veil: the landing's flip, played anywhere on the page ---------- */
+  // same trick the cover uses: every tile carries a copy of the page content BEHIND it, so when the
+  // tiles finish turning the screen is a full replica of the page in the incoming theme. the theme
+  // then swaps underneath and the tiles reset with transitions off — invisible, because the replica
+  // and the real page are now identical. that's why this needs copies and not a flat colour: a flat
+  // panel can only ever reappear badly. only the sources actually on screen get copied, which is
+  // what keeps it affordable (the whole document is ~16k nodes; one visible section is ~100).
+  const TV_STAG = 22;         // delay per diagonal step — the landing's step, out of the top-right
+  const TV_DUR = 850;         // matches the .t .flip transition: how long one tile takes to turn
+  const TV_MAXSIDE = 600;     // the wash is staggered per block, cut no bigger than this
+  const tvEl = $("tv");
+  let tvTiles = [], tvKey = "", tvGrid = null;
+
+  function buildVeil() {
+    const W = window.innerWidth, H = window.innerHeight;
+    const cols = W < 800 ? 12 : 24;      // the landing's density: ~60px tiles
+    const tw = Math.ceil(W / cols), rows = Math.ceil(H / tw);
+    const key = [W, H, cols].join("x");
+    if (key === tvKey) return;
+    tvKey = key;
+    tvGrid = { cols, rows, tw, maxD: (cols - 1 + rows - 1) * TV_STAG };
+    tvEl.innerHTML = "";
+    tvTiles = [];
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+      const t = document.createElement("div");
+      t.className = "t";
+      t.style.cssText = `left:${c * tw}px;top:${r * tw}px;width:${tw + 1}px;height:${tw + 1}px`;
+      const flip = document.createElement("div");
+      flip.className = "flip";
+      const back = document.createElement("div");
+      back.className = "back";
+      flip.appendChild(back); t.appendChild(flip); tvEl.appendChild(t);
+      // distance from the top-right corner, so the flip always runs out of the top-right
+      tvTiles.push({ t, flip, back, d: (cols - 1 - c + r) * TV_STAG });
+    }
+  }
+
+  // The blocks the wash is staggered over. Recurse until a block is card-sized or holds nothing but
+  // text, then stop. Same cutter as before, but these only carry a delay now — no copies.
+  function washBlocks() {
+    const skipIds = ["tv", "trans", "cursor", "flock", "tWipe", "tLabel", "tiles"];
+    const skipSel = ".tiles, .theme-veil, .tt";
+    const out = [];
+    const isBlock = (el) => {
+      const d = getComputedStyle(el).display;
+      return d !== "inline" && d !== "inline-block" && d !== "contents";
+    };
+    const walk = (el) => {
+      if (el.id && skipIds.includes(el.id)) return;
+      if (el.matches && el.matches(skipSel)) return;
+      const r = el.getBoundingClientRect();
+      if (!r.width || !r.height || r.bottom < 0 || r.top > window.innerHeight || r.right < 0 || r.left > window.innerWidth) return;
+      const kids = [...el.children].filter(isBlock);
+      // keep a block whole if it fits, or if it holds nothing but text (text can't be cut — the
+      // tile's overflow does that). only recurse into containers that are genuinely too big.
+      if (!kids.length || (r.width <= TV_MAXSIDE && r.height <= TV_MAXSIDE)) { out.push({ el, r }); return; }
+      kids.forEach(walk);
+    };
+    [...document.body.children].forEach((el) => {
+      if (el.tagName === "SCRIPT" || !el.getBoundingClientRect) return;
+      walk(el);
+    });
+    return out;
+  }
+
+  function veilReset() {
+    tvEl.classList.add("notrans");
+    tvTiles.forEach((x) => { x.flip.style.setProperty("--ry", "0deg"); x.flip.style.setProperty("--d", "0ms"); });
+    void tvEl.offsetWidth;
+    tvEl.classList.remove("notrans");
+    tvEl.style.removeProperty("--tv-bg");
+  }
+
+  /* ---------- scroll lock (the landing flip only) ---------- */
+  // the cover's tiles are rewritten by update() on every scroll event, so a scroll there would
+  // clobber the flip mid-flight. the off-cover flip no longer needs this: it copies nothing, so the
+  // page is free to move under it. released in a finally so a throw can never strand the page.
+  const SCROLL_KEYS = ["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "];
+  let scrollLocked = false;
+  const stopScroll = (e) => e.preventDefault();
+  const stopKeys = (e) => { if (SCROLL_KEYS.includes(e.key)) e.preventDefault(); };
+  function lockScroll() {
+    if (scrollLocked) return;
+    scrollLocked = true;
+    if (window.__lenis) window.__lenis.stop();
+    window.addEventListener("wheel", stopScroll, { passive: false });
+    window.addEventListener("touchmove", stopScroll, { passive: false });
+    window.addEventListener("keydown", stopKeys, true);
+  }
+  function unlockScroll() {
+    if (!scrollLocked) return;
+    scrollLocked = false;
+    window.removeEventListener("wheel", stopScroll);
+    window.removeEventListener("touchmove", stopScroll);
+    window.removeEventListener("keydown", stopKeys, true);
+    if (window.__lenis) window.__lenis.start();
+  }
+
+  async function themeFlip(next) {
+    buildVeil();
+    const { cols, tw, maxD } = tvGrid;
+    // Pin the page's own background to the OLD colour for the duration. Otherwise the base colour
+    // changes globally the instant the class flips, so the "wave" is really a global recolour with
+    // tiles flipping over it — and text ahead of the wave washes against the new background, which
+    // is the pale-on-pale you get now. Pinned, the only thing painting the new background is the
+    // tiles, so the wave is real. Released at the end, when the tiles cover everything anyway.
+    document.body.style.backgroundColor = getComputedStyle(document.body).backgroundColor;
+    // The wash runs on the tile grid's clock: same delay per block, same duration as a tile's turn,
+    // so a block recolours exactly as the tiles over it do. That's what makes it one wave.
+    const blocks = washBlocks();
+    document.body.style.setProperty("--wash-dur", TV_DUR + "ms");
+    blocks.forEach(({ el, r }) => {
+      const c = clamp(Math.floor((r.left + r.width / 2) / tw), 0, cols - 1);
+      const row = Math.max(0, Math.floor((r.top + r.height / 2) / tw));
+      el.style.setProperty("--wash", ((cols - 1 - c) + row) * TV_STAG + "ms");
+    });
+    // Sections that paint their own opaque background can't be flipped — their background sits above
+    // the flip layer, and .profile needs z-index:3 to stay above the cover's tiles behind it, which
+    // traps any layer inside it too. So the band rides the wash on the same clock instead: it
+    // recolours as the wave reaches it rather than snapping.
+    const band = document.querySelector(".profile");
+    if (band) {
+      const br = band.getBoundingClientRect();
+      const bc = clamp(Math.floor((br.left + br.width / 2) / tw), 0, cols - 1);
+      const brow = Math.max(0, Math.floor((br.top + br.height / 2) / tw));
+      band.style.setProperty("--wash", ((cols - 1 - bc) + brow) * TV_STAG + "ms");
+    }
+    document.body.classList.add("washing");
+    veilReset();
+    // freeze the incoming background on the tiles so nothing can recolour them mid-sweep
+    tvEl.style.setProperty("--tv-bg", getComputedStyle(document.body).getPropertyValue("--alt-bg").trim());
+    tvEl.classList.add("on");
+    void tvEl.offsetWidth;
+    tvTiles.forEach((x) => { x.flip.style.setProperty("--d", x.d + "ms"); x.flip.style.setProperty("--ry", "180deg"); });
+    applyTheme(next, false);        // false = leave transitions alone, the wash needs them
+    await sleep(maxD + TV_DUR + 140);
+    // Release the pin BEFORE the tiles come off, and with transitions suppressed. Releasing it after
+    // the reveal, with body's own background-color transition live, makes the base colour jump to the
+    // old value and then fade to the new one — that fade is the pulse after the flip. Done here it's
+    // invisible: the tiles are still covering, and the base underneath is already the new colour.
+    document.body.classList.add("nt");
+    document.body.style.removeProperty("background-color");
+    void document.body.offsetWidth;
+    document.body.classList.remove("nt");
+    tvEl.classList.remove("on");
+    veilReset();
+    document.body.classList.remove("washing");
+    blocks.forEach(({ el }) => el.style.removeProperty("--wash"));
+    if (band) band.style.removeProperty("--wash");
+    document.body.style.removeProperty("--wash-dur");
+  }
+
+  // The visible page background, as a real element rather than the body, so it animates when the
+  // theme changes. The body's own background stays as a base so there's no flash before this runs.
+  const pageBg = document.createElement("div");
+  pageBg.className = "page-bg";
+  pageBg.setAttribute("aria-hidden", "true");
+  document.body.prepend(pageBg);
+
   let switching = false;
-  $("themeBtn").addEventListener("click", async () => {
+  $("themeBtn").addEventListener("click", () => {
     if (switching) return;
-    const next = theme() === "light" ? "dark" : "light";
-    if (!tiles.length || window.scrollY > window.innerHeight * 0.7 || cpState > 0) { applyTheme(next); return; }
     switching = true;
-    clearTimeout(idleTimer);
-    let maxD = 0;
-    tiles.forEach((t) => { const d = (t.c + t.r) * 22; maxD = Math.max(maxD, d); flipTile(t, d); });
-    setTimeout(toneNav, maxD + 450);
-    await sleep(maxD + 950);
-    tilesEl.classList.add("notrans");
-    applyTheme(next);
-    tiles.forEach((t) => { t.flipped = false; t.flip.style.setProperty("--ry", "0deg"); t.flip.style.setProperty("--d", "0ms"); });
-    void tilesEl.offsetWidth;
-    tilesEl.classList.remove("notrans");
-    toneNav();
-    switching = false;
+    // Theme change is a straight cross-fade. applyTheme(..., false) leaves transitions alone, so
+    // every themed colour animates on its own 500ms instead of snapping. No flip, no veil, nothing
+    // locked or frozen — the page keeps running through it.
+    applyTheme(theme() === "light" ? "dark" : "light", false);
+    setTimeout(() => (switching = false), 520);
   });
 
   document.fonts.ready.then(() => {
@@ -523,7 +719,7 @@
     buildTiles();
     toneNav();
     let rt;
-    window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { builtKey = ""; buildTiles(); dots.forEach((d) => d.place(m)); toneNav(); }, 150); });
+    window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { builtKey = ""; tvKey = ""; buildTiles(); dots.forEach((d) => d.place(m)); toneNav(); }, 150); });
   });
 
   /* ---------- petals that follow the cursor ---------- */
@@ -546,8 +742,13 @@
   const RING_MAX_W = 260, RING_MAX_H = 200;
   let orbAmt = 0; // 0 = follow the cursor, 1 = ring the target; eased so it's a glide, not a jump
   document.addEventListener("mouseover", (e) => {
-    const t = e.target instanceof Element ? e.target.closest("a, button") : null;
+    const el = e.target instanceof Element ? e.target : null;
+    const t = el ? el.closest("a, button") : null;
     if (t !== orbitEl) orbitEl = t;
+    // petals step aside where something else owns the language: the recents frame ("more detail") and
+    // the marquee. The marquee is the target rather than the individual cards, so they don't flicker
+    // every time a card slides out from under a stationary pointer.
+    flock.classList.toggle("off", !!(el && el.closest("#frame, #mq")));
   }, { passive: true });
 
   /* ---------- profile: spinning flower, centred text that resolves as you scroll ---------- */
@@ -618,10 +819,26 @@
     ["reyna-gallery.png", "reyna", 2023], ["komi-gallery.png", "komi", 2022], ["yor-gallery.png", "yor forger", 2022],
     ["ivy-gallery.png", "ivy", 2022], ["jinx-gallery.png", "jinx", 2021], ["leksa-gallery.png", "elf", 2021], ["mermaid-gallery.png", "mermaid", 2021],
   ];
+  // focal point per piece — the frame window is centred here, so a subject that sits off-centre
+  // doesn't end up bisected by an edge. only pieces that need it get an entry.
+  const FOCUS = { "reyna-gallery.png": "64% 33%" };
+  // TARGET is the dial for "how much do they lose": the zoom required differs per artwork because a
+  // square frame takes a different slice of a 1.78 wide than of a 1.41/0.71 pair. equalising the
+  // *loss* instead of the zoom is what stops some pieces reading as whole and others as mangled.
+  // 0.45 = hides roughly half (too tight — it clips scalps), 0.58 = current, 0.7 = nearly whole.
+  // override live with ?crop=0.45 so you can feel the range without editing anything.
+  const TARGET = parseFloat(new URLSearchParams(location.search).get("crop")) || 0.58;
   [$("mqSet"), $("mqClone")].forEach((set) => gallery.forEach(([file, name, year]) => {
     const a = document.createElement("a");
     a.className = "card"; a.href = "#";
     a.innerHTML = `<img class="cf" src="public/images/${file}" alt="${name}" draggable="false" /><div class="cb"><span class="cn display">${name}</span><span class="cy mono">${year}</span></div>`;
+    if (FOCUS[file]) a.style.setProperty("--pos", FOCUS[file]);
+    const im = a.querySelector(".cf");
+    const fit = () => {
+      const ar = im.naturalWidth / im.naturalHeight;
+      if (ar) a.style.setProperty("--crop", (Math.min(ar, 1 / ar) / TARGET).toFixed(3));
+    };
+    im.complete ? fit() : im.addEventListener("load", fit);
     set.appendChild(a);
   }));
 
@@ -759,18 +976,20 @@
   const frame = $("frame"), cursor = $("cursor");
   let tx = 0, ty = 0, cx = 0, cy = 0;
   const mouse = { x: -200, y: -200 };
-  frame.addEventListener("mousemove", (e) => {
-    const r = frame.getBoundingClientRect();
-    frame.style.setProperty("--mx", (((e.clientX - r.left) / r.width) * 2 - 1).toFixed(3));
-    frame.style.setProperty("--my", (((e.clientY - r.top) / r.height) * 2 - 1).toFixed(3));
-  });
-  frame.addEventListener("mouseenter", () => { cursor.classList.add("on"); flock.classList.add("off"); });
-  frame.addEventListener("mouseleave", () => { cursor.classList.remove("on"); flock.classList.remove("off"); frame.style.setProperty("--mx", 0); frame.style.setProperty("--my", 0); });
+  // this frame's imagery is driven by scroll only (--w wipes the layers, --s scales each image).
+  // it used to also translate on mousemove; that's gone on purpose, so nothing here reacts to the
+  // pointer. if you ever want the drift back, drive it from the scroll progress p instead.
+  // the flock's off-state is owned by the delegated mouseover handler, so it has one source of truth
+  // and can't be left wrong when moving straight between the frame and the marquee
+  frame.addEventListener("mouseenter", () => cursor.classList.add("on"));
+  frame.addEventListener("mouseleave", () => cursor.classList.remove("on"));
   window.addEventListener("mousemove", (e) => { mouse.x = tx = e.clientX; mouse.y = ty = e.clientY; });
 
   let prev = performance.now();
   (function loop(now) {
     const dt = Math.min(0.05, (now - prev) / 1000); prev = now;
+    // nothing is frozen during the theme flip any more — the tiles only carry the background and sit
+    // behind the content, so the marquee, the flower and the petals all keep running through it
     stepFlower(dt); stepMarquee(dt);
     cx += (tx - cx) * 0.18; cy += (ty - cy) * 0.18;
     cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
@@ -871,6 +1090,21 @@
     tChip.textContent = "transition: " + tMode;
   });
 
+  // name entry variants — cycle + replay so the flips can be compared without reloading.
+  // rise is the original; if it cycles back to rise the attribute is removed and the base rule wins.
+  const NAME_ANIMS = ["rise", "flipy", "flipx"];
+  let nameAnim = 0;
+  const tNameChip = $("tNameChip");
+  tNameChip.addEventListener("click", () => {
+    nameAnim = (nameAnim + 1) % NAME_ANIMS.length;
+    const v = NAME_ANIMS[nameAnim];
+    if (v === "rise") document.body.removeAttribute("data-name-anim"); else document.body.dataset.nameAnim = v;
+    tNameChip.textContent = "name: " + v;
+    coverLetters.forEach((l) => { l.ch.style.animation = "none"; });
+    void document.body.offsetWidth; // force a reflow so the animation restarts
+    coverLetters.forEach((l) => { l.ch.style.animation = ""; });
+  });
+
   function go(hash, label) {
     if (tBusy) return;
     const target = document.querySelector(hash);
@@ -906,7 +1140,7 @@
   }
 
   // nav items + the two buttons map to sections that exist in this preview; the logo goes home
-  const DEST_BY_TEXT = { recents: "#recents", gallery: "#gallery", about: "#profile", "view my gallery": "#gallery", "more about me": "#profile" };
+  const DEST_BY_TEXT = { recents: "#recents", gallery: "#gallery", about: "#profile", "more about me": "#profile" };
   document.querySelectorAll('a[href^="#"]:not(.card):not(.stage-frame)').forEach((a) => a.addEventListener("click", (e) => {
     e.preventDefault();
     const href = a.getAttribute("href");
@@ -915,6 +1149,9 @@
     go(hash, hash.replace("#", ""));
   }));
   $("navLogo").addEventListener("click", () => go("#home", "home"));
+  // cards are placeholders in this preview — in the app this is where the piece opens (and where the
+  // transition would play). without this they follow href="#" and jump the page to the top.
+  document.querySelectorAll("a.card").forEach((a) => a.addEventListener("click", (e) => e.preventDefault()));
 </script>
 </body>
 </html>
