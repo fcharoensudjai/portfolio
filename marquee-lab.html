@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>marquee lab | fasai charoensudjai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    --bg: #242424; --ink: #e8e7e2; --rose: #cd7a7a; --sand: #bfaf9c;
+    --ink-dim: color-mix(in srgb, var(--ink) 55%, transparent);
+    background: var(--bg); color: var(--ink);
+    font-family: "Roboto Mono", monospace; font-size: 16px; line-height: 1.75;
+    overflow-x: hidden; -webkit-font-smoothing: antialiased;
+  }
+  .display { font-family: "Poppins", sans-serif; font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; }
+  .mono { font-family: "Roboto Mono", monospace; }
+  .pad { padding-left: clamp(20px, 6vw, 100px); padding-right: clamp(20px, 6vw, 100px); }
+
+  .lab-top { padding-top: clamp(56px, 12vh, 130px); padding-bottom: clamp(28px, 6vh, 56px); display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+  .lab-top h1 { font-size: clamp(2rem, 6vw, 4.4rem); text-transform: lowercase; margin-bottom: 16px; }
+  .lab-top p { font-size: 0.9375rem; color: var(--ink-dim); max-width: 56ch; }
+
+  .toggle { background: none; border: 1px solid var(--ink); color: var(--ink); font-family: "Roboto Mono", monospace; font-size: 12px; padding: 8px 16px; border-radius: 999px; cursor: pointer; transition: background .25s ease, color .25s ease, border-color .25s ease; white-space: nowrap; }
+  .toggle:hover { background: var(--ink); color: var(--bg); }
+  .toggle.off { border-style: dashed; color: var(--ink-dim); }
+  .toggle.off:hover { color: var(--bg); }
+
+  /* the marquee — full-bleed, infinite, draggable */
+  .mq {
+    position: relative; overflow: hidden; padding: clamp(28px, 8vh, 88px) 0;
+    cursor: grab; user-select: none; -webkit-user-select: none;
+    touch-action: pan-y;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+  }
+  .mq.dragging { cursor: grabbing; }
+  .mq-track { display: flex; align-items: flex-start; gap: clamp(22px, 3.2vw, 56px); width: max-content; will-change: transform; }
+  .card { flex-shrink: 0; display: flex; flex-direction: column; gap: 14px; text-decoration: none; color: var(--ink); }
+  .card img { height: clamp(300px, 52vh, 500px); width: auto; display: block; border-radius: 14px; pointer-events: none; -webkit-user-drag: none; user-select: none; }
+  .card .cap { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+  .card .cap .cn { font-family: "Poppins", sans-serif; font-size: clamp(1rem, 1.5vw, 1.25rem); text-transform: lowercase; line-height: 1.1; }
+  .card .cap .cy { font-size: 12px; color: var(--ink-dim); }
+
+  .hint { position: absolute; left: 50%; top: clamp(2px, 1.5vh, 16px); transform: translateX(-50%); font-size: 12px; color: var(--ink-dim); transition: opacity .6s ease; pointer-events: none; }
+  .hint.gone { opacity: 0; }
+
+  .lab-foot { padding-top: clamp(36px, 7vh, 70px); padding-bottom: clamp(60px, 12vh, 140px); font-size: 13px; color: var(--ink-dim); max-width: 60ch; }
+</style>
+</head>
+<body>
+  <header class="lab-top pad">
+    <div>
+      <h1 class="display">the marquee, fluid</h1>
+      <p class="mono">grab the row and throw it. it should glide, then settle to a stop — heavy, like honey, never snappy. leave it alone and it drifts slowly on its own.</p>
+    </div>
+    <button class="toggle mono" id="toggle">[ pause motion ]</button>
+  </header>
+
+  <section class="mq" id="mq">
+    <div class="hint mono" id="hint">[ drag ]</div>
+    <div class="mq-track" id="track"></div>
+  </section>
+
+  <footer class="lab-foot pad">
+    <p class="mono">no petals in this build — motion only, so you can judge the feel on its own. petals come back once the movement's right.</p>
+  </footer>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+  const gallery = [
+    ["yae-gallery.png", "yae miko", 2024], ["makima-gallery2.png", "makima (train scene)", 2024], ["makima-gallery.png", "makima", 2023],
+    ["reyna-gallery.png", "reyna", 2023], ["komi-gallery.png", "komi", 2022], ["yor-gallery.png", "yor forger", 2022],
+    ["ivy-gallery.png", "ivy", 2022], ["jinx-gallery.png", "jinx", 2021], ["leksa-gallery.png", "elf", 2021], ["mermaid-gallery.png", "mermaid", 2021],
+  ];
+
+  const track = $("track"), mq = $("mq"), hint = $("hint");
+  // two identical sets so the loop is seamless
+  for (let s = 0; s < 2; s++) {
+    gallery.forEach(([file, name, year]) => {
+      const a = document.createElement("a");
+      a.className = "card";
+      a.href = "#";
+      a.draggable = false;
+      a.innerHTML = `<img src="public/images/${file}" alt="${name}" draggable="false" /><span class="cap"><span class="cn">${name}</span><span class="cy mono">${year}</span></span>`;
+      track.appendChild(a);
+    });
+  }
+
+  /* ---- state ---- */
+  let P = 0;              // width of one set = the loop period
+  let offset = 0;         // current x translation (negative = row moved left)
+  let vel = 0;            // px / second
+  let dragging = false, dragStartX = 0, dragOffset = 0, lastX = 0, lastT = 0, moved = 0;
+  let paused = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let hover = false;
+
+  const DRIFT = 20;        // idle drift px/s — slow, calm
+  const FRICTION = 1.25;   // exponential decay per second
+  const MAXVEL = 2600;     // clamp on a throw
+
+  function measure() {
+    const n = track.children.length / 2;
+    if (n >= 1 && track.children[n]) P = track.children[n].offsetLeft - track.children[0].offsetLeft;
+  }
+  new ResizeObserver(measure).observe(track);
+  window.addEventListener("load", measure);
+  window.addEventListener("resize", measure);
+  setTimeout(measure, 250); setTimeout(measure, 900);
+
+  /* ---- drag ---- */
+  mq.addEventListener("pointerdown", (e) => {
+    dragging = true; moved = 0; vel = 0;
+    dragStartX = lastX = e.clientX;
+    dragOffset = offset;
+    lastT = performance.now();
+    mq.classList.add("dragging");
+    try { mq.setPointerCapture(e.pointerId); } catch {}
+  });
+  mq.addEventListener("pointermove", (e) => {
+    if (!dragging) return;
+    offset = dragOffset + (e.clientX - dragStartX);
+    moved = Math.max(moved, Math.abs(e.clientX - dragStartX));
+    const now = performance.now();
+    const dt = (now - lastT) / 1000;
+    if (dt > 0 && lastT) {
+      const inst = (e.clientX - lastX) / dt;
+      vel = clamp(vel * 0.7 + inst * 0.3, -MAXVEL, MAXVEL);
+    }
+    lastX = e.clientX; lastT = now;
+    if (moved > 8) hint.classList.add("gone");
+  });
+  function endDrag(e) {
+    if (!dragging) return;
+    dragging = false;
+    mq.classList.remove("dragging");
+    try { mq.releasePointerCapture(e.pointerId); } catch {}
+  }
+  mq.addEventListener("pointerup", endDrag);
+  mq.addEventListener("pointercancel", endDrag);
+  mq.addEventListener("click", (e) => { if (moved > 8) e.preventDefault(); }, true);
+  mq.addEventListener("mouseenter", () => (hover = true));
+  mq.addEventListener("mouseleave", () => (hover = false));
+
+  const toggle = $("toggle");
+  function paintToggle() {
+    toggle.textContent = paused ? "[ play motion ]" : "[ pause motion ]";
+    toggle.classList.toggle("off", paused);
+  }
+  toggle.addEventListener("click", () => { paused = !paused; paintToggle(); });
+  paintToggle();
+
+  /* ---- frame loop ---- */
+  let prev = performance.now();
+  function frame(now) {
+    const dt = Math.min(0.05, (now - prev) / 1000); prev = now;
+
+    if (!dragging) {
+      offset += vel * dt;                 // inertia
+      vel *= Math.exp(-dt * FRICTION);
+      if (Math.abs(vel) < 3) vel = 0;
+      if (!paused && !hover && vel === 0) offset -= DRIFT * dt;   // calm idle drift
+    }
+
+    if (P > 0) offset = ((offset % P) + P) % P - P;   // wrap into [-P, 0) — seamless
+
+    track.style.transform = `translate3d(${offset.toFixed(2)}px, 0, 0)`;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+</script>
+</body>
+</html>
