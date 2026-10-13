@@ -79,3 +79,55 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
+
+/* tight leading for the landing manifesto headline (overrides the global 1.75em line-height) */
+.story-head,
+.story-head * {
+  line-height: 1;
+}
+
+/* cover tile flip (landing) */
+.cover-tiles {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+.cover-tile {
+  position: absolute;
+  perspective: 800px;
+}
+.cover-tile .flip {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: rotateY(var(--ry, 0deg));
+  transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--d, 0ms);
+}
+.cover-tile .back {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* semantic colour tokens — values per theme (next-themes toggles .dark/.light on <html>) */
+:root,
+.dark {
+  --c-surface: 36 36 36; /* #242424 charcoal */
+  --c-surface-mid: 64 59 59; /* #403B3B mid charcoal (overlays) */
+  --c-ink: 232 231 226; /* #E8E7E2 cream */
+  --c-rose: 205 122 122; /* #CD7A7A */
+  --c-sand: 191 175 156; /* #BFAF9C */
+}
+.light {
+  --c-surface: 254 251 251; /* #FEFBFB cream */
+  --c-surface-mid: 232 231 226; /* #E8E7E2 */
+  --c-ink: 36 36 36; /* #242424 charcoal */
+  --c-rose: 221 166 166; /* #DDA6A6 */
+  --c-sand: 122 115 111; /* #7A736F */
+}

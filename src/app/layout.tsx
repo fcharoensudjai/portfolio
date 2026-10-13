@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import React from "react";
+import { Roboto_Mono } from "next/font/google";
 import { Header } from "@/components/header/header";
 import "./globals.css";
 import { ProviderTheme } from "@/app/providers/themeprovider";
@@ -10,6 +11,12 @@ import { VisibilityProvider } from "@/app/contexts/recentsvisibilitycontext";
 import { VisibilityProvider2 } from "@/app/contexts/introvisibilitycontext";
 import { VisibilityProvider3 } from "@/app/contexts/contactvisibilitycontext";
 import LenisProvider from "@/app/providers/lenisprovider";
+
+const robotoMono = Roboto_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-mono",
+});
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
@@ -23,7 +30,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning={true}>
+    <html lang="en" suppressHydrationWarning={true} className={robotoMono.variable}>
       <body>
         <ProviderTheme>
           <LenisProvider>

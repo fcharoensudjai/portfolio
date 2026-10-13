@@ -17,11 +17,12 @@ import Fader from "@/components/stylers/fader";
 import { Preloader } from "@/components/stylers/page-loading/preloader";
 import { useInView } from "react-intersection-observer";
 import { useVisibility } from "@/app/contexts/recentsvisibilitycontext";
-import { useVisibility2 } from "@/app/contexts/introvisibilitycontext";
-import { motion, useMotionValue, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Petal } from "@/components/petal";
 import { UnderlinedLink } from "@/components/underlinedlink";
 import { GalleryCarousel } from "@/components/home/gallery-carousel";
+import { ProfileSequence } from "@/components/home/profile-sequence";
+import { CoverTiles } from "@/components/home/cover-tiles";
 
 export default function Home() {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -42,29 +43,6 @@ export default function Home() {
     setIsRecentsInView(isRecentsInView);
   }, [isRecentsInView, setIsRecentsInView]);
 
-  // controlling the underlining for the intro section
-
-  const { setIsIntroInView } = useVisibility2();
-
-  const { ref: introRef, inView: isIntroInView } = useInView({
-    threshold: 0.5,
-    triggerOnce: false,
-  });
-
-  // used to update the intro context with visibility state
-  React.useEffect(() => {
-    setIsIntroInView(isIntroInView);
-  }, [isIntroInView, setIsIntroInView]);
-
-  // flower rotating speed (mirrors carousel motion profile)
-  const rotateValue = useMotionValue(0);
-  const [isIntroFlowerHovered, setIsIntroFlowerHovered] = useState(false);
-  const flowerDirectionRef = React.useRef<"up" | "down" | null>(null);
-  const flowerScrollingRef = React.useRef(false);
-  const flowerHoverRef = React.useRef(false);
-  const flowerSpeedMultiplierRef = React.useRef(1);
-  const flowerScrollBoostRef = React.useRef(1);
-
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
     if (hash) {
@@ -79,96 +57,6 @@ export default function Home() {
       setTimeout(() => attemptScroll(), 1100);
     }
   }, []);
-
-  const previousScrollRef = React.useRef({ y: 0, t: 0 });
-  const speedDecayTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    previousScrollRef.current = { y: window.scrollY, t: performance.now() };
-
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const now = performance.now();
-      const { y: prevY, t: prevT } = previousScrollRef.current;
-      const deltaY = currentScrollY - prevY;
-      const deltaT = Math.max(1, now - prevT);
-
-      if (deltaY > 0) {
-        flowerDirectionRef.current = "down";
-      } else if (deltaY < 0) {
-        flowerDirectionRef.current = "up";
-      }
-
-      const pxPerSecond = (Math.abs(deltaY) / deltaT) * 1000;
-      const hasMeaningfulScroll = Math.abs(deltaY) > 8 && pxPerSecond > 260;
-      if (hasMeaningfulScroll) {
-        flowerScrollingRef.current = true;
-      }
-
-      previousScrollRef.current = { y: currentScrollY, t: now };
-
-      if (speedDecayTimeoutRef.current) {
-        clearTimeout(speedDecayTimeoutRef.current);
-      }
-
-      speedDecayTimeoutRef.current = setTimeout(() => {
-        flowerScrollingRef.current = false;
-      }, 120);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-
-      if (speedDecayTimeoutRef.current) {
-        clearTimeout(speedDecayTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    flowerHoverRef.current = isIntroFlowerHovered;
-  }, [isIntroFlowerHovered]);
-
-  useEffect(() => {
-    let rafId: number;
-    let lastTime = performance.now();
-
-    const frame = (now: number) => {
-      const dt = (now - lastTime) / 1000;
-      lastTime = now;
-
-      const baseSpeed = 45;
-      const targetHoverMultiplier = flowerHoverRef.current ? 0.45 : 1;
-      const targetScrollBoost = flowerScrollingRef.current ? 1.65 : 1;
-
-      flowerSpeedMultiplierRef.current +=
-        (targetHoverMultiplier - flowerSpeedMultiplierRef.current) * Math.min(1, dt * 7);
-      flowerScrollBoostRef.current += (targetScrollBoost - flowerScrollBoostRef.current) * Math.min(1, dt * 4.5);
-
-      const speed = baseSpeed * flowerSpeedMultiplierRef.current * flowerScrollBoostRef.current;
-      const direction = flowerDirectionRef.current === "up" ? -1 : 1;
-
-      let nextRotation = rotateValue.get() + direction * speed * dt;
-
-      if (nextRotation >= 360) {
-        nextRotation -= 360;
-      }
-
-      if (nextRotation <= -360) {
-        nextRotation += 360;
-      }
-
-      rotateValue.set(nextRotation);
-      rafId = requestAnimationFrame(frame);
-    };
-
-    rafId = requestAnimationFrame(frame);
-
-    return () => {
-      cancelAnimationFrame(rafId);
-    };
-  }, [rotateValue]);
 
   const [showOverlay, setShowOverlay] = useState(false);
   const toggleOverlay = () => setShowOverlay(!showOverlay);
@@ -189,40 +77,49 @@ export default function Home() {
     setMousePosition({ x: clampedX, y: clampedY });
   };
 
+  const coverRef = React.useRef<HTMLElement | null>(null);
+
   return (
-    <div className={`${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
+    <div className="bg-surface text-ink">
       <Preloader duration={1100} texts={["hello", "สวัสดี"]} delay={500} />
 
-      <div
-        id="home"
-        className={`flex flex-col min-h-dvh ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}
-      >
-        <main className="content-cap flex flex-col flex-grow items-start justify-center text-left text-xs sm:text-md px-6 md:px-16 xl:px-20">
-          <Fader enterDelay={1.5} once={true}>
-            <Title size="large">
-              <div className="relative fixed-line-spacing mt-[75.58px] xl:mt-[103.22px]">
-                fasai <br /> charoensudjai{" "}
-                <Petal positioning="left-[96.5%] bottom-[36.75%] sm:left-[96.75%] sm:bottom-[36.5%] 2xl:left-[97%]" />
-              </div>
-            </Title>
+      <div className="relative h-[320vh]">
+        <section id="home" ref={coverRef} className="sticky top-0 h-[100dvh] overflow-hidden bg-surface text-ink">
+          <div className="relative z-[1] flex h-full flex-col justify-between px-6 pb-[22px] pt-[74px] md:px-16 xl:px-20">
+            <main className="flex flex-1 flex-col items-start justify-center text-left text-xs sm:text-md">
+              <Fader enterDelay={1.5} once={true}>
+                <div>
+                  <Title size="large">
+                    <div className="relative fixed-line-spacing mt-[75.58px] xl:mt-[103.22px]">
+                      fasai <br /> charoensudjai{" "}
+                      <Petal positioning="left-[96.5%] bottom-[36.75%] sm:left-[96.75%] sm:bottom-[36.5%] 2xl:left-[97%]" />
+                    </div>
+                  </Title>
+                </div>
 
-            <div className="my-4">
-              <Textbox>
-                <Scramble delay={2000} hover={true} interval={20}>
-                  {"[ scroll to explore ] "}
-                </Scramble>
-              </Textbox>
+                <div className="my-4">
+                  <Textbox>
+                    <Scramble delay={2000} hover={true} interval={20}>
+                      {"[ scroll to explore ] "}
+                    </Scramble>
+                  </Textbox>
+                </div>
+              </Fader>
+            </main>
+
+            <div className="flex items-center justify-between gap-5 bg-transparent pb-3 pt-3 text-xs xl:pb-7">
+              <LocalTime />
+              <SocialIcons />
             </div>
-          </Fader>
-        </main>
+          </div>
 
-        <div className="flex justify-between items-center px-3 md:px-6 pt-3 pb-3 xl:pb-7 bg-transparent">
-          <LocalTime />
-          <SocialIcons />
-        </div>
+          <CoverTiles coverRef={coverRef} />
 
-        <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav} />
+          <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav} />
+        </section>
       </div>
+
+      <ProfileSequence />
 
       <div className="content-cap">
         <div id="recents" className="px-6 md:px-16 xl:px-20 space-y-[10dvh] md:space-y-[14dvh] lg:space-y-16 my-7">
@@ -468,66 +365,6 @@ export default function Home() {
               </div>
             </Fader>
           </div>
-        </div>
-
-        <div
-          id="intro"
-          className=" px-6 md:px-16 xl:px-20 space-y-5 lg:space-y-12 my-7 min-h-[100dvh] flex flex-col justify-center items-start"
-        >
-          <Fader>
-            <div
-              ref={introRef}
-              className={`py-[75.48px] flex flex-col justify-center md:flex-row md:justify-between space-y-5 sm:space-y-0`}
-            >
-              <div id="" className="md:hidden fixed-line-spacing">
-                <Title size="medium">a brief intro</Title>
-              </div>
-
-              <div className="flex flex-col justify-center lg:justify-between space-y-5 sm:flex-row-reverse sm:space-x-reverse lg:space-x-reverse xl:space-x-reverse sm:space-y-0 ">
-                <motion.div
-                  className="flex justify-center items-center"
-                  style={{ rotate: rotateValue }}
-                  onHoverStart={() => setIsIntroFlowerHovered(true)}
-                  onHoverEnd={() => setIsIntroFlowerHovered(false)}
-                >
-                  <Image
-                    src={theme === "dark" ? `${basePath}/icons/dark/logodark.svg` : `${basePath}/icons/light/logo.svg`}
-                    alt="logo"
-                    width={1000}
-                    height={1000}
-                    style={{
-                      objectFit: "contain",
-                    }}
-                    className="xl:p-2 2xl:p-10 max-w-[75%] h-full"
-                  />
-                </motion.div>
-
-                <div className="sm:max-w-[55%] sm:space-y-5 lg:space-y-7 xl:space-y-10 flex flex-col justify-center items-start">
-                  <div className="hidden md:block fixed-line-spacing">
-                    <Title size="medium">a brief intro</Title>
-                  </div>
-
-                  <div className="flex flex-col justify-center items-center min-h-[200px]">
-                    <Textbox>
-                      <Scramble>
-                        {
-                          "Hi, I'm Fasai, an artist from Thailand and an Economics student at the University of Warwick! I created this website to showcase my passion for illustration, concept art and fanart, combining my love for art with web design in a way that's true to my style. Click the button below to learn more about my journey!"
-                        }
-                      </Scramble>
-                    </Textbox>
-                  </div>
-
-                  <div className={"justify-start hidden sm:block"}>
-                    <Button href="/about"> read my story </Button>
-                  </div>
-                </div>
-
-                <div className="sm:hidden flex justify-center items-center">
-                  <Button href="/about"> read my story </Button>
-                </div>
-              </div>
-            </div>
-          </Fader>
         </div>
 
         <div className={`${theme === "dark" ? "bg-text-light" : "bg-main-light"} px-6 md:px-16 xl:px-20`}>

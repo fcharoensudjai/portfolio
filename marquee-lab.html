@@ -38,7 +38,7 @@
     mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
   }
   .mq.dragging { cursor: grabbing; }
-  .petals { position: absolute; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
+  .petals { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
   .petal { position: absolute; left: 0; top: 0; display: block; transform-origin: 50% 50%; will-change: transform; }
   .mq-track { position: relative; z-index: 1; display: flex; align-items: flex-start; gap: clamp(22px, 3.2vw, 56px); width: max-content; will-change: transform; }
   .card { flex-shrink: 0; display: flex; flex-direction: column; gap: 14px; text-decoration: none; color: var(--ink); }
@@ -176,7 +176,7 @@
       petalList.push({
         el,
         baseX: Math.random(),
-        y: 0.05 + Math.random() * 0.9,
+        y: Math.random() < 0.5 ? 0.01 + Math.random() * 0.10 : 0.88 + Math.random() * 0.10,   // the bands above / below the row
         factor: 0.06 + Math.random() * 0.30,   // how much it lags behind the row
         speed: 6 + Math.random() * 14,          // its own slow float
         phase: Math.random() * Math.PI * 2,
