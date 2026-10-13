@@ -62,7 +62,7 @@ export const Preloader: React.FC<PreloaderProps> = ({
     <AnimatePresence>
       {loading && (
         <motion.div
-          className={`fixed inset-0 z-50 bg-middle-colour text-text-dark flex justify-center text-2xl md:text-3xl xl:text-4xl items-center`}
+          className="fixed inset-0 z-50 bg-surface-mid text-ink flex justify-center text-2xl md:text-3xl xl:text-4xl items-center"
           initial={{ y: 0 }}
           animate={{ y: 0 }}
           exit={{ y: "-100%" }}

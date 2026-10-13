@@ -1,6 +1,5 @@
 import Image from "next/image";
 import React, { useState } from "react";
-import { useTheme } from "next-themes";
 
 interface ImageFrameProps {
   src: string;
@@ -23,7 +22,6 @@ export const ImageFrame: React.FC<ImageFrameProps> = ({
   pulsePlaceholder = true,
   onContextMenu,
 }) => {
-  const { theme } = useTheme();
   const [isImageReady, setIsImageReady] = useState(false);
 
   const handleImageReady = async (img: HTMLImageElement) => {
@@ -38,7 +36,7 @@ export const ImageFrame: React.FC<ImageFrameProps> = ({
     }
   };
 
-  const defaultPlaceholderClassName = theme === "dark" ? "bg-middle-colour" : "bg-text-dark";
+  const defaultPlaceholderClassName = "bg-surface-mid";
 
   return (
     <div className={`absolute inset-0 ${className ?? ""}`}>

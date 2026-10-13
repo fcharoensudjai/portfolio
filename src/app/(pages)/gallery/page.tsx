@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useTheme } from "next-themes";
 import { MobileNav } from "@/components/header/mobilenav";
 import { Footer } from "@/components/footer/footer";
 import { Contact } from "@/components/contact";
@@ -17,7 +16,6 @@ import { AnimatePresence, motion } from "framer-motion";
 
 export default function Gallery() {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-  const { theme } = useTheme();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isViewerOpen, setIsViewerOpen] = useState<number | null>(null);
 
@@ -30,7 +28,7 @@ export default function Gallery() {
   );
 
   return (
-    <div className={`${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
+    <div className="bg-surface text-ink">
       <Preloader texts={["gallery"]} delay={200} interval={40} />
       <MobileNav isNavOpen={isNavOpen} toggleNav={() => setIsNavOpen(!isNavOpen)} />
 
@@ -73,7 +71,7 @@ export default function Gallery() {
         </div>
       </div>
 
-      <section className={`relative ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+      <section className="relative bg-surface">
         <div className="md:h-[130vh]">
           <div className="sticky top-0 z-10">
             <Fader>
@@ -83,7 +81,7 @@ export default function Gallery() {
         </div>
       </section>
 
-      <section className={`relative z-20 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+      <section className="relative z-20 bg-surface">
         <Footer />
       </section>
 
@@ -94,7 +92,7 @@ export default function Gallery() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.65, 0, 0.35, 1] }}
-            className={`fixed h-[100dvh] inset-0 z-30 backdrop-blur-[8px] bg-opacity-50 ${theme === "dark" ? "bg-middle-colour" : "bg-text-dark"}`}
+            className="fixed h-[100dvh] inset-0 z-30 backdrop-blur-[8px] bg-opacity-50 bg-surface-mid"
           >
             <ImageViewer
               src={`${basePath}${sortedImageData[isViewerOpen].src}`}

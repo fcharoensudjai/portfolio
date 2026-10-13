@@ -24,8 +24,8 @@ const NAV_LABELS: Record<NavKey, string> = {
   contact: "contact",
 };
 
-const DARK_TEXT_RGB = { r: 36, g: 36, b: 36 }; // text-light (#242424)
-const LIGHT_TEXT_RGB = { r: 232, g: 231, b: 226 }; // text-dark (#E8E7E2)
+const DARK_TEXT_RGB = { r: 36, g: 36, b: 36 }; // ink (light theme) #242424
+const LIGHT_TEXT_RGB = { r: 232, g: 231, b: 226 }; // ink (dark theme) #E8E7E2
 const MIN_VISIBLE_IMAGE_ALPHA = 0.35;
 let sharedSampleCanvas: HTMLCanvasElement | null = null;
 let sharedSampleCtx: CanvasRenderingContext2D | null = null;
@@ -457,7 +457,7 @@ export const Header = () => {
 
       <header
         data-header-layer="blur"
-        className={`fixed top-0 left-0 bg-transparent backdrop-blur-[8px] w-screen z-40 ${theme === "dark" ? "text-text-dark" : "text-text-light"}`}
+        className="fixed top-0 left-0 bg-transparent backdrop-blur-[8px] w-screen z-40 text-ink"
       >
         <div ref={headerRowRef} className="flex items-center justify-between px-4 py-2 md:px-6">
           <LogoButton />

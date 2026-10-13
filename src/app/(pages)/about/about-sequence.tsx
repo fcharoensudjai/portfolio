@@ -15,7 +15,7 @@ interface AboutSequenceProps {
 
 export const AboutSequence: React.FC<AboutSequenceProps> = ({ theme }) => {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-  const bgClass = theme === "dark" ? "bg-text-light" : "bg-main-light";
+  const bgClass = "bg-surface";
 
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -132,8 +132,8 @@ export const AboutSequence: React.FC<AboutSequenceProps> = ({ theme }) => {
           <div className="flex flex-col gap-5 w-full mt-auto mb-auto">
             {aboutSequenceItems.map((item, index) => {
               const isActive = activeIndex === index;
-              const activeColorClass = theme === "dark" ? "text-text-dark" : "text-black";
-              const inactiveClass = theme === "dark" ? "text-text-dark/50" : "text-black/50";
+              const activeColorClass = "text-ink";
+              const inactiveClass = "text-ink/50";
               return (
                 <div key={item.id} className="flex items-center gap-3 relative group whitespace-nowrap">
                   <div className="w-[32px] flex justify-center items-center h-[32px]">

@@ -13,6 +13,7 @@
 ## 2. guardrails (do not break)
 
 - **palette frozen** — cream `#FEFBFB`, charcoal `#242424`/`#403B3B`, rose `#DDA6A6`/`#CD7A7A`, sand `#BFAF9C`. no new colours.
+- **media scrim (open)** — carousel cards sit on a fixed `from-black` gradient with fixed cream text (`text-[#E8E7E2]`), theme-independent by design. revisit: should this be a semantic token (`ink-on-media`) instead of a hardcoded value?
 - **type stays** — Poppins (display) + Roboto Mono (copy) on the 1.25 scale
 - **mono is the voice** — the "wall of mono" is intentional; the fix is *staging*, not the font
 - **scramble stays as the reveal language** — reveal-on-enter, hover-on-interactive
@@ -105,7 +106,19 @@ keep the one-gesture swipe. optional polish (low priority vs recents):
 3. intro manifesto line
 4. recents two-act rebuild
 5. (optional) transition polish
+6. gallery redesign
 
-## 11. what we're NOT changing
+## 11. gallery redesign
+
+current `/gallery`: a responsive card grid (masonry-ish via row/col spans) → hover overlay "see full image" → `ImageViewer` modal.
+
+open: this is a redesign, not a touch-up. candidates to chew on:
+- grid density/pacing — more whitespace + editorial rhythm vs the current dense grid
+- card treatment — does the hover overlay + modal survive, or does each piece get more presence?
+- archive-vs-spotlight tension — what should gallery say that the two recents flagships don't?
+
+**needs from fasai:** direction before build — what feels off about the current gallery, and what should it communicate?
+
+## 12. what we're NOT changing
 
 palette · fonts · type scale · motifs (caret, petal, corner brackets, dotted rules) · mono voice · two-click patterns · scramble-as-reveal · the preloader/exit gesture

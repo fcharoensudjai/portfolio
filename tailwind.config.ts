@@ -29,15 +29,7 @@ const config: Config = {
       },
       colors: {
         transparent: "transparent",
-        "main-light": "#FEFBFB",
-        "text-dark": "#E8E7E2",
-        "secondary-light": "#7A736F",
-        "middle-colour": "#403B3B",
-        "text-light": "#242424",
         black: "#000000",
-        "secondary-dark": "#BFAF9C",
-        "accent-light": "#DDA6A6",
-        "accent-dark": "#CD7A7A",
         // semantic tokens — theme values live in globals.css (--c-*)
         surface: "rgb(var(--c-surface) / <alpha-value>)",
         "surface-mid": "rgb(var(--c-surface-mid) / <alpha-value>)",

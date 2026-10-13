@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { Title } from "@/components/title";
-import { useTheme } from "next-themes";
 import { MobileNav } from "@/components/header/mobilenav";
 import { LocalTime } from "@/components/footer/localtime";
 import { SocialIcons } from "@/components/footer/socialicons";
@@ -26,7 +25,6 @@ import { CoverTiles } from "@/components/home/cover-tiles";
 
 export default function Home() {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-  const { theme } = useTheme();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const toggleNav = () => setIsNavOpen(!isNavOpen);
 
@@ -149,7 +147,7 @@ export default function Home() {
             </Fader>
           </div>
 
-          <div className={`${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+          <div className="bg-surface">
             <Fader>
               <div className="flex justify-center items-center py-[10dvh] md:py-[12dvh]">
                 <div className="space-y-3 lg:space-y-5">
@@ -178,9 +176,7 @@ export default function Home() {
                             transition={{ duration: 0.2, ease: [0.65, 0, 0.35, 1] }}
                             style={{ cursor: showOverlay ? "none" : "default" }}
                           >
-                            <div
-                              className={`absolute inset-0 backdrop-blur-[2px] rounded-xl ${theme === "dark" ? "bg-middle-colour" : "bg-text-dark"} bg-opacity-60`}
-                            >
+                            <div className="absolute inset-0 backdrop-blur-[2px] rounded-xl bg-surface-mid bg-opacity-60">
                               <motion.div
                                 className="absolute border-corner z-20 flex justify-center items-center"
                                 style={{
@@ -256,7 +252,7 @@ export default function Home() {
             </Fader>
           </div>
 
-          <div className={`${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+          <div className="bg-surface">
             <Fader>
               <div className="flex justify-center items-center py-[10dvh] md:py-[12dvh]">
                 <div className="space-y-3 lg:space-y-5">
@@ -285,9 +281,7 @@ export default function Home() {
                             transition={{ duration: 0.2, ease: [0.65, 0, 0.35, 1] }}
                             style={{ cursor: showOverlay ? "none" : "default" }}
                           >
-                            <div
-                              className={`absolute inset-0 backdrop-blur-[2px] rounded-xl ${theme === "dark" ? "bg-middle-colour" : "bg-text-dark"} bg-opacity-60`}
-                            >
+                            <div className="absolute inset-0 backdrop-blur-[2px] rounded-xl bg-surface-mid bg-opacity-60">
                               <motion.div
                                 className="absolute border-corner z-20 flex justify-center items-center"
                                 style={{
@@ -367,7 +361,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className={`${theme === "dark" ? "bg-text-light" : "bg-main-light"} px-6 md:px-16 xl:px-20`}>
+        <div className="bg-surface px-6 md:px-16 xl:px-20">
           <Fader once={true}>
             <div className="flex justify-center items-center py-10 md:py-12 lg:py-14">
               <GalleryCarousel />
@@ -376,7 +370,7 @@ export default function Home() {
         </div>
       </div>
 
-      <section className={`relative ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+      <section className="relative bg-surface">
         <div className="md:h-[130vh]">
           <div className="sticky top-0 z-10">
             <Fader>
@@ -386,7 +380,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className={`relative z-20 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+      <section className="relative z-20 bg-surface">
         <Footer />
       </section>
     </div>

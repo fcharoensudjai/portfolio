@@ -68,7 +68,7 @@ export const Petal: React.FC<PetalProps> = ({ positioning, enterDelay = 0.75, si
   return (
     <div
       ref={parentRef}
-      className={`absolute ${petalVariants({ size })} ${positioning} ${isFlying ? "bg-transparent" : theme === "dark" ? "bg-text-light" : "bg-main-light"}`}
+      className={`absolute ${petalVariants({ size })} ${positioning} ${isFlying ? "bg-transparent" : "bg-surface"}`}
     >
       <motion.div
         ref={ref}

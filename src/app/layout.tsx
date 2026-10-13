@@ -41,7 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <Highlighter />
                     <PetalFollow />
                     <Header />
-                    <div className={`bg-middle-colour`}>{children}</div>
+                    <div className={`bg-surface-mid`}>{children}</div>
                   </VisibilityProvider3>
                 </VisibilityProvider2>
               </VisibilityProvider>

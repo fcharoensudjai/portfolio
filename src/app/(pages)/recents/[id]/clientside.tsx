@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { useTheme } from "next-themes";
 import { MobileNav } from "@/components/header/mobilenav";
 import { Footer } from "@/components/footer/footer";
 import { Contact } from "@/components/contact";
@@ -21,7 +20,6 @@ import { BtsCard } from "@/components/card/bts-card";
 
 export default function Recent() {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-  const { theme } = useTheme();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const toggleNav = () => setIsNavOpen(!isNavOpen);
 
@@ -111,9 +109,7 @@ export default function Recent() {
 
   if (!artwork) {
     return (
-      <div
-        className={`h-[100dvh] inset-0 flex flex-col space-y-3 md:space-y-5 justify-center items-center ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}
-      >
+      <div className="h-[100dvh] inset-0 flex flex-col space-y-3 md:space-y-5 justify-center items-center bg-surface text-ink">
         <div> artwork not found! </div>
         <Button href="/#home"> return home </Button>
       </div>
@@ -121,9 +117,7 @@ export default function Recent() {
   }
 
   return (
-    <div
-      className={`min-h-[100dvh] flex flex-col ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}
-    >
+    <div className="min-h-[100dvh] flex flex-col bg-surface text-ink">
       <Preloader texts={[artwork.title]} delay={200} interval={40} />
       <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav} />
       <div className={`h-[100dvh] flex flex-col xl:space-y-2 2xl:space-y-4`}>
@@ -141,7 +135,7 @@ export default function Recent() {
           />
           <div
             data-nav-sample-ignore="true"
-            className={`absolute inset-0 bg-gradient-to-b from-45% from-transparent ${theme === "dark" ? "to-text-light" : "to-main-light"} pointer-events-none`}
+            className="absolute inset-0 bg-gradient-to-b from-45% from-transparent to-surface pointer-events-none"
           />
           <div className="absolute inset-x-0 bottom-0" data-nav-sample-ignore="true">
             <div className="content-cap px-6 md:px-16 xl:px-20 py-3 lg:py-6">
@@ -206,7 +200,7 @@ export default function Recent() {
             <motion.div className={`sticky top-0 z-20 bg-transparent h-[100dvh] w-[100%] pointer-events-none`}>
               <Fader threshold={0}>
                 <motion.div
-                  className={`relative w-[100%] h-[50dvh] ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}
+                  className="relative w-[100%] h-[50dvh] bg-surface"
                   initial={{ y: 0 }}
                   animate={{ y: isBtsExpanded ? yBehind * 0.8 : 0 }}
                   transition={{ delay: 0, duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
@@ -236,7 +230,7 @@ export default function Recent() {
               </div>
 
               <motion.div
-                className={`relative w-[100%] h-[50dvh] ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}
+                className="relative w-[100%] h-[50dvh] bg-surface"
                 initial={{ y: 0 }}
                 animate={{ y: isBtsExpanded ? yScenes * 0.8 : 0 }}
                 transition={{ delay: 0, duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
@@ -268,7 +262,7 @@ export default function Recent() {
             <div className={`h-[100dvh]`}> </div>
           </div>
         </Fader>
-        <div className={`${theme === "dark" ? "bg-text-light" : "bg-main-light"} px-6 md:px-16 xl:px-20 my-7`}>
+        <div className="bg-surface px-6 md:px-16 xl:px-20 my-7">
           <Fader enterDelay={0.6} threshold={0.2} once={true}>
             <div className="flex justify-center items-center py-10 md:py-12 lg:py-14">
               <GalleryCarousel labelText="see the gallery" />
@@ -276,7 +270,7 @@ export default function Recent() {
           </Fader>
         </div>
       </div>
-      <section className={`relative ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+      <section className="relative bg-surface">
         <div className="md:h-[130vh]">
           <div className="sticky top-0 z-10">
             <Fader>
@@ -286,7 +280,7 @@ export default function Recent() {
         </div>
       </section>
 
-      <section className={`relative z-20 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+      <section className="relative z-20 bg-surface">
         <Footer />
       </section>
     </div>

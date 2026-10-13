@@ -1,7 +1,6 @@
 import Fader from "@/components/stylers/fader";
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useTheme } from "next-themes";
 import { Scramble } from "@/components/stylers/scramblerthai";
 import { ImageFrame } from "@/components/card/shared/imageframe";
 import { useHoverTracker } from "@/components/card/shared/use-hover-tracker";
@@ -18,8 +17,6 @@ export const Card: React.FC<CardProps> = ({ src, alt, className, onClick }) => {
   const handleContextMenu = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
     e.preventDefault();
   };
-
-  const { theme } = useTheme();
 
   const textBoxWidth = 175;
   const textBoxHeight = 50;
@@ -60,9 +57,7 @@ export const Card: React.FC<CardProps> = ({ src, alt, className, onClick }) => {
               transition={{ duration: 0.2, ease: [0.65, 0, 0.35, 1] }}
               style={{ cursor: showOverlay ? "none" : "default" }}
             >
-              <div
-                className={`absolute inset-0 backdrop-blur-[2px] ${theme === "dark" ? "bg-middle-colour" : "bg-text-dark"} bg-opacity-60`}
-              >
+              <div className="absolute inset-0 backdrop-blur-[2px] bg-surface-mid bg-opacity-60">
                 <motion.div
                   className="absolute border-corner z-20 flex justify-center items-center"
                   style={{

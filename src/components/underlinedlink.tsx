@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useTheme } from "next-themes";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useExitAnimation } from "@/app/contexts/exitcontext";
@@ -46,7 +45,6 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
 }) => {
   const [hovered, setHovered] = useState(false);
   const [isScrollNavigating, setIsScrollNavigating] = useState(false);
-  const { theme } = useTheme();
   const path = usePathname();
   const baseCurrentPath = path.split("#")[0];
   const baseHref = href.split("#")[0];
@@ -168,7 +166,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
         <div
           className={`
                 border-t-[3px] transition-all duration-[350ms] ease-in-out
-                ${theme === "dark" ? "border-accent-dark" : "border-accent-light"}
+                border-rose
                 ${(hovered && line) || isActive || isVisible || isScrollNavigating ? "w-full" : "w-0"}
             `}
         ></div>
@@ -186,7 +184,7 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
         <div
           className={`
                 border-t-[3px] transition-all duration-[350ms] ease-in-out
-                ${theme === "dark" ? "border-accent-dark" : "border-accent-light"}
+                border-rose
                 ${(hovered && line) || isActive || isVisible || isScrollNavigating ? "w-full" : "w-0"}
             `}
         ></div>

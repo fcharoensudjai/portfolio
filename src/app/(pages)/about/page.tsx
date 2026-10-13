@@ -21,7 +21,7 @@ export default function Gallery() {
   const toggleNav = () => setIsNavOpen(!isNavOpen);
 
   return (
-    <div className={`${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
+    <div className="bg-surface text-ink">
       <Preloader texts={["about"]} delay={200} interval={40} />
       <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav} />
       <div className="content-cap">
@@ -65,7 +65,7 @@ export default function Gallery() {
               <AboutSequence theme={theme} />
             </div>
 
-            <div className={`${theme === "dark" ? "bg-text-light" : "bg-main-light"} px-6 md:px-16 xl:px-20 my-7`}>
+            <div className="bg-surface px-6 md:px-16 xl:px-20 my-7">
               <Fader enterDelay={0.3} threshold={0.3} once={true}>
                 <div className="flex justify-center items-center py-10 md:py-12 lg:py-14">
                   <GalleryCarousel labelText="see the gallery" />
@@ -75,7 +75,7 @@ export default function Gallery() {
           </div>
         </div>
       </div>
-      <section className={`relative ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+      <section className="relative bg-surface">
         <div className="md:h-[130vh]">
           <div className="sticky top-0 z-10">
             <Fader>
@@ -85,7 +85,7 @@ export default function Gallery() {
         </div>
       </section>
 
-      <section className={`relative z-20 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
+      <section className="relative z-20 bg-surface">
         <Footer />
       </section>
     </div>

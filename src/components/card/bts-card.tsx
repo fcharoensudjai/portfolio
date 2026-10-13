@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTheme } from "next-themes";
 import { Scramble } from "@/components/stylers/scramblerthai";
 import { useHoverTracker } from "@/components/card/shared/use-hover-tracker";
 
@@ -17,8 +16,6 @@ const BTS_TRACKER_WIDTH = 175;
 const BTS_TRACKER_HEIGHT = 50;
 
 export const BtsCard: React.FC<BtsCardProps> = ({ src, alt, href, isBtsExpanded, onContextMenu }) => {
-  const { theme } = useTheme();
-
   const {
     isHovered,
     cursorPosition,
@@ -71,9 +68,7 @@ export const BtsCard: React.FC<BtsCardProps> = ({ src, alt, href, isBtsExpanded,
         <AnimatePresence>
           {showOverlay && (
             <motion.div
-              className={`absolute inset-0 z-10 backdrop-blur-[2px] ${
-                theme === "dark" ? "bg-middle-colour" : "bg-text-dark"
-              } bg-opacity-60 rounded-xl`}
+              className="absolute inset-0 z-10 backdrop-blur-[2px] bg-surface-mid bg-opacity-60 rounded-xl"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

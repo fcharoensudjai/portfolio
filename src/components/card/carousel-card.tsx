@@ -4,7 +4,6 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { useTheme } from "next-themes";
 import { ImageFrame } from "@/components/card/shared/imageframe";
 import { Title } from "@/components/title";
 import { useExitAnimation } from "@/app/contexts/exitcontext";
@@ -30,7 +29,6 @@ export const CarouselCard: React.FC<CarouselCardProps> = ({
   wide = false,
 }) => {
   const path = usePathname();
-  const { theme } = useTheme();
   const { setIsExit } = useExitAnimation();
   const [showOverlay, setShowOverlay] = React.useState(false);
 
@@ -69,7 +67,7 @@ export const CarouselCard: React.FC<CarouselCardProps> = ({
       <AnimatePresence>
         {showOverlay && (
           <motion.div
-            className={`absolute inset-0 z-[18] pointer-events-none backdrop-blur-[1px] ${theme === "dark" ? "bg-middle-colour" : "bg-text-dark"} bg-opacity-55`}
+            className="absolute inset-0 z-[18] pointer-events-none backdrop-blur-[1px] bg-surface-mid bg-opacity-55"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -80,13 +78,13 @@ export const CarouselCard: React.FC<CarouselCardProps> = ({
 
       <div className="absolute inset-x-0 bottom-0 h-[38%] z-[15] pointer-events-none bg-gradient-to-t from-black via-black/65 to-transparent" />
 
-      <div className="absolute inset-x-0 bottom-0 z-20 p-3 sm:p-4 lg:p-5 text-text-dark">
+      <div className="absolute inset-x-0 bottom-0 z-20 p-3 sm:p-4 lg:p-5 text-[#E8E7E2]">
         <div className="lowercase leading-tight">
           <Title size="carousel">{title.toLowerCase()}</Title>
         </div>
 
         <div className="mt-0.2 md:mt-0.5 lg:mt-1 w-fit pointer-events-auto group/cta">
-          <div className="flex items-center gap-0.5 sm:gap-0.75 md:gap-1 text-xxs sm:text-xs text-text-dark lowercase">
+          <div className="flex items-center gap-0.5 sm:gap-0.75 md:gap-1 text-xxs sm:text-xs text-[#E8E7E2] lowercase">
             <Scramble hover={true} navigate={showOverlay} interval={20}>{`[ ${ctaText.toLowerCase()}`}</Scramble>
             <span className="inline-block transition-transform duration-300 ease-out group-hover/card:translate-x-[25%]">
               →
