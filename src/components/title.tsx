@@ -9,22 +9,24 @@ const poppins = Poppins({
 
 interface TitleProps {
   children: React.ReactNode;
-  size?: "small" | "medium" | "stage" | "large" | "about" | "carousel";
+  /** Roles, not locations. Each ceiling comes from the type ladder in globals.css, so a size is
+   *  changed in one place for the whole site. `large` and `medium` still carry their old names — they
+   *  are on the rename list; `subhead`/`about`/`carousel` keep theirs because they're genuinely
+   *  scoped (item titles, the about page, gallery cards). */
+  size?: "small" | "medium" | "display" | "large" | "about" | "carousel";
 }
 
 const titleVariants = cva("font-sans", {
   variants: {
     size: {
-      small: "text-[clamp(1.125rem,2.5vw,1.875rem)]",
-      medium: "text-[clamp(1.25rem,3.5vw,2.5rem)]",
-      // the display size — kept in sync with the profile manifesto headline in profile-sequence.tsx
-      // ("from bangkok to london"): clamp(2rem, 5vw, 4.4rem)
-      stage: "text-[clamp(2rem,5vw,4.4rem)] leading-none tracking-[-0.02em]",
-      // fluid with two ceilings: never taller than 13vh (so it can't overflow a short window), and
-      // never past 8rem — which is this clamp's value at a 1600px viewport, i.e. exactly where
-      // .content-cap stops the frame. Without the second ceiling the type keeps growing on a wide
-      // window while the column it sits in doesn't.
-      large: "text-[clamp(1.5rem,8vw,min(13vh,8rem))]",
+      small: "text-[clamp(1.125rem,2.5vw,var(--type-subhead))]",
+      medium: "text-[clamp(1.25rem,3.5vw,var(--type-title))]",
+      // the editorial size: piece titles AND section headings, so a heading reads 4.4x the body
+      // beneath it wherever it appears. Also what the profile manifesto headline uses.
+      display: "text-[clamp(2rem,5vw,var(--type-display))] leading-none tracking-[-0.02em]",
+      // two ceilings: never taller than the viewport allows (so it can't overflow a short window)
+      // and never past its rem ceiling (so it stops when the frame it sits in does)
+      large: "text-[clamp(1.5rem,8vw,var(--type-name))]",
       about: "text-lg md:text-2xl lg:text-3xl 2xl:text-5xl",
       carousel: "text-xs sm:text-sm lg:text-md",
     },

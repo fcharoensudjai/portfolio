@@ -339,7 +339,10 @@ export const Header = () => {
     >
       <div className="flex h-full items-center justify-end px-4 md:px-6">
         <div className="flex h-full items-center space-x-4">
-          <ul className="flex items-center space-x-4 text-[12.8px] md:text-[16px] xl:text-[20px] pointer-events-auto">
+          {/* the body unit (1rem), not a pinned size: this sits in the same tier as the footer rows and
+              the captions. It grows with the root (16 → 22px), which is the point — it was 27.5px at
+              a 2560 window before, so this is also the fix for the oversized nav. */}
+          <ul className="flex items-center space-x-4 text-sm pointer-events-auto">
             <li>
               <UnderlinedLink exitDuration={1100} href={`/#recents`} isVisible={isRecentsInView} disableMotion={true}>
                 {Array.from(NAV_LABELS.recents).map((char, idx) => (

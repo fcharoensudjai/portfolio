@@ -131,6 +131,31 @@ body {
 
 /* Layout tokens — not theme-dependent, so they sit outside the colour blocks. */
 :root {
+  /* ---- The type ladder ----
+     Body (1rem) is the unit and every step is a multiple of it, so because the root font-size is
+     fluid the whole ladder scales together and these ratios hold at every window size.
+
+        name       viewport-driven   the hero name / "get in touch!" — deliberately off-ladder
+        display    4.4  x body       piece titles + section headings: raven, "from bangkok to
+                                     london", "recent works". THIS is the editorial ratio.
+        title      2.5  x body       secondary headings
+        subhead    1.875 x body      item titles
+        body       1    x body       paragraphs — the unit
+        caption    0.8  x body       captions, tags, chrome. Exactly one 1.25 step below body.
+
+     `display`, `title` and `subhead` sit deliberately off the 1.25 body ladder. That's the same
+     precedent tailwind.config.ts already sets for the titles at the top of its scale (6xl / 7xl,
+     noted there as "adjusted from 4.688rem"). The body ladder itself stays pure 1.25 — 0.8, 1, 1.25,
+     1.563, 1.953, 2.441 … — which is what `caption` follows.
+
+     Everything below the display steps is still a plain tailwind token (text-xs = caption,
+     text-sm = body, text-md = 1.25) — those never left the system, so they don't need a variable. */
+  --type-name: min(13vh, 8rem);
+  --type-display: 4.4rem;
+  --type-title: 2.5rem;
+  --type-subhead: 1.875rem;
+  --type-body: 1rem;
+  --type-caption: 0.8rem;
   /* The fixed nav's OWN HEIGHT, used as clearance: anything that has to start below the nav uses
      this rather than its own magic number (it was repeated in the hero, the contact, the image
      viewer and the about page — four copies of the same value with no explanation).

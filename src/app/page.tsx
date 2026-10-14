@@ -75,8 +75,9 @@ export default function Home() {
                   </Title>
                 </div>
 
-                <div className="my-4">
-                  <Textbox>
+                <div className="my-4 text-ink-secondary">
+                  {/* body unit + secondary ink: it's a prompt, not content */}
+                  <Textbox size="caption">
                     <Scramble delay={2000} hover={true} interval={20}>
                       {"[ scroll to explore ] "}
                     </Scramble>
@@ -85,7 +86,8 @@ export default function Home() {
               </Fader>
             </main>
 
-            <div className="-mx-6 flex items-center justify-between gap-5 bg-transparent px-4 text-xs md:-mx-16 md:px-6 xl:-mx-20">
+            {/* ink, not secondary: the landing page footer is chrome and reads as part of the nav */}
+            <div className="-mx-6 flex items-center justify-between gap-5 bg-transparent px-4 text-xs md:-mx-16 md:px-6 md:text-sm xl:-mx-20">
               <LocalTime />
 
               {/* both chrome rows sit on the same 38.4px inset, straight off the row padding — no
@@ -111,15 +113,20 @@ export default function Home() {
             <Fader>
               <div className="flex justify-center items-center py-[10dvh] md:py-[12dvh] h-[100dvh]">
                 <div className="flex flex-col space-y-6 lg:space-y-7 xl:space-y-10">
-                  <Title size="medium">
+                  {/* the section heading takes the display step, so it reads 4.4x the body beneath
+                      it — the same relationship as a piece title and its caption in the stage */}
+                  <Title size="display">
                     <div className="fixed-line-spacing scroll-mt-[7.5175rem] lg:scroll-mt-[9.25125rem]">
                       {" "}
                       recent works
                     </div>
                   </Title>
 
-                  <div className="lg:w-[65%]">
-                    <Textbox>
+                  <div className="lg:w-[65%] text-ink-secondary">
+                    {/* the body unit (1rem), so this sits at exactly 4.4x below the display heading
+                        above it — same relationship as a piece caption under its title, secondary ink
+                        in both cases */}
+                    <Textbox size="caption">
                       <Scramble>
                         {
                           "Here are the previews for some of the pieces I've been working on lately. Feel free to click on them to see the full image, view some more details, or click on the gallery button to view all of them!"

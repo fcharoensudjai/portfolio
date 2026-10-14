@@ -155,6 +155,7 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
   const segments = Math.max(1, n - 1);
 
   const wrapRef = useRef<HTMLDivElement | null>(null);
+  const plateRef = useRef<HTMLDivElement | null>(null);
   const layers = useRef<Array<HTMLDivElement | null>>([]);
 
   const [active, setActive] = useState(0);
@@ -238,14 +239,36 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
     window.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", remeasure);
     // the copy above the wrapper reflows once the display font lands, which moves the wrapper
-    const observer = new ResizeObserver(remeasure);
-    observer.observe(document.body);
+    const bodyObserver = new ResizeObserver(remeasure);
+    bodyObserver.observe(document.body);
+
+    // Arrival: the caption scrambles the first time the plate is actually scrolled into view —
+    // otherwise the flourish only ever plays at a handoff, so the first piece you land on is the one
+    // you never see it on. Reads the live index off activeRef rather than `active`, because this
+    // effect doesn't re-subscribe per handoff. Fires once, then unobserves.
+    const plate = plateRef.current;
+    let arrivalObserver: IntersectionObserver | null = null;
+    if (plate) {
+      arrivalObserver = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          arrivalObserver?.disconnect();
+          arrivalObserver = null;
+          const el = captionRefs.current[activeRef.current];
+          if (el) scramble(el, items[activeRef.current].caption, { perTick: 5, ms: 18 });
+        },
+        { threshold: 0.35 }
+      );
+      arrivalObserver.observe(plate);
+    }
+
     return () => {
       window.removeEventListener("scroll", update);
       window.removeEventListener("resize", remeasure);
-      observer.disconnect();
+      bodyObserver.disconnect();
+      arrivalObserver?.disconnect();
     };
-  }, [n, segments]);
+  }, [n, segments, items]);
 
   const handlePointerMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const label = overlayLabelRef.current;
@@ -275,7 +298,10 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
             gap. On a wide, short window the height is what binds, so this narrows the whole block and
             centres it — the surplus becomes equal margins instead of dead space beside the artwork.
             On a normal window the ratio of the two means it never engages at all. */}
-        <div className="sticky top-0 mx-auto grid h-[100dvh] max-w-[calc(var(--frame-h)*var(--frame-ratio)+46ch+6.4rem)] grid-cols-1 content-center items-center gap-6 pb-12 pt-[84px] lg:grid-cols-[minmax(280px,46ch)_1fr] lg:gap-x-16 xl:pt-28">
+        <div
+          ref={plateRef}
+          className="sticky top-0 mx-auto grid h-[100dvh] max-w-[calc(var(--frame-h)*var(--frame-ratio)+46ch+6.4rem)] grid-cols-1 content-center items-center gap-6 pb-12 pt-[84px] lg:grid-cols-[minmax(280px,46ch)_1fr] lg:gap-x-16 xl:pt-28"
+        >
           {/* copy — the slides share one grid cell (so the swap costs no layout) and each is
               top-aligned in it. that's what holds the breadcrumb and the title at the same y on
               every piece: only what hangs below them differs, so only the cta moves. */}
@@ -290,17 +316,26 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
                   k === active ? "visible opacity-100" : "invisible opacity-0"
                 }`}
               >
+                {/* secondary ink: the index is a wayfinding label for the piece, not the piece.
+                    Title and CTA below it stay ink, so the slide reads label → title → prose → action. */}
                 <div className="font-mono text-xs text-ink-secondary md:text-sm">[ {pad(k + 1)} ]</div>
 
                 <div className="mt-3">
-                  <Title size="stage">{item.title}</Title>
+                  <Title size="display">{item.title}</Title>
                 </div>
 
                 {/* the scramble owns this span's glyphs — Textbox only supplies the size and leading.
                     the inline line-height matters: globals.css's `* { line-height: 1.75em }` catches
                     this span directly, so without it the caption leads at 1.75 instead of the
                     Textbox's 1.6 — 2.4px a line that arrive silently with the boxes. */}
-                <div className="mt-3 max-w-[46ch] text-ink-secondary">
+                {/* secondary ink: it's the supporting prose under the display title. Applies to every
+                    piece — both slides come off the same markup — so raven and raiden shogun match.
+                    The 46ch measure only applies from lg, where the copy sits beside the image and
+                    needs a measure to hold the gap. Below lg the stage stacks, the column IS the
+                    measure, and an unconditional cap left the prose at half the width of the
+                    breadcrumb, title and image above it. Matches the intro and gallery, whose caps
+                    are lg-only for the same reason. */}
+                <div className="mt-3 text-ink-secondary lg:max-w-[46ch]">
                   <Textbox size="caption" caret={false}>
                     <span
                       style={{ lineHeight: "inherit" }}

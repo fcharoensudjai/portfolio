@@ -46,7 +46,7 @@ export const Footer = ({ exitDuration = 800 }) => {
 
   return (
     <div>
-      <div className="flex justify-between items-end min-h-15dvh lg:min-h-25dvh px-3 md:px-6 pt-3 md:pt-5 pb-5 xl:pb-7 text-xs lg:text-sm xl:text-md">
+      <div className="flex justify-between items-end min-h-15dvh lg:min-h-25dvh px-3 md:px-6 pt-3 md:pt-5 pb-5 xl:pb-7 text-xs md:text-sm">
         <div className="flex flex-row-reverse sm:flex-row items-end justify-start sm:space-x-5">
           <div className="space-x-0 w-[60px] md:w-auto h-full">
             <div className="hidden xl:block">

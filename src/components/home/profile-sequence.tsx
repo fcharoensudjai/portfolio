@@ -2,12 +2,10 @@
 
 import { useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
-import { Poppins } from "next/font/google";
 import { Button } from "@/components/button";
+import { Title } from "@/components/title";
 import { Scramble } from "@/components/stylers/scramblerthai";
 import Fader from "@/components/stylers/fader";
-
-const poppins = Poppins({ subsets: ["latin"], weight: ["400"] });
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 const ease = (t: number) => 1 - Math.pow(1 - t, 3);
@@ -220,25 +218,24 @@ export const ProfileSequence = () => {
       </div>
 
       <div className="mt-[clamp(28px,6vh,64px)]">
-        <h2
-          className="story-head"
-          style={{
-            fontFamily: poppins.style.fontFamily,
-            fontWeight: 400,
-            fontSize: "clamp(2rem, 5vw, 4.4rem)",
-            lineHeight: 1,
-            letterSpacing: "-0.02em",
-            textTransform: "lowercase",
-            marginBottom: "clamp(14px, 2.5vh, 24px)",
-          }}
-        >
-          from bangkok
-          <br />
-          to london
+        {/* the headline rides the same display step as a piece title, so the manifesto and the
+            recents block are the same size by construction instead of by coincidence. `story-head`
+            stays on the wrapper because it's the escape hatch from globals.css's
+            `* { line-height: 1.75em }` — without it the h2's own strut leads at 1.75 and the two
+            lines drift apart even though the span is `leading-none`. */}
+        <h2 className="story-head mb-[clamp(14px,2.5vh,24px)] lowercase">
+          <Title size="display">
+            from bangkok
+            <br />
+            to london
+          </Title>
         </h2>
+        {/* secondary ink — one of the four supporting texts that carries the tier */}
         <div
+          className="text-ink-secondary"
           style={{
-            fontSize: "clamp(0.95rem, 1.6vw, 1.1rem)",
+            // the body unit, which is what makes the ratio with the display headline exactly 4.4:1
+            fontSize: "var(--type-body)",
             lineHeight: 1.6,
             maxWidth: "36em",
             marginLeft: "auto",

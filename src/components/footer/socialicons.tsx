@@ -83,7 +83,7 @@ export const SocialIcons = () => {
         </a>
       </div>
 
-      <div className="hidden md:flex space-x-3 md:text-sm xl:text-md text-xs font-mono md:space-x-5">
+      <div className="hidden md:flex space-x-3 md:text-sm text-xs font-mono md:space-x-5">
         <UnderlinedLink href="https://www.linkedin.com/in/fasaich/" isExternal={true}>
           {" "}
           linkedin{" "}
