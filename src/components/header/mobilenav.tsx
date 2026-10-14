@@ -65,7 +65,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
           </div>
         </div>
 
-        <div className="flex flex-grow justify-end items-center pe-8 pb-[68.38px]">
+        <div className="flex flex-grow justify-end items-center pe-8 pb-[4.27375rem]">
           <ul className="flex flex-col space-y-3 text-xl text-right">
             <li>
               <UnderlinedLink href="/#home" onClick={toggleNav}>

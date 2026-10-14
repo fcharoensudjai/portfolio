@@ -32,7 +32,6 @@ export const ProfileSequence = () => {
   const isDark = resolvedTheme !== "light";
   const rose = isDark ? "#CD7A7A" : "#DDA6A6";
   const sand = isDark ? "#BFAF9C" : "#7A736F";
-  const dim = isDark ? "rgba(232, 231, 226, 0.55)" : "rgba(36, 36, 36, 0.55)";
 
   const sectionRef = useRef<HTMLElement | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
@@ -239,12 +238,11 @@ export const ProfileSequence = () => {
         </h2>
         <div
           style={{
-            fontSize: "clamp(0.95rem, 1.8vw, 1.3rem)",
+            fontSize: "clamp(0.95rem, 1.6vw, 1.1rem)",
             lineHeight: 1.6,
             maxWidth: "36em",
             marginLeft: "auto",
             marginRight: "auto",
-            color: dim,
           }}
         >
           <div>

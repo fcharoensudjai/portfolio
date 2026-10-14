@@ -7,9 +7,10 @@ interface ButtonProps {
   children: React.ReactNode;
   href: string;
   isExternal?: boolean;
+  size?: "sm" | "md";
 }
 
-export const Button = ({ children, href, isExternal = false }: ButtonProps) => {
+export const Button = ({ children, href, isExternal = false, size = "md" }: ButtonProps) => {
   const { theme } = useTheme();
 
   return (
@@ -32,7 +33,11 @@ export const Button = ({ children, href, isExternal = false }: ButtonProps) => {
           backgroundColor: theme === "dark" ? "#E8E7E2" : "#242424",
           borderColor: theme === "dark" ? "#E8E7E2" : "#242424",
         }}
-        className={`rounded-full border-[2px] py-1 md:py-[0.5rem] px-3 lg:px-5 lg:py-2.5 md:text-sm lg:text-md text-xs`}
+        className={`rounded-full border-[2px] ${
+          size === "sm"
+            ? "px-4 py-1 text-xs md:text-sm"
+            : "py-1 md:py-[0.5rem] px-3 lg:px-5 lg:py-2.5 md:text-sm lg:text-md text-xs"
+        }`}
       >
         <UnderlinedLink underline={false} href={href} isExternal={isExternal}>
           {children}

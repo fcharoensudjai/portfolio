@@ -35,6 +35,7 @@ export const PetalFollow = () => {
   const [enabled, setEnabled] = useState(false);
 
   const imgRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const flockRef = useRef<HTMLDivElement | null>(null);
   const pets = useRef(PETALS.map((o) => ({ ...o, x: -200, y: -200, rot: 0 })));
   const mouse = useRef({ x: -200, y: -200 });
   const orbitEl = useRef<Element | null>(null);
@@ -59,6 +60,9 @@ export const PetalFollow = () => {
     const onOver = (e: MouseEvent) => {
       const t = e.target instanceof Element ? e.target : null;
       orbitEl.current = t?.closest("a, button") ?? null;
+      // petals step aside where something else owns the language (the recents stage's
+      // frame): anything marked [data-petals-off] fades the flock out while hovered.
+      flockRef.current?.classList.toggle("opacity-0", !!t?.closest("[data-petals-off]"));
     };
 
     let prev = performance.now();
@@ -129,7 +133,11 @@ export const PetalFollow = () => {
   if (!enabled) return null;
 
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 z-[70]">
+    <div
+      ref={flockRef}
+      aria-hidden
+      className="pointer-events-none fixed inset-0 z-[70] transition-opacity duration-[250ms] ease-out"
+    >
       {PETALS.map((o, i) => (
         <img
           key={i}

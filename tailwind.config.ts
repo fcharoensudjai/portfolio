@@ -34,6 +34,7 @@ const config: Config = {
         surface: "rgb(var(--c-surface) / <alpha-value>)",
         "surface-mid": "rgb(var(--c-surface-mid) / <alpha-value>)",
         ink: "rgb(var(--c-ink) / <alpha-value>)",
+        "ink-secondary": "rgb(var(--c-ink-secondary) / <alpha-value>)",
         rose: "rgb(var(--c-rose) / <alpha-value>)",
         sand: "rgb(var(--c-sand) / <alpha-value>)",
       },

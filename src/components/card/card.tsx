@@ -38,7 +38,7 @@ export const Card: React.FC<CardProps> = ({ src, alt, className, onClick }) => {
 
   return (
     <motion.div
-      className={`relative overflow-hidden rounded-xl min-h-[300px] xl:min-h-[400px] 2xl:min-h-[500px] flex justify-center items-center ${className}`}
+      className={`relative overflow-hidden rounded-xl min-h-[18.75rem] xl:min-h-[25rem] 2xl:min-h-[31.25rem] flex justify-center items-center ${className}`}
       onHoverStart={toggleOverlayEnter}
       onHoverEnd={toggleOverlayLeave}
       onMouseMove={(e: any) => handleMouseMove(e as React.MouseEvent<HTMLElement>)}

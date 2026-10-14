@@ -22,7 +22,7 @@ export const ImageViewer: React.FC<ViewerProps> = ({ src, alt, name, toggleViewe
 
   return (
     <div className={`fixed flex justify-center items-center h-[100dvh] inset-0 z-30`}>
-      <div className={` mt-[75.58px] xl:mt-[103.22px]`}>
+      <div className={` mt-[var(--nav-clearance)]`}>
         <div className={`flex flex-col space-y-3 md:space-y-5 justify-center items-center py-3 lg:py-5`}>
           <div className={`md:text-sm xl:text-md text-xs`}>
             [{" "}
@@ -84,7 +84,7 @@ export const ImageViewer: React.FC<ViewerProps> = ({ src, alt, name, toggleViewe
             alt="close navigation"
             width={35}
             height={35}
-            className="max-w-[40px] fixed right-[1.36rem] md:right-5 lg:right-6 top-[75.48px] xl:top-[103.22px]"
+            className="max-w-[40px] fixed right-[1.36rem] md:right-5 lg:right-6 top-[var(--nav-clearance)]"
           />
         </button>
       </div>

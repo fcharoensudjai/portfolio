@@ -58,7 +58,9 @@ export const CarouselCard: React.FC<CarouselCardProps> = ({
       onMouseEnter={() => setShowOverlay(true)}
       onMouseLeave={() => setShowOverlay(false)}
       className={`group/card isolate relative flex-shrink-0 overflow-hidden rounded-xl aspect-[16/10] ${
-        wide ? "w-[280px] sm:w-[320px] lg:w-[470px] xl:w-[520px]" : "w-[200px] sm:w-[210px] lg:w-[230px]"
+        wide
+          ? "w-[17.5rem] sm:w-[20rem] lg:w-[29.375rem] xl:w-[32.5rem]"
+          : "w-[12.5rem] sm:w-[13.125rem] lg:w-[14.375rem]"
       } ${className ?? ""}`}
       aria-label={`${title} — ${ctaText}`}
     >

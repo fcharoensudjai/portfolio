@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>screen lab | how the recents block behaves on a wide screen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  /* Open this in a real browser at whatever size you want to judge, then resize the window and watch
+     the numbers under each band update. Models 1 and 2 are what the site does today; 3–5 are the
+     three ways of making it grow.
+
+     The whole lab is built from ONE block of markup repeated, and each band only changes three
+     numbers: --u (reading scale), --u-comp (display scale) and --u-lay (gutter + gap scale).
+     That is the entire point of the exercise — a growth model is one dial, and choosing it is
+     choosing which of those three dials moves and how fast. */
+  :root {
+    --surface: #242424;
+    --ink: #e8e7e2;
+    --ink-2: #b0ada6; /* the 6.9:1 secondary you settled on */
+    --rose: #cd7a7a;
+    --hair: rgba(232, 231, 226, 0.14);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--surface);
+    color: var(--ink);
+    font-family: "Roboto Mono", monospace;
+    line-height: 1.75;
+  }
+  code { font-family: inherit; color: var(--rose); }
+
+  .masthead { padding: 48px clamp(20px, 6vw, 100px) 28px; border-bottom: 1px solid var(--hair); }
+  .masthead h1 { font-family: Poppins, sans-serif; font-weight: 400; font-size: 2rem; letter-spacing: -0.02em; }
+  .masthead p { margin-top: 14px; max-width: 68ch; font-size: 14px; color: var(--ink-2); }
+  .masthead b { color: var(--ink); font-weight: 400; }
+
+  .model { border-bottom: 1px solid var(--hair); }
+  .model-head {
+    padding: 22px clamp(20px, 6vw, 100px);
+    display: flex; flex-wrap: wrap; gap: 8px 28px; align-items: baseline;
+    font-size: 13px;
+  }
+  .model-head .name { font-size: 15px; }
+  .model-head .why { flex-basis: 100%; color: var(--ink-2); max-width: 78ch; font-size: 13px; }
+  .readout { color: var(--ink-2); }
+  .readout b { color: var(--rose); font-weight: 400; }
+
+  /* ---- the block, at full viewport width ---- */
+  .recents { padding-inline: calc(8.4 * var(--u-lay)); }     /* .content-cap sits here in the app */
+  .inner { max-width: var(--cap, none); margin-inline: auto; }
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.8fr) 1.5fr;
+    gap: calc(4 * var(--u-lay));
+    align-items: center;
+  }
+  .copy { display: flex; flex-direction: column; align-items: flex-start; }
+  .tag { font-size: calc(0.8 * var(--u)); color: var(--ink-2); }
+  .title {
+    font-family: Poppins, sans-serif; font-weight: 400;
+    font-size: calc(4.4 * var(--u-comp));
+    line-height: 1.05; letter-spacing: -0.02em;
+    margin-top: calc(1.2 * var(--u-lay));
+  }
+  .cap {
+    font-size: calc(1 * var(--u));
+    line-height: 1.6;
+    color: var(--ink-2);
+    max-width: 46ch;               /* ch is font-relative, so the measure survives a growth model */
+    margin-top: calc(1.2 * var(--u-lay));
+  }
+  .btn {
+    display: inline-block;
+    margin-top: calc(1.6 * var(--u-lay));
+    padding: calc(0.4 * var(--u)) calc(1.6 * var(--u));
+    border: 2px solid var(--ink); border-radius: 999px;
+    color: var(--ink); text-decoration: none;
+    font-size: calc(1 * var(--u));
+    white-space: nowrap;
+  }
+  .frame { aspect-ratio: 1600 / 1151; overflow: hidden; border-radius: 16px; }
+  .frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <h1>screen lab — the recents block on a wide screen</h1>
+  <p>
+    Each band below is the same block, full viewport width, with three dials changed:
+    <b>reading scale</b> (the caption), <b>display scale</b> (the title) and
+    <b>layout scale</b> (the gutter and the column gap). Resize the window and the numbers under each
+    label update — <code>measure</code> is how wide the caption actually renders, which is the thing
+    that decides whether a paragraph still reads.
+  </p>
+  <p style="margin-top:10px">
+    Target: open this full-screen on the 2560×1440 display. Bands 1 and 2 are what the site does today.
+  </p>
+</div>
+
+<div id="models"></div>
+
+<script>
+const CAPTION = 'Raiden Shogun has been my favourite character from Genshin Impact for the longest time, and so I wanted to capture her energy. Inspired by the League of Legends splash art styles, this is one of the biggest digital canvases I\'ve ever worked on, and I\'m really happy with how it turned out.';
+
+// 0.2344vw + 13px  -> 16px at 1280, 19px at 2560
+const GROW_19 = 'clamp(16px, calc(0.2344vw + 13px), 19px)';
+// 0.4688vw + 10px  -> 16px at 1280, 22px at 2560
+const GROW_22 = 'clamp(16px, calc(0.4688vw + 10px), 22px)';
+
+const MODELS = [
+  {
+    name: '1 · no cap (the original)',
+    vars: { '--u': '16px', '--u-comp': '16px', '--u-lay': '16px' },
+    why: 'Everything is authored at a laptop size and the frame is free. The image column absorbs all of the extra width; the type never moves. This is what felt awkward at 2560 — an 1453px image beside a 16px paragraph.'
+  },
+  {
+    name: '2 · capped at 1600 (what is live right now)',
+    vars: { '--u': '16px', '--u-comp': '16px', '--u-lay': '16px', '--cap': '1600px' },
+    why: 'The composition is preserved exactly and centred. Costs you ~480px of dead margin a side, which is the thing you called ugly. Nothing grows.'
+  },
+  {
+    name: '3 · grows together, gently (to 19px)',
+    vars: { '--u': GROW_19, '--u-comp': GROW_19, '--u-lay': GROW_19 },
+    why: 'All three dials share one fluid unit: 16px at a 1280 window, 19px at 2560. Every rem-based token in the design rides along for free, gutters included, and the measure stays 46 characters. Read as: the same page, 19% bigger. Fills the width with no dead margin.'
+  },
+  {
+    name: '4 · grows together, hard (to 22px)',
+    vars: { '--u': GROW_22, '--u-comp': GROW_22, '--u-lay': GROW_22 },
+    why: 'Same mechanism, 37%. This is the honest upper bound — watch the measure figure. Past this the paragraph stops being a paragraph and starts being a wall.'
+  },
+  {
+    name: '5 · grows the composition only',
+    vars: { '--u': '16px', '--u-comp': GROW_19, '--u-lay': GROW_19 },
+    why: 'The reading scale is pinned at 16px; the display type, the gutters and the gap grow. Fills the width, keeps the prose at reading size, and is the closest to what a magazine does at a larger trim size. Body copy stops feeling like the poor relation because the air around it grows instead of the other way round.'
+  }
+];
+
+const templates = MODELS.map((m, i) => {
+  const vars = Object.entries(m.vars).map(([k, v]) => `${k}: ${v}`).join('; ');
+  return `
+  <section class="model" id="m${i + 1}">
+    <div class="model-head">
+      <span class="name">${m.name}</span>
+      <span class="readout" data-out>—</span>
+      <p class="why">${m.why}</p>
+    </div>
+    <div class="recents" style="${vars}">
+      <div class="inner">
+        <div class="grid">
+          <div class="copy">
+            <div class="tag">[ 01 ]</div>
+            <div class="title">raiden shogun</div>
+            <p class="cap">${CAPTION}</p>
+            <a class="btn" href="#">more detail</a>
+          </div>
+          <div class="frame"><img src="public/images/raiden-shogun/raiden-home.png" alt="raiden shogun" /></div>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}).join('');
+
+document.getElementById('models').innerHTML = templates;
+
+const readouts = [...document.querySelectorAll('[data-out]')];
+function report() {
+  MODELS.forEach((m, i) => {
+    const wrap = document.querySelector(`#m${i + 1} .recents`);
+    const el = document.querySelector(`#m${i + 1} .inner`);
+    const title = document.querySelector(`#m${i + 1} .title`);
+    const cap = document.querySelector(`#m${i + 1} .cap`);
+    const copy = document.querySelector(`#m${i + 1} .copy`);
+    const frame = document.querySelector(`#m${i + 1} .frame`);
+    const px = (el) => Math.round(parseFloat(getComputedStyle(el).fontSize) * 10) / 10;
+    const w = (el) => Math.round(el.getBoundingClientRect().width);
+    readouts[i].innerHTML =
+      `window <b>${innerWidth}</b> · frame <b>${w(el)}</b> · gutter <b>${Math.round(parseFloat(getComputedStyle(wrap).paddingLeft))}</b>` +
+      ` · title <b>${px(title)}</b> · body <b>${px(cap)}</b>` +
+      ` · measure <b>${w(cap)}</b> (${Math.round(w(cap) / (parseFloat(getComputedStyle(cap).fontSize) * 0.6))} chars)` +
+      ` · image <b>${w(frame)}×${Math.round(frame.getBoundingClientRect().height)}</b>` +
+      ` · text col <b>${w(copy)}</b>`;
+  });
+}
+report();
+addEventListener('resize', report);
+document.fonts.ready.then(report);
+</script>
+</body>
+</html>

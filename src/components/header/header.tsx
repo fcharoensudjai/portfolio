@@ -339,7 +339,7 @@ export const Header = () => {
     >
       <div className="flex h-full items-center justify-end px-4 md:px-6">
         <div className="flex h-full items-center space-x-4">
-          <ul className="flex items-center space-x-4 md:text-sm xl:text-md text-xs pointer-events-auto">
+          <ul className="flex items-center space-x-4 text-[12.8px] md:text-[16px] xl:text-[20px] pointer-events-auto">
             <li>
               <UnderlinedLink exitDuration={1100} href={`/#recents`} isVisible={isRecentsInView} disableMotion={true}>
                 {Array.from(NAV_LABELS.recents).map((char, idx) => (
@@ -459,10 +459,17 @@ export const Header = () => {
         data-header-layer="blur"
         className="fixed top-0 left-0 bg-transparent backdrop-blur-[8px] w-screen z-40 text-ink"
       >
-        <div ref={headerRowRef} className="flex items-center justify-between px-4 py-2 md:px-6">
+        {/* the blur band and this row are both full-bleed on purpose: the chrome stays anchored to the
+            window while .content-cap holds the sections back, so the nav keeps its own inset */}
+        <div ref={headerRowRef} className="flex items-center justify-between px-4 py-[12.8px] md:px-6">
           <LogoButton />
 
           <div className="flex items-center space-x-4">
+            {/* NOT nudged. The row's padding is symmetric and both boxes measured on it exactly
+                (logo box left = 38.4, theme button right = 38.4 from the content edge at 1570), so a
+                nudge here would be guessing at an asset's internal padding. If the two corners still
+                read uneven it's the sun/moon mark's own padding — and that button currently renders
+                no measurable glyph node, so it needs an eye rather than a measurement. */}
             <div className="invisible md:visible ml-4 flex justify-center items-center" ref={themeSwitchRef}>
               <ThemeSwitch
                 color={letterColor(themeSwitchTone)}

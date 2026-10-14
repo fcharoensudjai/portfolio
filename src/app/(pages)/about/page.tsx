@@ -27,7 +27,7 @@ export default function Gallery() {
       <div className="content-cap">
         <Fader enterDelay={1.2} once={true}>
           <div className="min-h-[100dvh] flex flex-col justify-between items-center px-6 md:px-16 xl:px-20">
-            <div className="flex flex-col flex-grow justify-center items-center text-center lg:max-w-[1500px] mt-[75.58px] xl:mt-[103.22px]">
+            <div className="flex flex-col flex-grow justify-center items-center text-center lg:max-w-[1500px] mt-[var(--nav-clearance)]">
               <div>
                 <Title size="about">
                   A finance and tech mind with a love for the creative space, dedicated to bringing ideas to life

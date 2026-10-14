@@ -18,8 +18,11 @@ interface LogoButtonProps {
 const logoButtonVariants = cva("relative", {
   variants: {
     size: {
-      small: "w-32 h-[49.9px] xl:w-56 xl:h-[77.63px]",
-      medium: "w-[595.34px] h-[192px]",
+      // px, not rem: the chrome is the one thing that deliberately does NOT ride the fluid root. At
+      // 14rem the wordmark would render 308px wide in a 2560 window, which is what made the nav read
+      // as oversized. Pinning both sizes keeps it the same physical size at every window.
+      small: "w-[128px] h-[49.9px] xl:w-[224px] xl:h-[77.63px]",
+      medium: "w-[595px] h-[192px]",
     },
   },
   defaultVariants: {

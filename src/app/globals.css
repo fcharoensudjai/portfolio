@@ -7,6 +7,15 @@
     @apply font-mono bg-surface-mid;
     overflow-x: clip;
     max-width: 100%;
+
+    /* The growth dial. Every spacing token in the design is rem-based and the measure is in `ch`,
+       so one number scales the whole page — gutters, gaps, display type — and the character count
+       per line stays identical because `ch` is font-relative.
+
+       16px up to 1600, 22px at 2560. It starts at 1600 because that is where the design's own
+       breakpoints stop (`2xl` is 1536), so nothing below 1600 moves at all. The 22px ceiling is the
+       one that matters: past 2560 a wider window would start showing five or six words a line. */
+    font-size: clamp(16px, calc(0.625vw + 6px), 22px);
   }
 
   body {
@@ -73,6 +82,11 @@ body {
   border-left-width: 0;
 }
 
+/* Max width on the CONTENT only — the header, footer and nav are deliberately not inside this, so
+   they stay anchored to the window while the sections stop growing. At 2560 it doesn't engage at
+   all (2560 = the window), which is why the content still runs full width; it's the stop above that,
+   and the number to tighten if the content should sit narrower than the window. If it is tightened,
+   the hero needs the same treatment or its left edge will jump against the sections below it. */
 .content-cap {
   width: 100%;
   max-width: 2560px;
@@ -115,12 +129,48 @@ body {
   -webkit-backface-visibility: hidden;
 }
 
+/* Layout tokens — not theme-dependent, so they sit outside the colour blocks. */
+:root {
+  /* The fixed nav's OWN HEIGHT, used as clearance: anything that has to start below the nav uses
+     this rather than its own magic number (it was repeated in the hero, the contact, the image
+     viewer and the about page — four copies of the same value with no explanation).
+     In rem, not px, because the nav's height is a rem logo width plus a rem py-2, so the nav grows
+     with the root: 103px at a 1570 window, 123px at 2560. A px offset would leave the content ~19px
+     underneath the nav at the top of the range. */
+  --nav-clearance: 4.72375rem; /* 75.58px — the nav at md */
+
+  /* How tall the artwork frame is allowed to get, as the smaller of two things:
+       - what the sticky stage can hold (its content box: the viewport less its own 7rem/4.8rem
+         padding, less a little breathing room), and
+       - an explicit ceiling in viewport units.
+     The first stops the frame overflowing a short window; the second is the "the artwork is too big"
+     dial. Without the second there was no ceiling at all — it landed around 80vh at a 1440-tall
+     window, i.e. implicitly "fill the screen minus the padding".
+
+     Everything that has to agree about the frame's height derives from this ONE number: the frame's
+     width cap, and the stage's width cap. That's what stops a capped frame leaving dead space beside
+     the artwork — the block narrows to match instead, and the surplus becomes equal margins. */
+  --frame-h: max(0px, min(calc(100dvh - 13rem), 65dvh));
+  --frame-ratio: 1.3901; /* 1600 / 1151 — keep in step with aspect-[1600/1151] */
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --nav-clearance: 6.45125rem; /* 103.22px — the nav at xl */
+  }
+}
+
 /* semantic colour tokens — values per theme (next-themes toggles .dark/.light on <html>) */
 :root,
 .dark {
   --c-surface: 36 36 36; /* #242424 charcoal */
   --c-surface-mid: 64 59 59; /* #403B3B mid charcoal (overlays) */
   --c-ink: 232 231 226; /* #E8E7E2 cream */
+  --c-ink-secondary: 176 173 166; /* #B0ADA6 — the supporting tier at 6.9:1. Dark's motivation is
+                                     glare (cream at 12.5:1 blooms); light's is hierarchy. Same ratio
+                                     in both so the tier is reproducible. (9:1 would be #C6C4BC here —
+                                     visible in dark, but #474747 in light is invisible, so the token
+                                     became a no-op in one theme.) */
   --c-rose: 205 122 122; /* #CD7A7A */
   --c-sand: 191 175 156; /* #BFAF9C */
 }
@@ -128,6 +178,9 @@ body {
   --c-surface: 254 251 251; /* #FEFBFB cream */
   --c-surface-mid: 232 231 226; /* #E8E7E2 */
   --c-ink: 36 36 36; /* #242424 charcoal */
+  --c-ink-secondary: 88 88 88; /* #585858 — the ink at 6.9:1 on the cream, matching the dark tier. No
+                                  bloom to damp here, so this step is purely hierarchy: a caption that
+                                  reads a step below the title. */
   --c-rose: 221 166 166; /* #DDA6A6 */
   --c-sand: 122 115 111; /* #7A736F */
 }

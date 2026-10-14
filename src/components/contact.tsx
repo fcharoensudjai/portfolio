@@ -25,12 +25,12 @@ export const Contact = () => {
     <div
       ref={contactRef}
       id="contact"
-      className="flex justify-center flex-col lg:min-h-[100dvh] min-h-[70dvh] scroll-mt-[75.58px] xl:scroll-mt-[103.22px]"
+      className="flex justify-center flex-col lg:min-h-[100dvh] min-h-[70dvh] scroll-mt-[var(--nav-clearance)]"
     >
       <div className={"flex flex-grow justify-center items-center w-full"}>
         <div className={`relative`}>
           <Title size="large">
-            <div className="relative fixed-line-spacing mt-[75.58px] xl:mt-[103.22px]">
+            <div className="relative fixed-line-spacing mt-[var(--nav-clearance)]">
               {"get in touch!"}
               <Petal positioning="left-[30.5%] bottom-[73.5%] sm:left-[30.75%] sm:bottom-[74%] 2xl:left-[31%]" />
             </div>
