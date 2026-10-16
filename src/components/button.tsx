@@ -35,7 +35,7 @@ export const Button = ({ children, href, isExternal = false, size = "md" }: Butt
         }}
         className={`rounded-full border-[2px] ${
           size === "sm"
-            ? "px-4 py-1 text-xs md:text-sm"
+            ? "px-4 py-[0.5rem] text-xs md:text-sm"
             : "py-1 md:py-[0.5rem] px-3 lg:px-5 lg:py-2.5 md:text-sm lg:text-md text-xs"
         }`}
       >

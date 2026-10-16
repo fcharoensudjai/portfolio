@@ -148,7 +148,7 @@ export const Header = () => {
 
   const { theme } = useTheme();
   const { isRecentsInView } = useVisibility();
-  const { isIntroInView } = useVisibility2();
+  const { isIntroInView, isIntroChromeAway } = useVisibility2();
   const { isContactInView } = useVisibility3();
 
   useEffect(() => {
@@ -331,10 +331,18 @@ export const Header = () => {
     };
   }, [isMounted, theme, SAMPLE_INTERVAL_MS]);
 
+  // while the intro owns the screen the chrome steps out of the way. visibility, not just
+  // opacity, so the links drop out of the tab order and stop being hittable — CSS resolves the
+  // visibility step at the end of the transition going out and immediately coming back. it leaves
+  // quicker than it returns: it has to be gone before the cover's fold sweeps up past it
+  const chromeFade = `transition-[opacity,visibility] ease-out ${
+    isIntroChromeAway ? "duration-300 opacity-0 invisible" : "duration-500 opacity-100 visible"
+  }`;
+
   const desktopNav = (
     <nav
       data-nav-layer="desktop"
-      className="fixed top-0 left-0 w-screen z-40 pointer-events-none hidden md:block"
+      className={`fixed top-0 left-0 w-screen z-40 pointer-events-none hidden md:block ${chromeFade}`}
       style={headerRowHeight ? { height: `${headerRowHeight}px` } : undefined}
     >
       <div className="flex h-full items-center justify-end px-4 md:px-6">
@@ -460,7 +468,7 @@ export const Header = () => {
 
       <header
         data-header-layer="blur"
-        className="fixed top-0 left-0 bg-transparent backdrop-blur-[8px] w-screen z-40 text-ink"
+        className={`fixed top-0 left-0 bg-transparent backdrop-blur-[8px] w-screen z-40 text-ink ${chromeFade}`}
       >
         {/* the blur band and this row are both full-bleed on purpose: the chrome stays anchored to the
             window while .content-cap holds the sections back, so the nav keeps its own inset */}

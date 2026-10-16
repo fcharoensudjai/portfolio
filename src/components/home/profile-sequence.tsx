@@ -6,6 +6,7 @@ import { Button } from "@/components/button";
 import { Title } from "@/components/title";
 import { Scramble } from "@/components/stylers/scramblerthai";
 import Fader from "@/components/stylers/fader";
+import { useVisibility2 } from "@/app/contexts/introvisibilitycontext";
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 const ease = (t: number) => 1 - Math.pow(1 - t, 3);
@@ -19,6 +20,17 @@ const GY: Record<PetalKey, number> = { pl: -1.2, pr: -0.9, pu: -1.6, pb: -1.1 };
 const K: Record<PetalKey, number> = { pl: 0.6, pr: 1, pu: 0.8, pb: 0.45 };
 const PETAL_KEYS: PetalKey[] = ["pl", "pr", "pu", "pb"];
 
+// mirrors cover-tiles' `cp`: the fold is fully flipped once the page has scrolled 0.85 viewport
+// heights. The wave rises bottom-to-top, so the header's own band is the LAST thing left to flip
+// (the top rows sit at pt ≈ 0.91–0.97) — the chrome therefore leaves as the fold is nearly done
+// rather than as it starts, with a little travel to spare before the wave reaches it
+const COVER_FOLD_VH = 0.85;
+const CHROME_AWAY_AT_FOLD = 0.88;
+
+// the other end of the same window: the chrome stays away until the flower has finished, i.e. the
+// wind has taken the last petal and the section has carried past. Just past winds = 1.
+const CHROME_BACK_AT = 0.78;
+
 /**
  * The landing intro, ported from home-preview-6.html (#profile): as the section
  * scrolls into view the flower spirals in from the top and settles, then the
@@ -30,6 +42,8 @@ export const ProfileSequence = () => {
   const isDark = resolvedTheme !== "light";
   const rose = isDark ? "#CD7A7A" : "#DDA6A6";
   const sand = isDark ? "#BFAF9C" : "#7A736F";
+
+  const { setIsIntroChromeAway } = useVisibility2();
 
   const sectionRef = useRef<HTMLElement | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
@@ -49,6 +63,8 @@ export const ProfileSequence = () => {
     formed: 0,
     decay: 0,
   });
+  // mirrors the context flag so the loop only pushes a render when it actually flips
+  const chromeAwayRef = useRef(false);
 
   useEffect(() => {
     const wrap = wrapRef.current;
@@ -142,6 +158,16 @@ export const ProfileSequence = () => {
         pt.style.opacity = clamp((1 - w) * enter, 0, 1).toFixed(3);
       });
       if (dmRef.current) dmRef.current.style.opacity = clamp(run * (1 - winds), 0, 1).toFixed(3);
+      // the header steps out for the whole intro. keyed off position (scrollY + sTop), not
+      // scroll direction, so scrolling back up hides it over exactly the same stretch — and brings
+      // it back as the fold starts reopening, which uncovers its band first
+      const coverFold = window.scrollY / (vh * COVER_FOLD_VH);
+      const chromeAway = coverFold >= CHROME_AWAY_AT_FOLD && sTop > -vh * CHROME_BACK_AT;
+      if (chromeAway !== chromeAwayRef.current) {
+        chromeAwayRef.current = chromeAway;
+        setIsIntroChromeAway(chromeAway);
+      }
+
       st.formed = run;
       if (run <= 0.01) st.angle = 0;
     }
@@ -152,8 +178,11 @@ export const ProfileSequence = () => {
       wrap.removeEventListener("mouseenter", onEnter);
       wrap.removeEventListener("mouseleave", onLeave);
       clearTimeout(st.decay);
+      // the flower only exists on the landing page — never leave the chrome hidden behind us
+      chromeAwayRef.current = false;
+      setIsIntroChromeAway(false);
     };
-  }, []);
+  }, [setIsIntroChromeAway]);
 
   return (
     <section
@@ -257,7 +286,12 @@ export const ProfileSequence = () => {
 
       <div className="mt-[clamp(26px,5vh,48px)]">
         <Fader enterDelay={0.8} once={true}>
-          <Button href="/about"> more about me </Button>
+          {/* sm so it matches the recents stage's "more detail" buttons — one button size for
+              in-page actions, and it belongs to the intro's type scale rather than towering over it. */}
+          <Button size="sm" href="/about">
+            {" "}
+            more about me{" "}
+          </Button>
         </Fader>
       </div>
     </section>

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Title } from "@/components/title";
 import { Button } from "@/components/button";
@@ -62,8 +62,19 @@ const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 const ease = (t: number) => 1 - Math.pow(1 - t, 3);
 const pad = (n: number) => String(n).padStart(2, "0");
 
-const textBoxWidth = 150;
-const textBoxHeight = 50;
+// The cursor label is sized by its own text (see the render below), so its box isn't a constant —
+// these two are only the clamp's fallback for the sliver of time before the label has mounted and
+// measured itself, which is why they're allowed to be a rough guess.
+const LABEL_FALLBACK = { w: 150, h: 50 };
+
+/** Where the label sits for a pointer at (clientX, clientY) inside the frame's `rect`. */
+function labelTransform(clientX: number, clientY: number, rect: DOMRect, { w, h }: { w: number; h: number }) {
+  const x = clientX - rect.left;
+  const y = clientY - rect.top;
+  const clampedX = Math.min(Math.max(x, w / 2), rect.width - w / 1.6);
+  const clampedY = Math.min(Math.max(y, h / 2), rect.height - h);
+  return `translate(${(clampedX - w / 2 + 10).toFixed(1)}px, ${(clampedY - h / 2 + 10).toFixed(1)}px)`;
+}
 
 /**
  * The handoff flourish, ported straight from home-preview-6: a plain time-based scramble — scroll
@@ -166,6 +177,13 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
   // the cursor label is positioned imperatively — a React state write per mousemove would
   // re-render the whole stage on every pointer event
   const overlayLabelRef = useRef<HTMLDivElement | null>(null);
+  // the label hugs its own text, so the clamp needs its real box rather than a constant. measured in
+  // the ref callback (during commit, so never a frame behind the label it positions).
+  const labelSize = useRef({ ...LABEL_FALLBACK });
+  // the pointer that was last seen over the frame, with the rect it was seen in. the label doesn't
+  // exist until the render *after* `hovering` flips true, so without this a pointer that entered and
+  // then stopped moving would leave the label sitting in the frame's corner until the next move.
+  const lastPointer = useRef<{ clientX: number; clientY: number; rect: DOMRect } | null>(null);
 
   // rewrite the arriving caption on every handoff. this is what covers the copy swap — preview-6's
   // trick, and the reason its crossfade is allowed to be this gentle. skipped on mount so a
@@ -271,19 +289,25 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
   }, [n, segments, items]);
 
   const handlePointerMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    lastPointer.current = { clientX: e.clientX, clientY: e.clientY, rect };
     const label = overlayLabelRef.current;
     if (!label) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const clampedX = Math.min(Math.max(x, textBoxWidth / 2), rect.width - textBoxWidth / 1.6);
-    const clampedY = Math.min(Math.max(y, textBoxHeight / 2), rect.height - textBoxHeight);
-    label.style.transform = `translate(${(clampedX - textBoxWidth / 2 + 10).toFixed(1)}px, ${(
-      clampedY -
-      textBoxHeight / 2 +
-      10
-    ).toFixed(1)}px)`;
+    label.style.transform = labelTransform(e.clientX, e.clientY, rect, labelSize.current);
   };
+
+  // stable identity on purpose: an inline ref callback is detached and re-attached on every render,
+  // which would re-measure (and re-place) the label on every frame of the slide crossfade.
+  const measureLabel = useCallback((el: HTMLDivElement | null) => {
+    overlayLabelRef.current = el;
+    if (!el) return;
+    const box = el.getBoundingClientRect();
+    if (box.width && box.height) labelSize.current = { w: box.width, h: box.height };
+    const pointer = lastPointer.current;
+    if (pointer) {
+      el.style.transform = labelTransform(pointer.clientX, pointer.clientY, pointer.rect, labelSize.current);
+    }
+  }, []);
 
   return (
     <div className="relative bg-surface">
@@ -348,7 +372,9 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
                   </Textbox>
                 </div>
 
-                <div className="mt-4">
+                {/* larger gap than the breadcrumb→title→prose rhythm (all mt-3) on purpose: the
+                    label, title and prose are one block, the action sits apart from them. */}
+                <div className="mt-8">
                   <Button size="sm" href={item.href}>
                     more detail
                   </Button>
@@ -410,20 +436,30 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
                     style={{ cursor: "none" }}
                   >
                     <div className="absolute inset-0 bg-surface-mid bg-opacity-60 backdrop-blur-[2px]">
+                      {/* No width/height: the box is sized by the label, so it hugs whatever the
+                          string is. `whitespace-nowrap` is what stops that hug from becoming a second
+                          line — the Scramble's per-word spans are breakable between words, and the
+                          old fixed 150×50 box wrapped "more detail" the moment the label got longer
+                          than it. A fixed box also can't be measured for the clamp, which is the
+                          other half of the same constant (see `labelSize`). */}
                       <div
-                        ref={overlayLabelRef}
+                        ref={measureLabel}
                         className="absolute left-0 top-0 z-20"
-                        style={{ width: textBoxWidth, height: textBoxHeight, willChange: "transform" }}
+                        style={{ willChange: "transform" }}
                       >
                         <motion.div
-                          className="border-corner flex h-full w-full items-center justify-center font-mono"
+                          className="border-corner flex items-center justify-center whitespace-nowrap px-2 py-2.5 font-mono"
                           initial={{ scale: 1.3 }}
                           animate={{ scale: 1 }}
                           exit={{ scale: 1.3 }}
                           whileTap={{ scale: 0.9 }}
                           transition={{ duration: 0.2, ease: [0.65, 0, 0.35, 1] }}
                         >
-                          <UnderlinedLink href={items[active].href} line={false}>
+                          {/* `cursor-none` has to sit on the link, not on the overlay: the UA's
+                              `cursor: pointer` for links applies to the anchor itself, so it beats the
+                              `cursor: none` the overlay inherits down — the arrow disappeared over the
+                              whole image except on the label, which is exactly where the cursor is. */}
+                          <UnderlinedLink href={items[active].href} line={false} linkClassName="cursor-none">
                             <Scramble interval={20} hover={true}>
                               {" more detail "}
                             </Scramble>
