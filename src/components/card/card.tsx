@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Scramble } from "@/components/stylers/scramblerthai";
 import { ImageFrame } from "@/components/card/shared/imageframe";
-import { useHoverTracker } from "@/components/card/shared/use-hover-tracker";
+import { useFollowLabel } from "@/components/card/shared/follow-label";
 
 interface CardProps {
   src: string;
@@ -18,30 +18,21 @@ export const Card: React.FC<CardProps> = ({ src, alt, className, onClick }) => {
     e.preventDefault();
   };
 
-  const textBoxWidth = 175;
-  const textBoxHeight = 50;
-
-  const {
-    isHovered: showOverlay,
-    cursorPosition: mousePosition,
-    handleMouseEnter: toggleOverlayEnter,
-    handleMouseLeave: toggleOverlayLeave,
-    handleMouseMove,
-  } = useHoverTracker({
-    trackerWidth: textBoxWidth,
-    trackerHeight: textBoxHeight,
-    clampCursor: ({ mouseX, mouseY, containerWidth, containerHeight }) => ({
-      x: Math.min(Math.max(mouseX, textBoxWidth / 2), containerWidth - textBoxWidth / 1.6),
-      y: Math.min(Math.max(mouseY, textBoxHeight / 2), containerHeight - textBoxHeight),
-    }),
-  });
+  const [showOverlay, setShowOverlay] = useState(false);
+  const { measureLabel, trackPointer } = useFollowLabel();
 
   return (
     <motion.div
       className={`relative overflow-hidden rounded-xl min-h-[18.75rem] xl:min-h-[25rem] 2xl:min-h-[31.25rem] flex justify-center items-center ${className}`}
-      onHoverStart={toggleOverlayEnter}
-      onHoverEnd={toggleOverlayLeave}
-      onMouseMove={(e: any) => handleMouseMove(e as React.MouseEvent<HTMLElement>)}
+      // the card, not the grid cell, owns the cursor: the petal trail fades out over the artwork,
+      // the same handover the recents stage makes for its frame
+      data-petals-off
+      onMouseEnter={(e) => {
+        setShowOverlay(true);
+        trackPointer(e);
+      }}
+      onMouseLeave={() => setShowOverlay(false)}
+      onMouseMove={trackPointer}
       onClick={onClick}
     >
       <Fader once={true} threshold={0.4}>
@@ -55,27 +46,26 @@ export const Card: React.FC<CardProps> = ({ src, alt, className, onClick }) => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2, ease: [0.65, 0, 0.35, 1] }}
-              style={{ cursor: showOverlay ? "none" : "default" }}
+              style={{ cursor: "none" }}
             >
               <div className="absolute inset-0 backdrop-blur-[2px] bg-surface-mid bg-opacity-60">
-                <motion.div
-                  className="absolute border-corner z-20 flex justify-center items-center"
-                  style={{
-                    top: mousePosition.y - textBoxHeight / 2 + 10,
-                    left: mousePosition.x - textBoxWidth / 2 + 10,
-                    width: textBoxWidth,
-                    height: textBoxHeight,
-                  }}
-                  initial={{ scale: 1.3 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 1.3 }}
-                  transition={{ duration: 0.2, ease: [0.65, 0, 0.35, 1] }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <Scramble interval={20} hover={true}>
-                    {" see full image "}
-                  </Scramble>
-                </motion.div>
+                {/* No width/height, same as the recents stage's label: the box is sized by its own
+                    text so it hugs whatever the string is, and the clamp reads that box once it has
+                    mounted. */}
+                <div ref={measureLabel} className="absolute left-0 top-0 z-20" style={{ willChange: "transform" }}>
+                  <motion.div
+                    className="border-corner flex items-center justify-center whitespace-nowrap px-2 py-2.5 font-mono"
+                    initial={{ scale: 1.3 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 1.3 }}
+                    transition={{ duration: 0.2, ease: [0.65, 0, 0.35, 1] }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <Scramble interval={20} hover={true}>
+                      {" see full image "}
+                    </Scramble>
+                  </motion.div>
+                </div>
               </div>
             </motion.div>
           )}

@@ -25,8 +25,10 @@ const titleVariants = cva("font-sans", {
       // beneath it wherever it appears. Also what the profile manifesto headline uses.
       display: "text-[clamp(2rem,5vw,var(--type-display))] leading-none tracking-[-0.02em]",
       // two ceilings: never taller than the viewport allows (so it can't overflow a short window)
-      // and never past its rem ceiling (so it stops when the frame it sits in does)
-      large: "text-[clamp(1.5rem,8vw,var(--type-name))]",
+      // and never past its rem ceiling (so it stops when the frame it sits in does). 1.2 matches
+      // what `display` actually renders at (leading-none inside a fixed-line-spacing wrapper) —
+      // without it this size inherited the global 1.75 and every gap below it read ~38px too big
+      large: "text-[clamp(1.5rem,8vw,var(--type-name))] leading-[1.2]",
       // the same ceiling as `large` with a lower viewport coefficient: this one shares its row
       // with the contact links, so it has to leave them enough width to stay on one line
       close: "text-[clamp(2rem,6.5vw,var(--type-name))]",

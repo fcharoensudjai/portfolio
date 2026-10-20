@@ -33,23 +33,32 @@ export default function Gallery() {
 
       <div className="content-cap">
         <Fader enterDelay={1.2} once={true}>
-          <div className="min-h-[100dvh] flex flex-col justify-center items-start px-6 md:px-16 xl:px-20 space-y-3 lg:space-y-7 xl:space-y-10">
-            <Title size="large">gallery</Title>
-            <div className="lg:w-[65%] flex flex-col space-y-6 lg:space-y-7 xl:space-y-10 text-ink-secondary">
-              <div className={`min-h-200px sm:min-h-0`}>
-                <Textbox caret={false} size="caption">
-                  <Scramble delay={1500}>
-                    {
-                      "Welcome to my gallery! Here, you’ll find a collection of pieces that have been a part of my journey in learning and growing as an artist. I mostly work in Procreate, but you'll see some studies in other mediums from my pieces in school. Click on the pieces to view them in detail, and feel free to see the progress I've made along the way :)"
-                    }
+          <div className="min-h-[100dvh] flex flex-col justify-center items-start px-6 md:px-16 xl:px-20">
+            <div className="lg:w-[65%] flex flex-col">
+              {/* the heading and the line under it are one pair, so they take the tight pair step
+                  (12/16) — the same one the gallery carousel and the recents stage use */}
+              <div className="flex flex-col space-y-3 md:space-y-4">
+                <Title size="large">gallery</Title>
+                <div className={`min-h-200px sm:min-h-0 text-ink-secondary`}>
+                  <Textbox caret={false} size="caption">
+                    <Scramble delay={1500}>
+                      {
+                        "Welcome to my gallery! Here, you’ll find a collection of pieces that have been a part of my journey in learning and growing as an artist. I mostly work in Procreate, but you'll see some studies in other mediums from my pieces in school. Click on the pieces to view them in detail, and feel free to see the progress I've made along the way."
+                      }
+                    </Scramble>
+                  </Textbox>
+                </div>
+              </div>
+              {/* ink, not secondary: the cue is chrome, not copy — same-size secondary text under a
+                  paragraph reads as its last line. It keeps the looser step below the pair, because
+                  it's a different kind of element (the stage gives its button the same treatment) */}
+              <div className="mt-6 lg:mt-7 xl:mt-10 text-ink">
+                <Textbox size="caption">
+                  <Scramble delay={3250} hover={true} interval={20}>
+                    {"[ scroll to explore ] "}
                   </Scramble>
                 </Textbox>
               </div>
-              <Textbox size="caption">
-                <Scramble delay={3250} hover={true} interval={20}>
-                  {"[ scroll to explore ] "}
-                </Scramble>
-              </Textbox>
             </div>
           </div>
         </Fader>

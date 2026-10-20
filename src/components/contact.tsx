@@ -56,9 +56,16 @@ export const Contact = ({ once = true }: ContactProps) => {
           to place and nothing can sit awkwardly between them. The clock moved out: it has its home in
           the landing hero row, and repeating it here competed with the year for the same slot. */}
       <div className="flex items-center justify-between gap-4 px-4 pb-[1.375rem] text-xs md:px-6 md:pb-4 md:text-sm xl:pb-6">
-        {/* inherits the row's size (md:text-sm) and uses ink, matching the socials beside it —
-            the override to text-xs was what made it read as smallprint */}
-        <div className="text-ink">© 2026</div>
+        {/* inherits the row's size (md:text-sm) and uses ink, matching the socials beside it — the
+            override to text-xs was what made it read as smallprint.
+            Two wordings. Below md the socials collapse to icons (~156px), so "© 2026" is already
+            enough to balance them. From md they're four text links (~449px) and the short form looks
+            weightless — but the long form needs ~269px, and 269 + 449 + gap doesn't fit the 691px of
+            usable width at 768, so it wrapped. `lg` is the first breakpoint that genuinely holds it. */}
+        <div className="text-ink">
+          <span className="lg:hidden">© 2026</span>
+          <span className="hidden lg:inline">© 2026 — all rights reserved</span>
+        </div>
 
         <div className="shrink-0">
           <SocialIcons />

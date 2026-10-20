@@ -76,8 +76,10 @@ export default function Home() {
                   </Title>
                 </div>
 
-                <div className="my-4 text-ink-secondary">
-                  {/* body unit + secondary ink: it's a prompt, not content */}
+                <div className="my-4 text-ink">
+                  {/* ink, not secondary: the cue is chrome (an affordance), not copy. secondary is the
+                      supporting-content tier, and once a page puts prose in it the cue stops reading as
+                      a prompt and starts reading as the paragraph's last line */}
                   <Textbox size="caption">
                     <Scramble delay={2000} hover={true} interval={20} once={false}>
                       {"[ scroll to explore ] "}
@@ -113,30 +115,35 @@ export default function Home() {
           <div ref={recentsRef}>
             <Fader>
               <div className="flex justify-center items-center py-[10dvh] md:py-[12dvh] h-[100dvh]">
-                <div className="flex flex-col space-y-6 lg:space-y-7 xl:space-y-10">
-                  {/* the section heading takes the display step, so it reads 4.4x the body beneath
-                      it — the same relationship as a piece title and its caption in the stage */}
-                  <Title size="display">
-                    <div className="fixed-line-spacing scroll-mt-[7.5175rem] lg:scroll-mt-[9.25125rem]">
-                      {" "}
-                      recent works
-                    </div>
-                  </Title>
+                <div className="flex flex-col">
+                  {/* the heading and the line under it are one pair, so they take the tight pair step
+                      (12/16) — the same one the stage pieces and the gallery carousel use. The button
+                      below keeps the looser step, since it's a different kind of element. */}
+                  <div className="flex flex-col space-y-3 md:space-y-4">
+                    {/* the section heading takes the display step, so it reads 4.4x the body beneath
+                        it — the same relationship as a piece title and its caption in the stage */}
+                    <Title size="display">
+                      <div className="fixed-line-spacing scroll-mt-[7.5175rem] lg:scroll-mt-[9.25125rem]">
+                        {" "}
+                        recent works
+                      </div>
+                    </Title>
 
-                  <div className="lg:w-[65%] text-ink-secondary">
-                    {/* the body unit (1rem), so this sits at exactly 4.4x below the display heading
-                        above it — same relationship as a piece caption under its title, secondary ink
-                        in both cases */}
-                    <Textbox size="caption">
-                      <Scramble once={false} preScrambled>
-                        {
-                          "Here are the previews for some of the pieces I've been working on lately. Feel free to click on them to see the full image, view some more details, or click on the gallery button to view all of them!"
-                        }
-                      </Scramble>
-                    </Textbox>
+                    <div className="lg:w-[65%] text-ink-secondary">
+                      {/* the body unit (1rem), so this sits at exactly 4.4x below the display heading
+                          above it — same relationship as a piece caption under its title, secondary ink
+                          in both cases */}
+                      <Textbox size="caption">
+                        <Scramble once={false} preScrambled>
+                          {
+                            "Here are the previews for some of the pieces I've been working on lately. Feel free to click on them to see the full image, view some more details, or click on the gallery button to view all of them!"
+                          }
+                        </Scramble>
+                      </Textbox>
+                    </div>
                   </div>
 
-                  <div>
+                  <div className="mt-6 lg:mt-7 xl:mt-10">
                     {/* sm, matching the stage's "more detail" buttons and the intro's "more about
                         me" — one button size for in-page actions */}
                     <Button href="/gallery" size="sm">

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Title } from "@/components/title";
 import { Button } from "@/components/button";
@@ -9,6 +9,7 @@ import { Textbox } from "@/components/textbox";
 import { UnderlinedLink } from "@/components/underlinedlink";
 import { Scramble } from "@/components/stylers/scramblerthai";
 import { SCRAMBLE_RATE } from "@/components/stylers/scramble-rate";
+import { useFollowLabel } from "@/components/card/shared/follow-label";
 
 export interface RecentsStageItem {
   id: number;
@@ -62,20 +63,6 @@ const SWITCH_HYSTERESIS = 0.05;
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 const ease = (t: number) => 1 - Math.pow(1 - t, 3);
 const pad = (n: number) => String(n).padStart(2, "0");
-
-// The cursor label is sized by its own text (see the render below), so its box isn't a constant —
-// these two are only the clamp's fallback for the sliver of time before the label has mounted and
-// measured itself, which is why they're allowed to be a rough guess.
-const LABEL_FALLBACK = { w: 150, h: 50 };
-
-/** Where the label sits for a pointer at (clientX, clientY) inside the frame's `rect`. */
-function labelTransform(clientX: number, clientY: number, rect: DOMRect, { w, h }: { w: number; h: number }) {
-  const x = clientX - rect.left;
-  const y = clientY - rect.top;
-  const clampedX = Math.min(Math.max(x, w / 2), rect.width - w / 1.6);
-  const clampedY = Math.min(Math.max(y, h / 2), rect.height - h);
-  return `translate(${(clampedX - w / 2 + 10).toFixed(1)}px, ${(clampedY - h / 2 + 10).toFixed(1)}px)`;
-}
 
 /**
  * The handoff flourish, ported straight from home-preview-6: a plain time-based scramble — scroll
@@ -192,14 +179,7 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
   const captionRefs = useRef<Array<HTMLSpanElement | null>>([]);
   // the cursor label is positioned imperatively — a React state write per mousemove would
   // re-render the whole stage on every pointer event
-  const overlayLabelRef = useRef<HTMLDivElement | null>(null);
-  // the label hugs its own text, so the clamp needs its real box rather than a constant. measured in
-  // the ref callback (during commit, so never a frame behind the label it positions).
-  const labelSize = useRef({ ...LABEL_FALLBACK });
-  // the pointer that was last seen over the frame, with the rect it was seen in. the label doesn't
-  // exist until the render *after* `hovering` flips true, so without this a pointer that entered and
-  // then stopped moving would leave the label sitting in the frame's corner until the next move.
-  const lastPointer = useRef<{ clientX: number; clientY: number; rect: DOMRect } | null>(null);
+  const { measureLabel, trackPointer } = useFollowLabel();
 
   // rewrite the arriving caption on every handoff. this is what covers the copy swap — preview-6's
   // trick, and the reason its crossfade is allowed to be this gentle. skipped on mount so a
@@ -309,27 +289,6 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
     };
   }, [n, segments, items]);
 
-  const handlePointerMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    lastPointer.current = { clientX: e.clientX, clientY: e.clientY, rect };
-    const label = overlayLabelRef.current;
-    if (!label) return;
-    label.style.transform = labelTransform(e.clientX, e.clientY, rect, labelSize.current);
-  };
-
-  // stable identity on purpose: an inline ref callback is detached and re-attached on every render,
-  // which would re-measure (and re-place) the label on every frame of the slide crossfade.
-  const measureLabel = useCallback((el: HTMLDivElement | null) => {
-    overlayLabelRef.current = el;
-    if (!el) return;
-    const box = el.getBoundingClientRect();
-    if (box.width && box.height) labelSize.current = { w: box.width, h: box.height };
-    const pointer = lastPointer.current;
-    if (pointer) {
-      el.style.transform = labelTransform(pointer.clientX, pointer.clientY, pointer.rect, labelSize.current);
-    }
-  }, []);
-
   return (
     <div className="relative bg-surface">
       <div ref={wrapRef} style={{ height: `${BASE_VH + segments * VH_PER_HANDOFF}vh` }} className="relative">
@@ -380,7 +339,7 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
                     measure, and an unconditional cap left the prose at half the width of the
                     breadcrumb, title and image above it. Matches the intro and gallery, whose caps
                     are lg-only for the same reason. */}
-                <div className="mt-3 text-ink-secondary lg:max-w-[46ch]">
+                <div className="mt-3 md:mt-4 text-ink-secondary lg:max-w-[46ch]">
                   <Textbox size="caption" caret={false}>
                     <span
                       style={{ lineHeight: "inherit" }}
@@ -418,10 +377,10 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
               data-petals-off
               onMouseEnter={(e) => {
                 setHovering(true);
-                handlePointerMove(e);
+                trackPointer(e);
               }}
               onMouseLeave={() => setHovering(false)}
-              onMouseMove={handlePointerMove}
+              onMouseMove={trackPointer}
             >
               {items.map((item, k) => (
                 <div
@@ -462,7 +421,7 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
                           line — the Scramble's per-word spans are breakable between words, and the
                           old fixed 150×50 box wrapped "more detail" the moment the label got longer
                           than it. A fixed box also can't be measured for the clamp, which is the
-                          other half of the same constant (see `labelSize`). */}
+                          other half of the same constant (see `useFollowLabel`). */}
                       <div
                         ref={measureLabel}
                         className="absolute left-0 top-0 z-20"

@@ -91,10 +91,12 @@ export const CarouselCard: React.FC<CarouselCardProps> = ({
         onImageLoad={handleImageLoad}
       />
 
-      {/* no hover on touch, so the caption stays put there instead of hiding the name entirely */}
-      <div className="absolute inset-0 z-[15] flex flex-col justify-end p-4 lg:p-5 bg-[linear-gradient(180deg,rgba(18,18,18,0)_45%,rgba(18,18,18,0.74))] opacity-0 transition-opacity duration-[350ms] ease-in group-hover/card:opacity-100 [@media(hover:none)]:opacity-100">
+      {/* no hover on touch, so the caption stays put there instead of hiding the name entirely.
+          the text is pinned to the light ink rather than `ink`: the scrim behind it is always dark,
+          so in light mode an inherited ink would be near-black on near-black. */}
+      <div className="absolute inset-0 z-[15] flex flex-col justify-end p-4 lg:p-5 text-[#E8E7E2] bg-[linear-gradient(180deg,rgba(18,18,18,0)_45%,rgba(18,18,18,0.74))] opacity-0 transition-opacity duration-[350ms] ease-in group-hover/card:opacity-100 [@media(hover:none)]:opacity-100">
         <Title size="carousel">{title.toLowerCase()}</Title>
-        {year ? <span className="font-mono text-xs text-[#E8E7E2]/[0.62]">{year}</span> : null}
+        {year ? <span className="font-mono text-xs opacity-[0.62]">{year}</span> : null}
       </div>
     </Link>
   );
