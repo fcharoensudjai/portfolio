@@ -10,6 +10,14 @@ const ROLL_MS = 460;
 const ROLL_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
 // Long enough to cover the roll, short enough that the sampled header tone takes over again promptly.
 const FLIP_MS = 700;
+// The two marks are drawn on artboards that disagree about the right edge: the moon's ink runs to
+// the edge of its 25×26 viewBox, while the sun's rays stop 2.75 of 30 units short (the stroke gives
+// one unit back). Painted into the same 30px window that leaves the sun ~2.5px further inside than
+// the moon, which reads as the sun being indented against the footer's last social link. Each mark
+// is nudged by its own ink inset so both land on the window edge — that edge is what the chrome
+// rows align on, not the artboard.
+const SUN_INK_INSET = 3.14;
+const MOON_INK_INSET = 0.58;
 
 export default function ThemeSwitch({ color, transitionDuration }: { color?: string; transitionDuration?: string }) {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -69,7 +77,7 @@ export default function ThemeSwitch({ color, transitionDuration }: { color?: str
   // leaves over the top; on the way back the moon drops in from above. Nothing crossfades, so the
   // filled moon and the stroked sun can never muddy into each other mid-swap — the clipped box does
   // the masking instead, and both marks are always painted.
-  const mark = (src: string, active: boolean, parkedY: string) => (
+  const mark = (src: string, active: boolean, parkedY: string, inkInset: number) => (
     <div
       aria-hidden
       className="absolute inset-0"
@@ -83,7 +91,7 @@ export default function ThemeSwitch({ color, transitionDuration }: { color?: str
         WebkitMaskPosition: "center",
         maskRepeat: "no-repeat",
         WebkitMaskRepeat: "no-repeat",
-        transform: active ? "translateY(0)" : `translateY(${parkedY})`,
+        transform: `translate(${inkInset}px, ${active ? "0" : parkedY})`,
         transition: swapTransition,
       }}
     />
@@ -97,8 +105,8 @@ export default function ThemeSwitch({ color, transitionDuration }: { color?: str
     >
       <div className="relative h-[30px] w-[30px] overflow-hidden">
         {/* parked at ±118%: fully clear of the window at both ends of the travel */}
-        {mark(`${basePath}/icons/light/moon.svg`, !isDark, "-118%")}
-        {mark(`${basePath}/icons/dark/sun.svg`, isDark, "118%")}
+        {mark(`${basePath}/icons/light/moon.svg`, !isDark, "-118%", MOON_INK_INSET)}
+        {mark(`${basePath}/icons/dark/sun.svg`, isDark, "118%", SUN_INK_INSET)}
       </div>
     </button>
   );

@@ -8,6 +8,7 @@ import { Button } from "@/components/button";
 import { Textbox } from "@/components/textbox";
 import { UnderlinedLink } from "@/components/underlinedlink";
 import { Scramble } from "@/components/stylers/scramblerthai";
+import { SCRAMBLE_RATE } from "@/components/stylers/scramble-rate";
 
 export interface RecentsStageItem {
   id: number;
@@ -96,9 +97,6 @@ function labelTransform(clientX: number, clientY: number, rect: DOMRect, { w, h 
  */
 const THAI = "กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮ";
 const randomChar = () => THAI[Math.floor(Math.random() * THAI.length)];
-// the caption clears in roughly half a second — the same pace as the intro paragraph above the
-// stage (one glyph per ~2ms), so the stage's prose doesn't read slower than the section it follows
-const CAPTION_RATE = { perTick: 5, ms: 12 };
 const scrambleTimers = new WeakMap<HTMLElement, ReturnType<typeof setInterval>>();
 
 /** Rebuilds `host` as fixed-width character boxes and hands the boxes back, in text order. */
@@ -215,7 +213,7 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
       return;
     }
     const el = captionRefs.current[active];
-    if (el) scramble(el, items[active].caption, CAPTION_RATE);
+    if (el) scramble(el, items[active].caption, SCRAMBLE_RATE);
   }, [active, items]);
 
   useEffect(() => {
@@ -292,7 +290,7 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
           const el = captionRefs.current[activeRef.current];
           if (!el) return;
           const caption = items[activeRef.current].caption;
-          if (entries.some((entry) => entry.isIntersecting)) scramble(el, caption, CAPTION_RATE);
+          if (entries.some((entry) => entry.isIntersecting)) scramble(el, caption, SCRAMBLE_RATE);
           else holdScrambled(el, caption);
         },
         { threshold: 0.35 }

@@ -421,12 +421,16 @@ export const Header = () => {
           <LogoButton />
 
           <div className="flex items-center space-x-4">
-            {/* NOT nudged. The row's padding is symmetric and both boxes measured on it exactly
-                (logo box left = 38.4, theme button right = 38.4 from the content edge at 1570), so a
-                nudge here would be guessing at an asset's internal padding. If the two corners still
-                read uneven it's the sun/moon mark's own padding — and that button currently renders
-                no measurable glyph node, so it needs an eye rather than a measurement. */}
-            <div className="invisible md:visible ml-4 flex justify-center items-center" ref={themeSwitchRef}>
+            {/* The row's padding is symmetric, so both corners sit on the same box edge — but the
+                ink doesn't. The mark's window is 30px inside a 36px button and the glyph is already
+                flush to the window (see themeswitch.tsx), so the mark still ends 3px short of the
+                button box. Pulling the button out by that much puts the sun/moon's right edge on the
+                row's edge, level with the footer's last social label directly below it. */}
+            <div
+              className="invisible md:visible ml-4 flex justify-center items-center"
+              style={{ marginRight: "-3px" }}
+              ref={themeSwitchRef}
+            >
               <ThemeSwitch
                 color={letterColor(themeSwitchTone)}
                 transitionDuration={enableToneTransition ? "500ms" : "0ms"}
@@ -438,7 +442,10 @@ export const Header = () => {
               color={letterColor(themeSwitchTone)}
               transitionDuration={enableToneTransition ? "500ms" : "0ms"}
             />
-            <button onClick={toggleNav} aria-label="toggle navigation">
+            {/* the hamburger's bars span 3–21 of its 24-unit viewBox, so at 30px its ink stops
+                3.75px inside the button box. Pulling it out by that lands the glyphs on the row's
+                edge, level with the last social icon in the footer. */}
+            <button onClick={toggleNav} aria-label="toggle navigation" style={{ marginRight: "-3.75px" }}>
               <Image
                 src={
                   theme === "dark"

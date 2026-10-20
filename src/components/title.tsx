@@ -13,7 +13,7 @@ interface TitleProps {
    *  changed in one place for the whole site. `large` and `medium` still carry their old names — they
    *  are on the rename list; `subhead`/`about`/`carousel` keep theirs because they're genuinely
    *  scoped (item titles, the about page, gallery cards). */
-  size?: "small" | "medium" | "display" | "large" | "about" | "carousel";
+  size?: "small" | "medium" | "display" | "large" | "close" | "about" | "carousel";
 }
 
 const titleVariants = cva("font-sans", {
@@ -27,8 +27,11 @@ const titleVariants = cva("font-sans", {
       // two ceilings: never taller than the viewport allows (so it can't overflow a short window)
       // and never past its rem ceiling (so it stops when the frame it sits in does)
       large: "text-[clamp(1.5rem,8vw,var(--type-name))]",
+      // the same ceiling as `large` with a lower viewport coefficient: this one shares its row
+      // with the contact links, so it has to leave them enough width to stay on one line
+      close: "text-[clamp(2rem,6.5vw,var(--type-name))]",
       about: "text-lg md:text-2xl lg:text-3xl 2xl:text-5xl",
-      carousel: "text-xs sm:text-sm lg:text-md",
+      carousel: "text-[clamp(1.2rem,2vw,1.7rem)] leading-[1.05] tracking-[-0.02em]",
     },
   },
   defaultVariants: {

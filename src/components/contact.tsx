@@ -1,6 +1,7 @@
 import { Title } from "@/components/title";
 import { Textbox } from "@/components/textbox";
 import { Scramble } from "@/components/stylers/scramblerthai";
+import { SocialIcons } from "@/components/footer/socialicons";
 import { useVisibility3 } from "@/app/contexts/contactvisibilitycontext";
 import { useInView } from "react-intersection-observer";
 import React from "react";
@@ -26,29 +27,42 @@ export const Contact = ({ once = true }: ContactProps) => {
   }, [isContactInView, setIsContactInView]);
 
   return (
-    <div
-      ref={contactRef}
-      id="contact"
-      className="flex justify-center flex-col lg:min-h-[100dvh] min-h-[70dvh] scroll-mt-[var(--nav-clearance)]"
-    >
-      <div className={"flex flex-grow justify-center items-center w-full"}>
-        <div className={`relative`}>
-          <Title size="large">
-            <div className="relative fixed-line-spacing mt-[var(--nav-clearance)]">
-              {"get in touch!"}
-              <Petal positioning="left-[30.5%] bottom-[73.5%] sm:left-[30.75%] sm:bottom-[74%] 2xl:left-[31%]" />
-            </div>
-          </Title>
-        </div>
-      </div>
-      <div className="flex justify-end items-center px-3 md:px-5 pt-3 md:pt-5 pb-5 xl:pb-7 text-xs text-ink-secondary md:text-sm">
-        <a href="mailto:fuzz.ch04@gmail.com">
+    <div ref={contactRef} id="contact" className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-surface">
+      {/* the CTA: centred, with the mail directly beneath it and nothing beside it */}
+      <div className="flex flex-1 flex-col items-center justify-center px-6 pt-[var(--nav-clearance)] text-center md:px-16 xl:px-20">
+        <Title size="close">
+          <div className="relative fixed-line-spacing whitespace-nowrap">
+            {"get in touch!"}
+            <Petal positioning="left-[30.5%] bottom-[73.5%] sm:left-[30.75%] sm:bottom-[74%] 2xl:left-[31%]" />
+          </div>
+        </Title>
+
+        {/* draggable={false}: without it a drag on a link starts a native link-drag, which is why
+            the address couldn't be selected and copied */}
+        <a
+          href="mailto:fuzz.ch04@gmail.com"
+          draggable={false}
+          className="mt-7 inline-block text-xs text-ink md:mt-9 md:text-sm"
+        >
           <Textbox size="caption">
             <Scramble delay={2000} interval={15} once={once}>
               {"[ mail | fuzz.ch04@gmail.com ]"}
             </Scramble>
           </Textbox>
         </a>
+      </div>
+
+      {/* the foot: the year on the left, socials on the right — two items, so there's no third thing
+          to place and nothing can sit awkwardly between them. The clock moved out: it has its home in
+          the landing hero row, and repeating it here competed with the year for the same slot. */}
+      <div className="flex items-center justify-between gap-4 px-4 pb-[1.375rem] text-xs md:px-6 md:pb-4 md:text-sm xl:pb-6">
+        {/* inherits the row's size (md:text-sm) and uses ink, matching the socials beside it —
+            the override to text-xs was what made it read as smallprint */}
+        <div className="text-ink">© 2026</div>
+
+        <div className="shrink-0">
+          <SocialIcons />
+        </div>
       </div>
     </div>
   );

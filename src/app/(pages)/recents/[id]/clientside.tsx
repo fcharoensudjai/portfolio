@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { MobileNav } from "@/components/header/mobilenav";
-import { Footer } from "@/components/footer/footer";
 import { Contact } from "@/components/contact";
 import Fader from "@/components/stylers/fader";
 import { Preloader } from "@/components/stylers/page-loading/preloader";
@@ -270,18 +269,10 @@ export default function Recent() {
           </Fader>
         </div>
       </div>
-      <section className="relative bg-surface">
-        <div className="md:h-[130vh]">
-          <div className="sticky top-0 z-10">
-            <Fader>
-              <Contact />
-            </Fader>
-          </div>
-        </div>
-      </section>
-
       <section className="relative z-20 bg-surface">
-        <Footer />
+        <Fader>
+          <Contact />
+        </Fader>
       </section>
     </div>
   );

@@ -27,28 +27,28 @@ const petalVariants = cva("h-auto", {
 export const Petal: React.FC<PetalProps> = ({ positioning, enterDelay = 0.75, size = "medium", autoWiggle = 3000 }) => {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const { theme } = useTheme();
-  const { ref, inView } = useInView({
-    triggerOnce: false,
-    threshold: 0.2,
-  });
 
   const [isWiggling, setIsWiggling] = useState(false);
   const [isFlying, setIsFlying] = useState(false);
 
-  const { ref: parentRef, inView: parentInView } = useInView({
+  // The element that gets observed is the WRAPPER, and `inView` is read from it — not from the
+  // glyph. The glyph is scaled to 0 while out of view, and an element with a zero-area box can
+  // never report a visible ratio, so observing the glyph meant it could never come back into view:
+  // the scale animation was pinned at 0 and the petal never appeared at all. The wrapper always
+  // has a box, so it observes correctly.
+  const { ref: parentRef, inView } = useInView({
     triggerOnce: false,
     threshold: 0.2,
   });
-
   const [key, setKey] = useState("0");
 
   useEffect(() => {
-    if (!parentInView) {
-      setKey(key + 1);
+    if (!inView) {
+      setKey((k) => k + 1);
       setIsWiggling(false);
       setIsFlying(false);
     }
-  }, [parentInView]);
+  }, [inView]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -71,7 +71,6 @@ export const Petal: React.FC<PetalProps> = ({ positioning, enterDelay = 0.75, si
       className={`absolute ${petalVariants({ size })} ${positioning} ${isFlying ? "bg-transparent" : "bg-surface"}`}
     >
       <motion.div
-        ref={ref}
         key={key}
         initial={{ scale: 0, x: 0, y: 0, rotate: 0 }}
         animate={{
@@ -85,7 +84,7 @@ export const Petal: React.FC<PetalProps> = ({ positioning, enterDelay = 0.75, si
           duration: isWiggling ? 1.5 : 3,
           ease: isWiggling ? "easeInOut" : [0.4, 0, 0.5, 1],
           repeat: isWiggling ? 2 : 0,
-          times: isWiggling || isFlying ? [0, 0.2, 0.4, 0.6, 0.8, 1] : parentInView ? undefined : [0, 0, 0, 0],
+          times: isWiggling || isFlying ? [0, 0.2, 0.4, 0.6, 0.8, 1] : undefined,
         }}
         className={`rounded-md origin-bottom-left ${petalVariants({ size })}`}
         style={{ transformOrigin: "10% 100%" }}

@@ -71,12 +71,32 @@ export const PetalFollow = () => {
 
     // one delegated listener — moving anywhere that isn't a link/button resolves to
     // null, so leaving a target resets it without needing mouseout
+    let revealTimer: ReturnType<typeof setTimeout> | null = null;
+    const setFlockHidden = (hidden: boolean) => {
+      if (!flockRef.current) return;
+      if (hidden) {
+        // hide at once, reveal after a beat: crossing a small gap between two tiles that both
+        // opt out (the carousel's cards) would otherwise make the flock stutter in and out
+        if (revealTimer) {
+          clearTimeout(revealTimer);
+          revealTimer = null;
+        }
+        flockRef.current.classList.add("opacity-0");
+        return;
+      }
+      if (revealTimer || !flockRef.current.classList.contains("opacity-0")) return;
+      revealTimer = setTimeout(() => {
+        revealTimer = null;
+        flockRef.current?.classList.remove("opacity-0");
+      }, 140);
+    };
+
     const onOver = (e: MouseEvent) => {
       const t = e.target instanceof Element ? e.target : null;
       orbitEl.current = resolveUnit(t);
-      // petals step aside where something else owns the language (the recents stage's
-      // frame): anything marked [data-petals-off] fades the flock out while hovered.
-      flockRef.current?.classList.toggle("opacity-0", !!t?.closest("[data-petals-off]"));
+      // petals step aside where something else owns the language (the recents stage's frame, the
+      // gallery carousel's cards): anything marked [data-petals-off] fades the flock out while hovered.
+      setFlockHidden(!!t?.closest("[data-petals-off]"));
     };
 
     let prev = performance.now();
@@ -139,6 +159,7 @@ export const PetalFollow = () => {
 
     return () => {
       cancelAnimationFrame(raf);
+      if (revealTimer) clearTimeout(revealTimer);
       window.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseover", onOver);
     };

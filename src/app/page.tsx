@@ -5,7 +5,6 @@ import { Title } from "@/components/title";
 import { MobileNav } from "@/components/header/mobilenav";
 import { LocalTime } from "@/components/footer/localtime";
 import { SocialIcons } from "@/components/footer/socialicons";
-import { Footer } from "@/components/footer/footer";
 import { Textbox } from "@/components/textbox";
 import { Contact } from "@/components/contact";
 import { Button } from "@/components/button";
@@ -67,8 +66,10 @@ export default function Home() {
               <Fader enterDelay={1.5} once={true}>
                 <div>
                   <Title size="large">
-                    {/* in rem via the token: the nav grows with the page, so its clearance must too */}
-                    <div className="relative fixed-line-spacing mt-[var(--nav-clearance)]">
+                    {/* no nav offset here: <main> centres this lockup between the container's
+                        top padding and the footer row, so the nav clearance is already in that box.
+                        A margin here only pushes the lockup off-centre. */}
+                    <div className="relative fixed-line-spacing">
                       fasai <br /> charoensudjai{" "}
                       <Petal positioning="left-[96.5%] bottom-[36.75%] sm:left-[96.75%] sm:bottom-[36.5%] 2xl:left-[97%]" />
                     </div>
@@ -160,18 +161,10 @@ export default function Home() {
         </div>
       </div>
 
-      <section className="relative bg-surface">
-        <div className="md:h-[130vh]">
-          <div className="sticky top-0 z-10">
-            <Fader>
-              <Contact once={false} />
-            </Fader>
-          </div>
-        </div>
-      </section>
-
       <section className="relative z-20 bg-surface">
-        <Footer />
+        <Fader>
+          <Contact once={false} />
+        </Fader>
       </section>
     </div>
   );

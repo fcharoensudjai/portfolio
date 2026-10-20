@@ -6,6 +6,8 @@ export interface CustomImageData {
   wide?: boolean;
   tall?: boolean;
   large?: boolean;
+  /** Focal point for square crops, for pieces whose subject sits off-centre. */
+  focus?: string;
 }
 
 export const imageData: CustomImageData[] = [
@@ -135,6 +137,7 @@ export const imageData: CustomImageData[] = [
     alt: "drawing of reyna",
     date: "2023-06-05",
     name: "reyna",
+    focus: "64% 33%",
   },
 
   {

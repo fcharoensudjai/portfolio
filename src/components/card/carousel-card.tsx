@@ -3,11 +3,9 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
 import { ImageFrame } from "@/components/card/shared/imageframe";
 import { Title } from "@/components/title";
 import { useExitAnimation } from "@/app/contexts/exitcontext";
-import { Scramble } from "@/components/stylers/scramblerthai";
 
 interface CarouselCardProps {
   src: string;
@@ -16,8 +14,18 @@ interface CarouselCardProps {
   href?: string;
   className?: string;
   ctaText?: string;
-  wide?: boolean;
+  year?: string;
+  /** Focal point the square crop is centred on, e.g. "64% 33%". */
+  focus?: string;
+  /** True while another tile in the same row is hovered — the rest of the row drops back. */
+  dimmed?: boolean;
 }
+
+// TARGET is the share of the artwork a square frame gets to keep. A square takes a different slice
+// out of a 1.78 wide than out of a 0.71 tall, so equalising the *loss* per piece (rather than the
+// zoom) is what stops some tiles reading as whole and others as mangled.
+const CROP_TARGET = 0.58;
+const CROP_FALLBACK = 1.5;
 
 export const CarouselCard: React.FC<CarouselCardProps> = ({
   src,
@@ -26,11 +34,19 @@ export const CarouselCard: React.FC<CarouselCardProps> = ({
   href = "/gallery",
   className,
   ctaText = "view gallery",
-  wide = false,
+  year,
+  focus = "50% 32%",
+  dimmed = false,
 }) => {
   const path = usePathname();
   const { setIsExit } = useExitAnimation();
-  const [showOverlay, setShowOverlay] = React.useState(false);
+  const [crop, setCrop] = React.useState(CROP_FALLBACK);
+
+  const handleImageLoad = (img: HTMLImageElement) => {
+    const aspect = img.naturalWidth / img.naturalHeight;
+    if (!aspect) return;
+    setCrop(Math.max(1, Math.min(aspect, 1 / aspect) / CROP_TARGET));
+  };
 
   const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -55,45 +71,30 @@ export const CarouselCard: React.FC<CarouselCardProps> = ({
     <Link
       href={href}
       onClick={handleClick}
-      onMouseEnter={() => setShowOverlay(true)}
-      onMouseLeave={() => setShowOverlay(false)}
-      className={`group/card isolate relative flex-shrink-0 overflow-hidden rounded-xl aspect-[16/10] ${
-        wide
-          ? "w-[17.5rem] sm:w-[20rem] lg:w-[29.375rem] xl:w-[32.5rem]"
-          : "w-[12.5rem] sm:w-[13.125rem] lg:w-[14.375rem]"
-      } ${className ?? ""}`}
+      // the row dims as a whole while it is hovered: every tile drops back, the hovered one comes
+      // back to full strength and lifts above its neighbours. data-petals-off hands the language of
+      // the hover to the artwork itself, the same way the recents stage does for its frame.
+      data-petals-off
+      className={`group/card isolate relative flex-shrink-0 overflow-hidden rounded-xl aspect-square w-[min(clamp(220px,38vh,400px),78vw)] cursor-pointer ${
+        dimmed ? "opacity-60" : "opacity-100"
+      } hover:z-10 hover:scale-[1.05] hover:opacity-100 ${className ?? ""}`}
+      style={{ transition: "transform 500ms cubic-bezier(0.22, 1, 0.36, 1), opacity 400ms ease" }}
       aria-label={`${title} — ${ctaText}`}
     >
-      <ImageFrame src={src} alt={alt} pulsePlaceholder={true} className="inset-0" imageClassName="scale-100" />
+      <ImageFrame
+        src={src}
+        alt={alt}
+        pulsePlaceholder={true}
+        className="inset-0"
+        objectPosition={focus}
+        imageStyle={{ transform: `scale(${crop})` }}
+        onImageLoad={handleImageLoad}
+      />
 
-      <AnimatePresence>
-        {showOverlay && (
-          <motion.div
-            className="absolute inset-0 z-[18] pointer-events-none backdrop-blur-[1px] bg-surface-mid bg-opacity-55"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2, ease: [0.65, 0, 0.35, 1] }}
-          />
-        )}
-      </AnimatePresence>
-
-      <div className="absolute inset-x-0 bottom-0 h-[38%] z-[15] pointer-events-none bg-gradient-to-t from-black via-black/65 to-transparent" />
-
-      <div className="absolute inset-x-0 bottom-0 z-20 p-3 sm:p-4 lg:p-5 text-[#E8E7E2]">
-        <div className="lowercase leading-tight">
-          <Title size="carousel">{title.toLowerCase()}</Title>
-        </div>
-
-        <div className="mt-0.2 md:mt-0.5 lg:mt-1 w-fit pointer-events-auto group/cta">
-          <div className="flex items-center gap-0.5 sm:gap-0.75 md:gap-1 text-xxs sm:text-xs text-[#E8E7E2] lowercase">
-            <Scramble hover={true} navigate={showOverlay} interval={20}>{`[ ${ctaText.toLowerCase()}`}</Scramble>
-            <span className="inline-block transition-transform duration-300 ease-out group-hover/card:translate-x-[25%]">
-              →
-            </span>
-            <span>]</span>
-          </div>
-        </div>
+      {/* no hover on touch, so the caption stays put there instead of hiding the name entirely */}
+      <div className="absolute inset-0 z-[15] flex flex-col justify-end p-4 lg:p-5 bg-[linear-gradient(180deg,rgba(18,18,18,0)_45%,rgba(18,18,18,0.74))] opacity-0 transition-opacity duration-[350ms] ease-in group-hover/card:opacity-100 [@media(hover:none)]:opacity-100">
+        <Title size="carousel">{title.toLowerCase()}</Title>
+        {year ? <span className="font-mono text-xs text-[#E8E7E2]/[0.62]">{year}</span> : null}
       </div>
     </Link>
   );

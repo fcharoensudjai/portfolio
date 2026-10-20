@@ -84,7 +84,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
           </ul>
         </div>
 
-        <div className="fixed bottom-0 left-0 right-0 flex justify-between items-center px-5 py-3 bg-transparent">
+        <div className="fixed bottom-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-transparent">
           <div className="flex-grow flex justify-start">
             <LocalTime />
           </div>

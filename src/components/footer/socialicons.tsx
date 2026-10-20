@@ -67,11 +67,15 @@ export const SocialIcons = () => {
           </div>
         </a>
 
+        {/* the icon is drawn on a 24-unit viewBox whose ink runs to 22, so at 30px its right edge
+            stops 2.5px inside the box. Pulling it out by that puts the glyph on the row's edge —
+            the same line the header's hamburger and the desktop socials end on. */}
         <a
           href="https://www.youtube.com/@fuzz_ch"
           target="_blank"
           rel="noopener noreferrer"
           className="relative inline-block"
+          style={{ marginRight: "-2.5px" }}
         >
           <Image
             src={theme === "dark" ? `${basePath}/icons/dark/youtubedark.svg` : `${basePath}/icons/light/youtube.svg`}

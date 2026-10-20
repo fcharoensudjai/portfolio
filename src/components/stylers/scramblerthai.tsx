@@ -2,12 +2,15 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { ScrambleWord } from "@/components/stylers/scramble-boxes";
+import { SCRAMBLE_RATE } from "@/components/stylers/scramble-rate";
 
 interface ScrambleProps {
   children: string;
   delay?: number; // delay before starting the scramble effect
   hover?: boolean; // choose whether I want it to have an onHover effect
-  interval?: number; // how quickly stuff scrambles
+  // ms per glyph, for the slow glyph-by-glyph decode the short hover labels want. Omit it and the
+  // text runs at SCRAMBLE_RATE — the same pace as the recents stage's caption
+  interval?: number;
   paragraphs?: boolean;
   navigate?: boolean;
   preScrambled?: boolean; // holds the text scrambled while out of view, then unscrambles it in view
@@ -19,7 +22,7 @@ export const Scramble: React.FC<ScrambleProps> = ({
   children,
   delay = 500,
   hover = false,
-  interval = 2,
+  interval,
   paragraphs = false,
   navigate = false,
   preScrambled = false,
@@ -27,6 +30,11 @@ export const Scramble: React.FC<ScrambleProps> = ({
   renderCustom,
 }) => {
   // default delay is 500ms
+
+  // omitting `interval` opts into the shared site pace: glyphs arrive in runs of SCRAMBLE_RATE.perTick
+  // per tick. An explicit interval keeps the one-glyph-per-tick rhythm the hover labels are tuned to.
+  const perTick = interval === undefined ? SCRAMBLE_RATE.perTick : 1;
+  const tickMs = interval ?? SCRAMBLE_RATE.ms;
 
   const letters = "กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮ";
 
@@ -94,11 +102,11 @@ export const Scramble: React.FC<ScrambleProps> = ({
 
     intervalRef.current = setInterval(() => {
       setIntervalCount((prevCount) => {
-        const newCount = prevCount + 1;
+        const newCount = prevCount + perTick;
         setScrambled(scrambleText(children, newCount));
         return newCount;
       });
-    }, interval);
+    }, tickMs);
 
     timeoutRef.current = setTimeout(() => {
       stopScramble();
