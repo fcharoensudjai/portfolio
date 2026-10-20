@@ -78,7 +78,7 @@ export default function Home() {
                 <div className="my-4 text-ink-secondary">
                   {/* body unit + secondary ink: it's a prompt, not content */}
                   <Textbox size="caption">
-                    <Scramble delay={2000} hover={true} interval={20}>
+                    <Scramble delay={2000} hover={true} interval={20} once={false}>
                       {"[ scroll to explore ] "}
                     </Scramble>
                   </Textbox>
@@ -127,7 +127,7 @@ export default function Home() {
                         above it — same relationship as a piece caption under its title, secondary ink
                         in both cases */}
                     <Textbox size="caption">
-                      <Scramble>
+                      <Scramble once={false} preScrambled>
                         {
                           "Here are the previews for some of the pieces I've been working on lately. Feel free to click on them to see the full image, view some more details, or click on the gallery button to view all of them!"
                         }
@@ -164,7 +164,7 @@ export default function Home() {
         <div className="md:h-[130vh]">
           <div className="sticky top-0 z-10">
             <Fader>
-              <Contact />
+              <Contact once={false} />
             </Fader>
           </div>
         </div>

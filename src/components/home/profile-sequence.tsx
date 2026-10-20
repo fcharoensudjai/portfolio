@@ -274,12 +274,12 @@ export const ProfileSequence = () => {
               sets and the text leads 2.4px looser than the intro asks for. `inherit` re-reads the
               wrapper's 1.6, and Scramble's boxes inherit it on down from there. */}
           <div style={{ lineHeight: "inherit" }}>
-            <Scramble interval={20} delay={400}>
+            <Scramble interval={20} delay={400} once={false} preScrambled>
               Working in Finance and tech,
             </Scramble>
           </div>
           <div style={{ lineHeight: "inherit" }}>
-            <Scramble interval={20} delay={400}>
+            <Scramble interval={20} delay={400} once={false} preScrambled>
               creating art whenever I can.
             </Scramble>
           </div>

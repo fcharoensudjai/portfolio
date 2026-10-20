@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>theme switch lab</title>
+    <style>
+      /* Same two marks the site uses, as masks, so what you see here is what ships. */
+      :root {
+        --moon: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 25 26'><path d='M25 17.184C23.5067 17.7842 21.876 18.1144 20.168 18.1144C13.0076 18.1144 7.20287 12.3097 7.20287 5.14922C7.20287 3.44131 7.53311 1.81054 8.13321 0.317261C3.36588 2.23311 0 6.89953 0 12.3521C0 19.5126 5.8047 25.3173 12.9652 25.3173C18.4177 25.3173 23.0841 21.9514 25 17.184Z' fill='black'/></svg>");
+        --sun: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 31'><path d='M15 4.06726V5.31726M15 25.3173V26.5673M26.25 15.3173H25M5 15.3173H3.75M22.955 23.2722L22.0711 22.3883M7.92893 8.24619L7.04505 7.36231M22.955 7.36238L22.0711 8.24626M7.929 22.3884L7.04511 23.2723M20 15.3173C20 18.0787 17.7614 20.3173 15 20.3173C12.2386 20.3173 10 18.0787 10 15.3173C10 12.5558 12.2386 10.3173 15 10.3173C17.7614 10.3173 20 12.5558 20 15.3173Z' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>");
+
+        --slow: 1;
+        --d: calc(420ms * var(--slow));
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+        --pop: cubic-bezier(0.34, 1.45, 0.64, 1);
+        --sw: 30px;
+
+        --stage-dark: #1c1c1c;
+        --stage-light: #e8e7e2;
+        --ink-dark: #e8e7e2;
+        --ink-light: #242424;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        padding: 32px clamp(16px, 4vw, 56px) 96px;
+        background: #141414;
+        color: #cfcdc8;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 12px 28px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #2a2a2a;
+        margin-bottom: 28px;
+      }
+
+      h1 {
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #e8e7e2;
+      }
+
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 18px;
+        margin-left: auto;
+      }
+
+      .controls label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        letter-spacing: 0.06em;
+        color: #8d8b87;
+      }
+
+      select,
+      button {
+        font: inherit;
+        color: #e8e7e2;
+        background: #1f1f1f;
+        border: 1px solid #333;
+        padding: 4px 10px;
+        cursor: pointer;
+      }
+
+      select:hover,
+      button:hover {
+        border-color: #555;
+      }
+
+      .hint {
+        color: #6f6d69;
+        font-size: 12px;
+        max-width: 46ch;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
+        gap: 16px;
+      }
+
+      .card {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #2c2c2c;
+        background: var(--stage-dark);
+        color: var(--ink-dark);
+      }
+
+      .card.light {
+        background: var(--stage-light);
+        color: var(--ink-light);
+      }
+
+      .stage {
+        display: grid;
+        place-items: center;
+        min-height: 128px;
+      }
+
+      /* the switch itself: two masked marks sharing one box */
+      .sw {
+        position: relative;
+        width: var(--sw);
+        height: var(--sw);
+        flex: none;
+      }
+
+      .mark {
+        position: absolute;
+        inset: 0;
+        background-color: currentColor;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        opacity: 0;
+      }
+
+      .moon {
+        -webkit-mask-image: var(--moon);
+        mask-image: var(--moon);
+      }
+
+      .sun {
+        -webkit-mask-image: var(--sun);
+        mask-image: var(--sun);
+      }
+
+      .card:not(.light) .sun,
+      .card.light .moon {
+        opacity: 1;
+      }
+
+      .meta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        border-top: 1px solid rgba(128, 128, 128, 0.25);
+      }
+
+      .meta h2 {
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .meta p {
+        font-size: 11px;
+        opacity: 0.55;
+        line-height: 1.5;
+      }
+
+      .meta button {
+        margin-left: auto;
+        flex: none;
+        padding: 3px 9px;
+        font-size: 11px;
+        color: inherit;
+        background: transparent;
+        border: 1px solid currentColor;
+        opacity: 0.6;
+      }
+
+      .meta button:hover {
+        opacity: 1;
+      }
+
+      /* ------------------------------------------------------------------ iris */
+      /* the new mark opens out of the centre while the old one lets go late */
+      [data-variant="iris"] .mark {
+        transition:
+          opacity calc(var(--d) * 0.85) ease,
+          clip-path var(--d) var(--ease);
+      }
+
+      [data-variant="iris"] .sun {
+        clip-path: circle(0% at 50% 50%);
+      }
+
+      [data-variant="iris"] .moon {
+        clip-path: circle(0% at 50% 50%);
+      }
+
+      [data-variant="iris"]:not(.light) .sun {
+        clip-path: circle(76% at 50% 50%);
+      }
+
+      [data-variant="iris"].light .moon {
+        clip-path: circle(76% at 50% 50%);
+      }
+
+      /* ------------------------------------------------------------ roll (all axes) */
+      /* the marks travel through a window: one exits one edge, the next enters the opposite edge.
+         --pm / --ps are where the moon and sun sit while parked; the active one resets to 0 0. */
+      [data-roll] .sw {
+        overflow: hidden;
+      }
+
+      [data-roll] .mark {
+        opacity: 1;
+        transition: transform calc(var(--d) * 1.1) var(--pop);
+      }
+
+      [data-roll] .moon {
+        transform: translate(var(--pm));
+      }
+
+      [data-roll] .sun {
+        transform: translate(var(--ps));
+      }
+
+      [data-roll]:not(.light) .sun,
+      [data-roll].light .moon {
+        transform: translate(0, 0);
+      }
+
+      [data-roll="up"] {
+        --pm: 0, -118%;
+        --ps: 0, 118%;
+      }
+
+      [data-roll="down"] {
+        --pm: 0, 118%;
+        --ps: 0, -118%;
+      }
+
+      [data-roll="west"] {
+        --pm: -118%, 0;
+        --ps: 118%, 0;
+      }
+
+      [data-roll="east"] {
+        --pm: 118%, 0;
+        --ps: -118%, 0;
+      }
+
+      [data-roll="diag"] {
+        --pm: 118%, -118%;
+        --ps: -118%, 118%;
+      }
+
+      /* ----------------------------------------------------------- focus pull */
+      /* old mark defocuses out, new one racks into focus */
+      [data-variant="focus"] .mark {
+        transition:
+          opacity calc(var(--d) * 0.9) ease,
+          filter calc(var(--d) * 0.9) ease,
+          transform calc(var(--d) * 0.9) var(--ease);
+        filter: blur(5px);
+        transform: scale(1.18);
+      }
+
+      [data-variant="focus"]:not(.light) .sun,
+      [data-variant="focus"].light .moon {
+        filter: blur(0);
+        transform: scale(1);
+      }
+
+      /* ----------------------------------------------------------------- bloom */
+      /* light swells in from a point with a soft glow; the moon just fades */
+      [data-variant="bloom"] .mark {
+        transition: opacity calc(var(--d) * 0.55) ease;
+      }
+
+      [data-variant="bloom"] .sun {
+        transition:
+          opacity calc(var(--d) * 0.4) ease,
+          transform calc(var(--d) * 1.05) var(--pop),
+          filter calc(var(--d) * 1.05) var(--ease);
+        transform: scale(0.25);
+        filter: drop-shadow(0 0 0 transparent);
+      }
+
+      [data-variant="bloom"] .moon {
+        transition:
+          opacity calc(var(--d) * 0.45) ease,
+          transform calc(var(--d) * 0.7) var(--ease);
+        transform: scale(1);
+      }
+
+      [data-variant="bloom"]:not(.light) .sun {
+        transform: scale(1);
+        filter: drop-shadow(0 0 6px rgba(232, 231, 226, 0.45));
+      }
+
+      [data-variant="bloom"]:not(.light) .moon {
+        transform: scale(0.86);
+      }
+
+      /* --------------------------------------------------------------- curtain */
+      /* new mark wipes up from the baseline like a curtain; old one clears out */
+      [data-variant="curtain"] .mark {
+        transition:
+          opacity calc(var(--d) * 0.5) ease,
+          clip-path var(--d) var(--ease);
+      }
+
+      [data-variant="curtain"] .sun,
+      [data-variant="curtain"] .moon {
+        clip-path: inset(100% 0 0 0);
+      }
+
+      [data-variant="curtain"]:not(.light) .sun {
+        clip-path: inset(0 0 0 0);
+      }
+
+      [data-variant="curtain"].light .moon {
+        clip-path: inset(0 0 0 0);
+      }
+
+      /* ----------------------------------------------------------------- drift */
+      /* plain crossfade, the newcomer rising a few pixels into place */
+      [data-variant="drift"] .mark {
+        transition:
+          opacity calc(var(--d) * 0.7) ease,
+          transform calc(var(--d) * 0.9) var(--ease);
+      }
+
+      [data-variant="drift"] .sun,
+      [data-variant="drift"] .moon {
+        transform: translateY(7px);
+      }
+
+      [data-variant="drift"]:not(.light) .sun,
+      [data-variant="drift"].light .moon {
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bar">
+      <h1>theme switch lab</h1>
+      <p class="hint">no rotation. press a card's toggle, or run them all in a loop and watch.</p>
+      <div class="controls">
+        <label>speed <select id="speed">
+            <option value="1">1×</option>
+            <option value="2">2× slower</option>
+            <option value="4">4× slower</option>
+            <option value="8">8× slower</option>
+          </select></label>
+        <label>size <select id="size">
+            <option value="30">30px (real)</option>
+            <option value="56">56px</option>
+            <option value="88">88px</option>
+          </select></label>
+        <label><input type="checkbox" id="loop" /> loop all</label>
+        <button id="flipAll">flip all</button>
+      </div>
+    </div>
+
+    <main class="grid">
+      <section class="card" data-variant="iris">
+        <div class="stage">
+          <div class="sw"><div class="mark moon"></div><div class="mark sun"></div></div>
+        </div>
+        <div class="meta">
+          <div>
+            <h2>iris</h2>
+            <p>opens out of the centre</p>
+          </div>
+          <button class="toggle">toggle</button>
+        </div>
+      </section>
+
+      <section class="card" data-roll="up">
+        <div class="stage">
+          <div class="sw"><div class="mark moon"></div><div class="mark sun"></div></div>
+        </div>
+        <div class="meta">
+          <div>
+            <h2>sunrise</h2>
+            <p>rolls up through the frame</p>
+          </div>
+          <button class="toggle">toggle</button>
+        </div>
+      </section>
+
+      <section class="card" data-roll="down">
+        <div class="stage">
+          <div class="sw"><div class="mark moon"></div><div class="mark sun"></div></div>
+        </div>
+        <div class="meta">
+          <div>
+            <h2>sundown</h2>
+            <p>rolls down through the frame</p>
+          </div>
+          <button class="toggle">toggle</button>
+        </div>
+      </section>
+
+      <section class="card" data-roll="west">
+        <div class="stage">
+          <div class="sw"><div class="mark moon"></div><div class="mark sun"></div></div>
+        </div>
+        <div class="meta">
+          <div>
+            <h2>westward</h2>
+            <p>exits left, enters from the right</p>
+          </div>
+          <button class="toggle">toggle</button>
+        </div>
+      </section>
+
+      <section class="card" data-roll="east">
+        <div class="stage">
+          <div class="sw"><div class="mark moon"></div><div class="mark sun"></div></div>
+        </div>
+        <div class="meta">
+          <div>
+            <h2>eastward</h2>
+            <p>exits right, enters from the left</p>
+          </div>
+          <button class="toggle">toggle</button>
+        </div>
+      </section>
+
+      <section class="card" data-roll="diag">
+        <div class="stage">
+          <div class="sw"><div class="mark moon"></div><div class="mark sun"></div></div>
+        </div>
+        <div class="meta">
+          <div>
+            <h2>diagonal</h2>
+            <p>rolls up and to the right</p>
+          </div>
+          <button class="toggle">toggle</button>
+        </div>
+      </section>
+
+      <section class="card" data-variant="focus">
+        <div class="stage">
+          <div class="sw"><div class="mark moon"></div><div class="mark sun"></div></div>
+        </div>
+        <div class="meta">
+          <div>
+            <h2>focus pull</h2>
+            <p>defocus out, rack in</p>
+          </div>
+          <button class="toggle">toggle</button>
+        </div>
+      </section>
+
+      <section class="card" data-variant="bloom">
+        <div class="stage">
+          <div class="sw"><div class="mark moon"></div><div class="mark sun"></div></div>
+        </div>
+        <div class="meta">
+          <div>
+            <h2>bloom</h2>
+            <p>light swells from a point</p>
+          </div>
+          <button class="toggle">toggle</button>
+        </div>
+      </section>
+
+      <section class="card" data-variant="curtain">
+        <div class="stage">
+          <div class="sw"><div class="mark moon"></div><div class="mark sun"></div></div>
+        </div>
+        <div class="meta">
+          <div>
+            <h2>curtain</h2>
+            <p>wipes up from the baseline</p>
+          </div>
+          <button class="toggle">toggle</button>
+        </div>
+      </section>
+
+      <section class="card" data-variant="drift">
+        <div class="stage">
+          <div class="sw"><div class="mark moon"></div><div class="mark sun"></div></div>
+        </div>
+        <div class="meta">
+          <div>
+            <h2>drift</h2>
+            <p>quiet crossfade, 7px rise</p>
+          </div>
+          <button class="toggle">toggle</button>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const cards = Array.from(document.querySelectorAll(".card"));
+      const flip = (card) => card.classList.toggle("light");
+
+      document.querySelectorAll(".toggle").forEach((btn) => {
+        btn.addEventListener("click", () => flip(btn.closest(".card")));
+      });
+
+      document.getElementById("flipAll").addEventListener("click", () => {
+        cards.forEach(flip);
+      });
+
+      document.getElementById("speed").addEventListener("change", (e) => {
+        document.documentElement.style.setProperty("--slow", e.target.value);
+      });
+
+      document.getElementById("size").addEventListener("change", (e) => {
+        document.documentElement.style.setProperty("--sw", e.target.value + "px");
+      });
+
+      let loopId = null;
+      document.getElementById("loop").addEventListener("change", (e) => {
+        clearInterval(loopId);
+        loopId = e.target.checked ? setInterval(() => cards.forEach(flip), 1400) : null;
+      });
+    </script>
+  </body>
+</html>

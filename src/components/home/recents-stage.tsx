@@ -96,6 +96,9 @@ function labelTransform(clientX: number, clientY: number, rect: DOMRect, { w, h 
  */
 const THAI = "กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮ";
 const randomChar = () => THAI[Math.floor(Math.random() * THAI.length)];
+// the caption clears in roughly half a second — the same pace as the intro paragraph above the
+// stage (one glyph per ~2ms), so the stage's prose doesn't read slower than the section it follows
+const CAPTION_RATE = { perTick: 5, ms: 12 };
 const scrambleTimers = new WeakMap<HTMLElement, ReturnType<typeof setInterval>>();
 
 /** Rebuilds `host` as fixed-width character boxes and hands the boxes back, in text order. */
@@ -131,9 +134,16 @@ function fillFixedChars(host: HTMLElement, text: string) {
   return boxes;
 }
 
-function scramble(el: HTMLElement, text: string, { perTick = 1, ms = 30 } = {}) {
+function stopScramble(el: HTMLElement) {
   const running = scrambleTimers.get(el);
-  if (running) clearInterval(running);
+  if (!running) return false;
+  clearInterval(running);
+  scrambleTimers.delete(el);
+  return true;
+}
+
+function scramble(el: HTMLElement, text: string, { perTick = 1, ms = 30 } = {}) {
+  stopScramble(el);
   const boxes = fillFixedChars(el, text);
   const chars = text.replace(/\s+/g, "");
   let revealed = 0;
@@ -149,6 +159,14 @@ function scramble(el: HTMLElement, text: string, { perTick = 1, ms = 30 } = {}) 
     }
   }, ms);
   scrambleTimers.set(el, id);
+}
+
+/** Cancels any run and parks `el` fully scrambled, so the next entry decodes from the start. */
+function holdScrambled(el: HTMLElement, text: string) {
+  stopScramble(el);
+  fillFixedChars(el, text).forEach((box) => {
+    box.textContent = randomChar();
+  });
 }
 
 /**
@@ -197,12 +215,14 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
       return;
     }
     const el = captionRefs.current[active];
-    if (el) scramble(el, items[active].caption, { perTick: 5, ms: 18 });
+    if (el) scramble(el, items[active].caption, CAPTION_RATE);
   }, [active, items]);
 
   useEffect(() => {
     const wrap = wrapRef.current;
     if (!wrap) return;
+    // captured once: the cleanup has to reach the same nodes this run registered
+    const captionEls = captionRefs.current;
 
     // The wrapper's own geometry only changes on resize, or when something above it reflows — so it
     // is measured then, and NOT per scroll frame. A getBoundingClientRect() inside the scroll handler
@@ -260,20 +280,20 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
     const bodyObserver = new ResizeObserver(remeasure);
     bodyObserver.observe(document.body);
 
-    // Arrival: the caption scrambles the first time the plate is actually scrolled into view —
-    // otherwise the flourish only ever plays at a handoff, so the first piece you land on is the one
-    // you never see it on. Reads the live index off activeRef rather than `active`, because this
-    // effect doesn't re-subscribe per handoff. Fires once, then unobserves.
+    // Arrival and re-entry: the caption holds its scramble while the plate is off screen and decodes
+    // as it comes back in, so the prose behaves like the rest of the home page's text instead of
+    // playing once and then sitting there plain. Reads the live index off activeRef rather than
+    // `active`, because this effect doesn't re-subscribe per handoff.
     const plate = plateRef.current;
     let arrivalObserver: IntersectionObserver | null = null;
     if (plate) {
       arrivalObserver = new IntersectionObserver(
         (entries) => {
-          if (!entries.some((entry) => entry.isIntersecting)) return;
-          arrivalObserver?.disconnect();
-          arrivalObserver = null;
           const el = captionRefs.current[activeRef.current];
-          if (el) scramble(el, items[activeRef.current].caption, { perTick: 5, ms: 18 });
+          if (!el) return;
+          const caption = items[activeRef.current].caption;
+          if (entries.some((entry) => entry.isIntersecting)) scramble(el, caption, CAPTION_RATE);
+          else holdScrambled(el, caption);
         },
         { threshold: 0.35 }
       );
@@ -285,6 +305,9 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
       window.removeEventListener("resize", remeasure);
       bodyObserver.disconnect();
       arrivalObserver?.disconnect();
+      captionEls.forEach((el) => {
+        if (el) stopScramble(el);
+      });
     };
   }, [n, segments, items]);
 

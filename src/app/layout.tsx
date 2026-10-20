@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning={true} className={robotoMono.variable}>
+    <html lang="en" suppressHydrationWarning={true} className={`${robotoMono.variable} theme-boot`}>
       <body>
         <ProviderTheme>
           <LenisProvider>

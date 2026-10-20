@@ -6,7 +6,11 @@ import { useInView } from "react-intersection-observer";
 import React from "react";
 import { Petal } from "@/components/petal";
 
-export const Contact = () => {
+interface ContactProps {
+  once?: boolean; // whether the mail line scrambles only the first time it enters view
+}
+
+export const Contact = ({ once = true }: ContactProps) => {
   // controlling the underlining for the contact section
 
   const { setIsContactInView } = useVisibility3();
@@ -40,7 +44,7 @@ export const Contact = () => {
       <div className="flex justify-end items-center px-3 md:px-5 pt-3 md:pt-5 pb-5 xl:pb-7 text-xs text-ink-secondary md:text-sm">
         <a href="mailto:fuzz.ch04@gmail.com">
           <Textbox size="caption">
-            <Scramble delay={2000} interval={15}>
+            <Scramble delay={2000} interval={15} once={once}>
               {"[ mail | fuzz.ch04@gmail.com ]"}
             </Scramble>
           </Textbox>

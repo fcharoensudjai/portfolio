@@ -1,38 +1,29 @@
 "use client";
 
 import { useEffect } from "react";
-import { useTheme } from "next-themes";
 
+// Written once, in tokens rather than theme-branched hexes: the selection follows the theme on its own
+// (and fades with the rest of the page, since the tokens are what animate).
 const Highlighter = () => {
-  const { theme } = useTheme();
-
   useEffect(() => {
     const style = document.createElement("style");
     style.id = "selection-styles";
-    document.head.appendChild(style);
-
-    const updateHighlighter = (theme: string | undefined) => {
-      const selectionColor = theme === "dark" ? "#403B3B" : "#E8E7E2";
-      const textColor = theme === "dark" ? "#E8E7E2" : "#242424";
-
-      style.innerHTML = `
+    style.innerHTML = `
                 ::selection {
-                    background: ${selectionColor};
-                    color: ${textColor};
+                    background: rgb(var(--c-surface-mid));
+                    color: rgb(var(--c-ink));
                 }
                 ::-moz-selection {
-                    background: ${selectionColor};
-                    color: ${textColor};
+                    background: rgb(var(--c-surface-mid));
+                    color: rgb(var(--c-ink));
                 }
             `;
-    };
-
-    updateHighlighter(theme);
+    document.head.appendChild(style);
 
     return () => {
       document.head.removeChild(style);
     };
-  }, [theme]);
+  }, []);
 
   return null;
 };

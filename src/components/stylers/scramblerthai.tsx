@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { ScrambleWord } from "@/components/stylers/scramble-boxes";
@@ -10,7 +10,8 @@ interface ScrambleProps {
   interval?: number; // how quickly stuff scrambles
   paragraphs?: boolean;
   navigate?: boolean;
-  preScrambled?: boolean; // keeps the text completely scrambled from frame 0 until delay is met
+  preScrambled?: boolean; // holds the text scrambled while out of view, then unscrambles it in view
+  once?: boolean; // scramble only the first time the text comes into view
   renderCustom?: (scrambledNodes: React.ReactNode[]) => React.ReactNode; // custom render callback
 }
 
@@ -22,25 +23,41 @@ export const Scramble: React.FC<ScrambleProps> = ({
   paragraphs = false,
   navigate = false,
   preScrambled = false,
+  once = true,
   renderCustom,
 }) => {
   // default delay is 500ms
 
   const letters = "กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮ";
 
-  const [scrambled, setScrambled] = useState<string>(() => {
-    if (preScrambled) {
-      return children
-        .split("")
-        .map((char) =>
-          char === " " || char === "\n" || char === "|" ? char : letters[Math.floor(Math.random() * letters.length)]
-        )
-        .join("");
-    }
-    return children;
-  });
+  function fullyScrambled(text: string) {
+    return text
+      .split("")
+      .map((char) =>
+        char === " " || char === "\n" || char === "|" ? char : letters[Math.floor(Math.random() * letters.length)]
+      )
+      .join("");
+  }
+
+  const [scrambled, setScrambled] = useState<string>(() => (preScrambled ? fullyScrambled(children) : children));
   const [intervalCount, setIntervalCount] = useState<number>(0);
-  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // the first pass keeps its `delay` so entrance choreography still staggers; later passes
+  // unscramble the moment the text is back in view
+  const hasPlayedRef = useRef(false);
+
+  function stopScramble() {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  }
 
   function shuffleArray<T>(array: T[]): T[] {
     for (let i = array.length - 1; i > 0; i--) {
@@ -51,7 +68,7 @@ export const Scramble: React.FC<ScrambleProps> = ({
   }
 
   const [ref, inView] = useInView({
-    triggerOnce: true,
+    triggerOnce: once,
     threshold: 0.1, // small threshold to detect when in view
   });
 
@@ -72,9 +89,10 @@ export const Scramble: React.FC<ScrambleProps> = ({
 
   function handleScramble() {
     const textLength = children.length;
+    stopScramble();
     setIntervalCount(0);
 
-    const id = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       setIntervalCount((prevCount) => {
         const newCount = prevCount + 1;
         setScrambled(scrambleText(children, newCount));
@@ -82,25 +100,34 @@ export const Scramble: React.FC<ScrambleProps> = ({
       });
     }, interval);
 
-    setIntervalId(id);
-
-    setTimeout(() => {
-      if (id) {
-        clearInterval(id);
-        setScrambled(children);
-      }
+    timeoutRef.current = setTimeout(() => {
+      stopScramble();
+      setScrambled(children);
     }, textLength * 50);
   }
 
   useEffect(() => {
     if (inView && !navigate) {
-      const delayTimer = setTimeout(() => {
-        handleScramble();
-      }, delay);
+      const delayTimer = setTimeout(
+        () => {
+          hasPlayedRef.current = true;
+          handleScramble();
+        },
+        hasPlayedRef.current ? 0 : delay
+      );
 
       return () => clearTimeout(delayTimer);
     }
   }, [inView, delay]);
+
+  // while out of view, park the text back in its scrambled state so it decodes again on re-entry
+  useEffect(() => {
+    if (!preScrambled || inView) return;
+
+    stopScramble();
+    setIntervalCount(0);
+    setScrambled(fullyScrambled(children));
+  }, [inView, preScrambled, children]);
 
   useEffect(() => {
     if (navigate) {
@@ -114,11 +141,9 @@ export const Scramble: React.FC<ScrambleProps> = ({
 
   useEffect(() => {
     return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
+      stopScramble();
     };
-  }, [intervalId]);
+  }, []);
 
   const rawParagraphs = scrambled.split("|||");
 

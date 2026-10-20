@@ -185,27 +185,210 @@ body {
   }
 }
 
+/* ---- The theme cross-fade ----
+   A token is a space-separated RGB triplet so tailwind can append alpha (`rgb(var(--c-ink) / 0.5)`),
+   and a bare string like `36 36 36` is not a value the browser can interpolate — so the whole page
+   used to snap between themes. Registering each channel as a typed number gives it something to
+   animate: the triplet recomposes from the in-flight numbers every frame, and everything that reads a
+   token — the ground, the ink, borders, the accents — fades with it. (Unregistered custom properties
+   change discretely, so `transition` on its own would do nothing here; hence `@property`.)
+
+   `initial-value` is the dark theme's channel, which is also the default theme. Browsers without
+   `@property` ignore this block and land exactly where they were: the values below still compose
+   normally, they just change in one step instead of over the fade. */
+@property --c-surface-r {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 36;
+}
+@property --c-surface-g {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 36;
+}
+@property --c-surface-b {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 36;
+}
+@property --c-surface-mid-r {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 64;
+}
+@property --c-surface-mid-g {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 59;
+}
+@property --c-surface-mid-b {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 59;
+}
+@property --c-ink-r {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 232;
+}
+@property --c-ink-g {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 231;
+}
+@property --c-ink-b {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 226;
+}
+@property --c-ink-secondary-r {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 176;
+}
+@property --c-ink-secondary-g {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 173;
+}
+@property --c-ink-secondary-b {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 166;
+}
+@property --c-rose-r {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 205;
+}
+@property --c-rose-g {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 122;
+}
+@property --c-rose-b {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 122;
+}
+@property --c-sand-r {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 191;
+}
+@property --c-sand-g {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 175;
+}
+@property --c-sand-b {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 156;
+}
+
 /* semantic colour tokens — values per theme (next-themes toggles .dark/.light on <html>) */
 :root,
 .dark {
-  --c-surface: 36 36 36; /* #242424 charcoal */
-  --c-surface-mid: 64 59 59; /* #403B3B mid charcoal (overlays) */
-  --c-ink: 232 231 226; /* #E8E7E2 cream */
-  --c-ink-secondary: 176 173 166; /* #B0ADA6 — the supporting tier at 6.9:1. Dark's motivation is
-                                     glare (cream at 12.5:1 blooms); light's is hierarchy. Same ratio
-                                     in both so the tier is reproducible. (9:1 would be #C6C4BC here —
-                                     visible in dark, but #474747 in light is invisible, so the token
-                                     became a no-op in one theme.) */
-  --c-rose: 205 122 122; /* #CD7A7A */
-  --c-sand: 191 175 156; /* #BFAF9C */
+  /* #242424 charcoal */
+  --c-surface-r: 36;
+  --c-surface-g: 36;
+  --c-surface-b: 36;
+  --c-surface: var(--c-surface-r) var(--c-surface-g) var(--c-surface-b);
+
+  /* #403B3B mid charcoal (overlays) */
+  --c-surface-mid-r: 64;
+  --c-surface-mid-g: 59;
+  --c-surface-mid-b: 59;
+  --c-surface-mid: var(--c-surface-mid-r) var(--c-surface-mid-g) var(--c-surface-mid-b);
+
+  /* #E8E7E2 cream */
+  --c-ink-r: 232;
+  --c-ink-g: 231;
+  --c-ink-b: 226;
+  --c-ink: var(--c-ink-r) var(--c-ink-g) var(--c-ink-b);
+
+  /* #B0ADA6 — the supporting tier at 6.9:1. Dark's motivation is
+     glare (cream at 12.5:1 blooms); light's is hierarchy. Same ratio
+     in both so the tier is reproducible. (9:1 would be #C6C4BC here —
+     visible in dark, but #474747 in light is invisible, so the token
+     became a no-op in one theme.) */
+  --c-ink-secondary-r: 176;
+  --c-ink-secondary-g: 173;
+  --c-ink-secondary-b: 166;
+  --c-ink-secondary: var(--c-ink-secondary-r) var(--c-ink-secondary-g) var(--c-ink-secondary-b);
+
+  /* #CD7A7A */
+  --c-rose-r: 205;
+  --c-rose-g: 122;
+  --c-rose-b: 122;
+  --c-rose: var(--c-rose-r) var(--c-rose-g) var(--c-rose-b);
+
+  /* #BFAF9C */
+  --c-sand-r: 191;
+  --c-sand-g: 175;
+  --c-sand-b: 156;
+  --c-sand: var(--c-sand-r) var(--c-sand-g) var(--c-sand-b);
 }
+/* Only the channels change per theme — the triplets are assembled once above, from those channels. */
 .light {
-  --c-surface: 254 251 251; /* #FEFBFB cream */
-  --c-surface-mid: 232 231 226; /* #E8E7E2 */
-  --c-ink: 36 36 36; /* #242424 charcoal */
-  --c-ink-secondary: 88 88 88; /* #585858 — the ink at 6.9:1 on the cream, matching the dark tier. No
-                                  bloom to damp here, so this step is purely hierarchy: a caption that
-                                  reads a step below the title. */
-  --c-rose: 221 166 166; /* #DDA6A6 */
-  --c-sand: 122 115 111; /* #7A736F */
+  /* #FEFBFB cream */
+  --c-surface-r: 254;
+  --c-surface-g: 251;
+  --c-surface-b: 251;
+
+  /* #E8E7E2 */
+  --c-surface-mid-r: 232;
+  --c-surface-mid-g: 231;
+  --c-surface-mid-b: 226;
+
+  /* #242424 charcoal */
+  --c-ink-r: 36;
+  --c-ink-g: 36;
+  --c-ink-b: 36;
+
+  /* #585858 — the ink at 6.9:1 on the cream, matching the dark tier. No
+     bloom to damp here, so this step is purely hierarchy: a caption that
+     reads a step below the title. */
+  --c-ink-secondary-r: 88;
+  --c-ink-secondary-g: 88;
+  --c-ink-secondary-b: 88;
+
+  /* #DDA6A6 */
+  --c-rose-r: 221;
+  --c-rose-g: 166;
+  --c-rose-b: 166;
+
+  /* #7A736F */
+  --c-sand-r: 122;
+  --c-sand-g: 115;
+  --c-sand-b: 111;
+}
+
+/* Only the channels are listed: the triplets above are unregistered, so they follow their channels
+   rather than needing a transition of their own. 400ms is a touch quicker than the nav labels' own
+   500ms tone swap (header.tsx) — those start late anyway, since they wait on a sampled reading, so
+   this keeps the page from feeling like it is waiting on the chrome. */
+html {
+  transition-property:
+    --c-surface-r, --c-surface-g, --c-surface-b, --c-surface-mid-r, --c-surface-mid-g, --c-surface-mid-b, --c-ink-r,
+    --c-ink-g, --c-ink-b, --c-ink-secondary-r, --c-ink-secondary-g, --c-ink-secondary-b, --c-rose-r, --c-rose-g,
+    --c-rose-b, --c-sand-r, --c-sand-g, --c-sand-b;
+  transition-duration: 400ms;
+  transition-timing-function: ease-in-out;
+}
+
+/* The first frame is not a flip. The provider only mounts on the client, so a light-theme visitor
+   paints the default (dark) ground for a beat and the stored class lands afterwards — that correction
+   has to stay a snap, or every load opens with a fade out of a theme the visitor never picked. The
+   class ships in the server markup and comes off once the themed frame has painted. */
+html.theme-boot {
+  transition-duration: 0ms;
+}
+
+/* A theme flip is a large area changing at once, so honour the opt-out: swap in one step instead. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    transition-duration: 0ms;
+  }
 }

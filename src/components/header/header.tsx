@@ -16,9 +16,9 @@ import { useVisibility2 } from "@/app/contexts/introvisibilitycontext";
 type NavKey = "home" | "gallery" | "about";
 
 const NAV_LABELS: Record<NavKey, string> = {
-  home: "HOME",
-  gallery: "GALLERY",
-  about: "ABOUT",
+  home: "home",
+  gallery: "gallery",
+  about: "about",
 };
 
 const DARK_TEXT_RGB = { r: 36, g: 36, b: 36 }; // ink (light theme) #242424
