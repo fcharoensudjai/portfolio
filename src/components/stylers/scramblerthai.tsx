@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { ScrambleWord } from "@/components/stylers/scramble-boxes";
 
 interface ScrambleProps {
   children: string;
@@ -124,34 +125,14 @@ export const Scramble: React.FC<ScrambleProps> = ({
   const paragraphNodes = rawParagraphs.map((paraText, pIndex) => (
     <React.Fragment key={pIndex}>
       {paraText.split(" ").map((word, wi) => (
-        <span
-          key={wi}
-          style={{
-            display: "inline-block",
-            whiteSpace: "nowrap",
-            marginRight: wi < paraText.split(" ").length - 1 ? "1.25ch" : undefined,
-          }}
-        >
-          {word.split("").map((char, ci) => (
-            <span
-              key={ci}
-              style={{
-                display: "inline-block",
-                width: "1ch",
-                textAlign: "center",
-              }}
-            >
-              {char}
-            </span>
-          ))}
-        </span>
+        <ScrambleWord key={wi} glyphs={word.split("")} gap={wi < paraText.split(" ").length - 1} />
       ))}
     </React.Fragment>
   ));
 
   if (renderCustom) {
     return (
-      <span ref={ref} className="w-full">
+      <span ref={ref} className="w-full" style={{ lineHeight: "inherit" }}>
         {renderCustom(paragraphNodes)}
       </span>
     );
@@ -159,7 +140,7 @@ export const Scramble: React.FC<ScrambleProps> = ({
 
   return (
     <motion.span
-      style={{ whiteSpace: paragraphs ? "pre-wrap" : "normal" }}
+      style={{ whiteSpace: paragraphs ? "pre-wrap" : "normal", lineHeight: "inherit" }}
       ref={ref}
       onHoverStart={() => {
         if (hover) {
@@ -174,26 +155,7 @@ export const Scramble: React.FC<ScrambleProps> = ({
     >
       {scrambled.split(" ").map((word, wi) => (
         <React.Fragment key={wi}>
-          <span
-            style={{
-              display: "inline-block",
-              whiteSpace: "nowrap",
-              marginRight: wi < scrambled.split(" ").length - 1 ? "1.25ch" : undefined,
-            }}
-          >
-            {word.split("").map((char, ci) => (
-              <span
-                key={ci}
-                style={{
-                  display: "inline-block",
-                  width: "1ch",
-                  textAlign: "center",
-                }}
-              >
-                {char}
-              </span>
-            ))}
-          </span>
+          <ScrambleWord glyphs={word.split("")} gap={wi < scrambled.split(" ").length - 1} />
         </React.Fragment>
       ))}
     </motion.span>

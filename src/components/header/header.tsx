@@ -3,6 +3,7 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
+import { usePathname } from "next/navigation";
 import { createPortal } from "react-dom";
 import ThemeSwitch from "./themeswitch";
 import { LogoButton } from "@/components/logobutton";
@@ -10,18 +11,14 @@ import { MobileNav } from "@/components/header/mobilenav";
 import { Scrollbar } from "@/components/header/scrollbar";
 import { UnderlinedLink } from "@/components/underlinedlink";
 import { ExitAnimation } from "@/components/stylers/page-loading/exitanimation";
-import { useVisibility } from "@/app/contexts/recentsvisibilitycontext";
 import { useVisibility2 } from "@/app/contexts/introvisibilitycontext";
-import { useVisibility3 } from "@/app/contexts/contactvisibilitycontext";
 
-type NavKey = "recents" | "gallery" | "intro" | "about" | "contact";
+type NavKey = "home" | "gallery" | "about";
 
 const NAV_LABELS: Record<NavKey, string> = {
-  recents: "recents",
-  gallery: "gallery",
-  intro: "intro",
-  about: "about",
-  contact: "contact",
+  home: "HOME",
+  gallery: "GALLERY",
+  about: "ABOUT",
 };
 
 const DARK_TEXT_RGB = { r: 36, g: 36, b: 36 }; // ink (light theme) #242424
@@ -128,28 +125,24 @@ export const Header = () => {
   const [headerRowHeight, setHeaderRowHeight] = useState<number | null>(null);
   const [enableToneTransition, setEnableToneTransition] = useState(false);
   const [navTone, setNavTone] = useState<Record<NavKey, number[]>>({
-    recents: Array.from(NAV_LABELS.recents).map(() => 0),
+    home: Array.from(NAV_LABELS.home).map(() => 0),
     gallery: Array.from(NAV_LABELS.gallery).map(() => 0),
-    intro: Array.from(NAV_LABELS.intro).map(() => 0),
     about: Array.from(NAV_LABELS.about).map(() => 0),
-    contact: Array.from(NAV_LABELS.contact).map(() => 0),
   });
   const [themeSwitchTone, setThemeSwitchTone] = useState<number>(0);
   const themeSwitchRef = React.useRef<HTMLDivElement | null>(null);
   const labelRefs = React.useRef<Record<NavKey, Array<HTMLSpanElement | null>>>({
-    recents: Array.from(NAV_LABELS.recents).map(() => null),
+    home: Array.from(NAV_LABELS.home).map(() => null),
     gallery: Array.from(NAV_LABELS.gallery).map(() => null),
-    intro: Array.from(NAV_LABELS.intro).map(() => null),
     about: Array.from(NAV_LABELS.about).map(() => null),
-    contact: Array.from(NAV_LABELS.contact).map(() => null),
   });
   const headerRowRef = React.useRef<HTMLDivElement | null>(null);
   const toggleNav = () => setIsNavOpen(!isNavOpen);
 
   const { theme } = useTheme();
-  const { isRecentsInView } = useVisibility();
-  const { isIntroInView, isIntroChromeAway } = useVisibility2();
-  const { isContactInView } = useVisibility3();
+  const pathname = usePathname();
+  const { isIntroChromeAway } = useVisibility2();
+  const isOnLanding = pathname === "/";
 
   useEffect(() => {
     setIsMounted(true);
@@ -188,11 +181,9 @@ export const Header = () => {
 
     const updateTone = () => {
       const sampledTone: Record<NavKey, number[]> = {
-        recents: Array.from(NAV_LABELS.recents).map(() => 0),
+        home: Array.from(NAV_LABELS.home).map(() => 0),
         gallery: Array.from(NAV_LABELS.gallery).map(() => 0),
-        intro: Array.from(NAV_LABELS.intro).map(() => 0),
         about: Array.from(NAV_LABELS.about).map(() => 0),
-        contact: Array.from(NAV_LABELS.contact).map(() => 0),
       };
 
       (Object.keys(labelRefs.current) as NavKey[]).forEach((key) => {
@@ -239,11 +230,9 @@ export const Header = () => {
       });
 
       const nextTone: Record<NavKey, number[]> = {
-        recents: smoothNeighbourBlend(sampledTone.recents),
+        home: smoothNeighbourBlend(sampledTone.home),
         gallery: smoothNeighbourBlend(sampledTone.gallery),
-        intro: smoothNeighbourBlend(sampledTone.intro),
         about: smoothNeighbourBlend(sampledTone.about),
-        contact: smoothNeighbourBlend(sampledTone.contact),
       };
 
       let currentThemeSwitchTone = 0;
@@ -350,19 +339,19 @@ export const Header = () => {
           {/* the body unit (1rem), not a pinned size: this sits in the same tier as the footer rows and
               the captions. It grows with the root (16 → 22px), which is the point — it was 27.5px at
               a 2560 window before, so this is also the fix for the oversized nav. */}
-          <ul className="flex items-center space-x-4 text-sm pointer-events-auto">
+          <ul className="flex items-center space-x-4 text-sm tracking-wide pointer-events-auto">
             <li>
-              <UnderlinedLink exitDuration={1100} href={`/#recents`} isVisible={isRecentsInView} disableMotion={true}>
-                {Array.from(NAV_LABELS.recents).map((char, idx) => (
+              <UnderlinedLink href={`/#home`} scroll={isOnLanding} isVisible={isOnLanding} disableMotion={true}>
+                {Array.from(NAV_LABELS.home).map((char, idx) => (
                   <span
-                    key={`recents-${idx}`}
+                    key={`home-${idx}`}
                     className="transition-colors ease-in-out"
                     style={{
-                      color: letterColor(navTone.recents[idx]),
+                      color: letterColor(navTone.home[idx]),
                       transitionDuration: enableToneTransition ? "500ms" : "0ms",
                     }}
                     ref={(el) => {
-                      labelRefs.current.recents[idx] = el;
+                      labelRefs.current.home[idx] = el;
                     }}
                   >
                     {char}
@@ -390,25 +379,6 @@ export const Header = () => {
               </UnderlinedLink>
             </li>
             <li>
-              <UnderlinedLink exitDuration={1100} href={`/#intro`} isVisible={isIntroInView} disableMotion={true}>
-                {Array.from(NAV_LABELS.intro).map((char, idx) => (
-                  <span
-                    key={`intro-${idx}`}
-                    className="transition-colors ease-in-out"
-                    style={{
-                      color: letterColor(navTone.intro[idx]),
-                      transitionDuration: enableToneTransition ? "500ms" : "0ms",
-                    }}
-                    ref={(el) => {
-                      labelRefs.current.intro[idx] = el;
-                    }}
-                  >
-                    {char}
-                  </span>
-                ))}
-              </UnderlinedLink>
-            </li>
-            <li>
               <UnderlinedLink href={`/about`} disableMotion={true}>
                 {Array.from(NAV_LABELS.about).map((char, idx) => (
                   <span
@@ -420,31 +390,6 @@ export const Header = () => {
                     }}
                     ref={(el) => {
                       labelRefs.current.about[idx] = el;
-                    }}
-                  >
-                    {char}
-                  </span>
-                ))}
-              </UnderlinedLink>
-            </li>
-            <li>
-              <UnderlinedLink
-                exitDuration={1100}
-                href={`/#contact`}
-                scroll={true}
-                isVisible={isContactInView}
-                disableMotion={true}
-              >
-                {Array.from(NAV_LABELS.contact).map((char, idx) => (
-                  <span
-                    key={`contact-${idx}`}
-                    className="transition-colors ease-in-out"
-                    style={{
-                      color: letterColor(navTone.contact[idx]),
-                      transitionDuration: enableToneTransition ? "500ms" : "0ms",
-                    }}
-                    ref={(el) => {
-                      labelRefs.current.contact[idx] = el;
                     }}
                   >
                     {char}

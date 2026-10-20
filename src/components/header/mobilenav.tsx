@@ -9,9 +9,6 @@ import { SocialIcons } from "@/components/footer/socialicons";
 import { Poppins } from "next/font/google";
 import { Scrollbar } from "@/components/header/scrollbar";
 import { UnderlinedLink } from "@/components/underlinedlink";
-import { useVisibility } from "@/app/contexts/recentsvisibilitycontext";
-import { useVisibility2 } from "@/app/contexts/introvisibilitycontext";
-import { useVisibility3 } from "@/app/contexts/contactvisibilitycontext";
 import { usePathname } from "next/navigation";
 
 const poppins = Poppins({
@@ -34,10 +31,6 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
       toggleNav();
     }
   }, [pathname]);
-
-  const { isRecentsInView } = useVisibility();
-  const { isIntroInView } = useVisibility2();
-  const { isContactInView } = useVisibility3();
 
   return (
     <motion.div
@@ -68,13 +61,14 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
         <div className="flex flex-grow justify-end items-center pe-8 pb-[4.27375rem]">
           <ul className="flex flex-col space-y-3 text-xl text-right">
             <li>
-              <UnderlinedLink href="/#home" onClick={toggleNav}>
+              <UnderlinedLink
+                href="/#home"
+                scroll={pathname === "/"}
+                isVisible={pathname === "/"}
+                onClick={toggleNav}
+                toggleNav={toggleNav}
+              >
                 home
-              </UnderlinedLink>
-            </li>
-            <li>
-              <UnderlinedLink href={`/#recents`} onClick={toggleNav} isVisible={isRecentsInView}>
-                recents
               </UnderlinedLink>
             </li>
             <li>
@@ -83,24 +77,8 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
               </UnderlinedLink>
             </li>
             <li>
-              <UnderlinedLink href={`/#intro`} onClick={toggleNav} isVisible={isIntroInView}>
-                intro
-              </UnderlinedLink>
-            </li>
-            <li>
               <UnderlinedLink href="/about" onClick={toggleNav}>
                 about
-              </UnderlinedLink>
-            </li>
-            <li>
-              <UnderlinedLink
-                href="/#contact"
-                scroll={true}
-                isVisible={isContactInView}
-                onClick={toggleNav}
-                toggleNav={toggleNav}
-              >
-                contact
               </UnderlinedLink>
             </li>
           </ul>

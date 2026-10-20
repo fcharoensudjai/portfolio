@@ -27,6 +27,20 @@ const RING_MAX_H = 200;
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
+// a control can be nested (our buttons wrap a link as their label) — resolve to the
+// outermost link/button so the ring measures the whole control, not the slice under
+// the pointer; otherwise hovering the label vs. the padding changes the orbit radii
+const resolveUnit = (start: Element | null): Element | null => {
+  let unit = start?.closest("a, button") ?? null;
+  if (!unit) return null;
+  for (let p = unit.parentElement; p; p = p.parentElement) {
+    const outer = p.closest("a, button");
+    if (!outer) break;
+    unit = outer;
+  }
+  return unit;
+};
+
 export const PetalFollow = () => {
   const { resolvedTheme } = useTheme();
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -59,7 +73,7 @@ export const PetalFollow = () => {
     // null, so leaving a target resets it without needing mouseout
     const onOver = (e: MouseEvent) => {
       const t = e.target instanceof Element ? e.target : null;
-      orbitEl.current = t?.closest("a, button") ?? null;
+      orbitEl.current = resolveUnit(t);
       // petals step aside where something else owns the language (the recents stage's
       // frame): anything marked [data-petals-off] fades the flock out while hovered.
       flockRef.current?.classList.toggle("opacity-0", !!t?.closest("[data-petals-off]"));

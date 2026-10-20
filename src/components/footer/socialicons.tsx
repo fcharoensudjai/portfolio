@@ -83,22 +83,22 @@ export const SocialIcons = () => {
         </a>
       </div>
 
-      <div className="hidden md:flex space-x-3 md:text-sm text-xs font-mono md:space-x-5">
+      <div className="hidden md:flex space-x-3 text-sm font-mono md:space-x-5 tracking-wide">
         <UnderlinedLink href="https://www.linkedin.com/in/fasaich/" isExternal={true}>
           {" "}
-          linkedin{" "}
+          LINKEDIN{" "}
         </UnderlinedLink>
         <UnderlinedLink href="https://www.instagram.com/fuzz_ch/" isExternal={true}>
           {" "}
-          instagram{" "}
+          INSTAGRAM{" "}
         </UnderlinedLink>
         <UnderlinedLink href="https://www.artstation.com/fuzz_ch" isExternal={true}>
           {" "}
-          artstation{" "}
+          ARTSTATION{" "}
         </UnderlinedLink>
         <UnderlinedLink href="https://www.youtube.com/@fuzz_ch" isExternal={true}>
           {" "}
-          youtube{" "}
+          YOUTUBE{" "}
         </UnderlinedLink>
       </div>
     </div>

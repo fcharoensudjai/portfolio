@@ -136,7 +136,12 @@ export default function Home() {
                   </div>
 
                   <div>
-                    <Button href="/gallery"> view my gallery </Button>{" "}
+                    {/* sm, matching the stage's "more detail" buttons and the intro's "more about
+                        me" — one button size for in-page actions */}
+                    <Button href="/gallery" size="sm">
+                      {" "}
+                      view my gallery{" "}
+                    </Button>{" "}
                   </div>
                 </div>
               </div>

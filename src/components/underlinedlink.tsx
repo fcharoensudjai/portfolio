@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useExitAnimation } from "@/app/contexts/exitcontext";
 import { useVisibility } from "@/app/contexts/recentsvisibilitycontext";
 import { useVisibility2 } from "@/app/contexts/introvisibilitycontext";
+import { scrollToTop } from "@/app/providers/lenisscroll";
 
 interface UnderlinedLinkProps {
   children: React.ReactNode;
@@ -59,6 +60,12 @@ export const UnderlinedLink: React.FC<UnderlinedLinkProps> = ({
 
   const scrollToSection = (hash: string) => {
     const targetId = hash.replace("#", "");
+    // the cover is sticky and pinned at the top, so scrollIntoView on it is a no-op —
+    // "home" has to move the window itself
+    if (targetId === "home") {
+      scrollToTop();
+      return;
+    }
     const targetElement = document.getElementById(targetId);
     if (targetElement) {
       targetElement.scrollIntoView({

@@ -27,10 +27,6 @@ const PETAL_KEYS: PetalKey[] = ["pl", "pr", "pu", "pb"];
 const COVER_FOLD_VH = 0.85;
 const CHROME_AWAY_AT_FOLD = 0.88;
 
-// the other end of the same window: the chrome stays away until the flower has finished, i.e. the
-// wind has taken the last petal and the section has carried past. Just past winds = 1.
-const CHROME_BACK_AT = 0.78;
-
 /**
  * The landing intro, ported from home-preview-6.html (#profile): as the section
  * scrolls into view the flower spirals in from the top and settles, then the
@@ -158,11 +154,13 @@ export const ProfileSequence = () => {
         pt.style.opacity = clamp((1 - w) * enter, 0, 1).toFixed(3);
       });
       if (dmRef.current) dmRef.current.style.opacity = clamp(run * (1 - winds), 0, 1).toFixed(3);
-      // the header steps out for the whole intro. keyed off position (scrollY + sTop), not
-      // scroll direction, so scrolling back up hides it over exactly the same stretch — and brings
-      // it back as the fold starts reopening, which uncovers its band first
+      // the chrome steps out as the fold nearly closes and comes back the moment the flower has
+      // FORMED — run = 1, i.e. it has landed with its petals still on it. The wind that follows is
+      // the quiet part, so the header is welcome back for it. Tied to run rather than a threshold so
+      // it can't drift out of sync with the landing maths above. keyed off position, not scroll
+      // direction, so scrolling back up hides it over exactly the same stretch
       const coverFold = window.scrollY / (vh * COVER_FOLD_VH);
-      const chromeAway = coverFold >= CHROME_AWAY_AT_FOLD && sTop > -vh * CHROME_BACK_AT;
+      const chromeAway = coverFold >= CHROME_AWAY_AT_FOLD && run < 1;
       if (chromeAway !== chromeAwayRef.current) {
         chromeAwayRef.current = chromeAway;
         setIsIntroChromeAway(chromeAway);
@@ -271,14 +269,18 @@ export const ProfileSequence = () => {
             marginRight: "auto",
           }}
         >
-          <div>
+          {/* `lineHeight: inherit` has to sit on the <div>, not on the wrapper above: globals.css's
+              `* { line-height: 1.75em }` matches this div *directly*, so it beats the 1.6 the wrapper
+              sets and the text leads 2.4px looser than the intro asks for. `inherit` re-reads the
+              wrapper's 1.6, and Scramble's boxes inherit it on down from there. */}
+          <div style={{ lineHeight: "inherit" }}>
             <Scramble interval={20} delay={400}>
-              working in finance and tech,
+              Working in Finance and tech,
             </Scramble>
           </div>
-          <div>
+          <div style={{ lineHeight: "inherit" }}>
             <Scramble interval={20} delay={400}>
-              creating art whenever i can.
+              creating art whenever I can.
             </Scramble>
           </div>
         </div>
