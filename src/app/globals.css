@@ -94,6 +94,14 @@ body {
   margin-right: auto;
 }
 
+/* The hero banner's fade-out. The end stop sits at 90%, not 100%, on purpose: at 100% the last
+   rows of the image still show through a ~5%-transparent overlay, which draws a hard line exactly
+   where the banner ends and the page colour begins. Finishing early means the bottom tenth is
+   already solid surface, so that boundary is surface on surface and disappears. */
+.banner-fade {
+  background-image: linear-gradient(to bottom, rgb(var(--c-surface) / 0) 45%, rgb(var(--c-surface)) 90%);
+}
+
 /* tight leading for the landing manifesto headline (overrides the global 1.75em line-height) */
 .story-head,
 .story-head * {
