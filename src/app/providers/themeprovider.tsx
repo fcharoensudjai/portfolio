@@ -2,6 +2,7 @@
 
 import { ThemeProvider } from "next-themes";
 import { useEffect, useState } from "react";
+import { ThemeColor } from "@/app/providers/themecolor";
 
 export function ProviderTheme({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
@@ -30,6 +31,7 @@ export function ProviderTheme({ children }: { children: React.ReactNode }) {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="dark">
+      <ThemeColor />
       {children}
     </ThemeProvider>
   );

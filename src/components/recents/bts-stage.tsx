@@ -65,7 +65,7 @@ export const BtsStage = ({ frames, href, basePath, onContextMenu }: BtsStageProp
     return () => img?.removeEventListener("load", read);
   }, []);
 
-  const { isHovered, cursorPosition, handleMouseEnter, handleMouseLeave, handleMouseMove } = useHoverTracker({
+  const { isHovered, cursorPosition, handlePointerEnter, handlePointerLeave, handlePointerMove } = useHoverTracker({
     trackerWidth: TRACKER_WIDTH,
     trackerHeight: TRACKER_HEIGHT,
     clampCursor: ({ mouseX, mouseY, containerWidth, containerHeight }) => ({
@@ -184,14 +184,14 @@ export const BtsStage = ({ frames, href, basePath, onContextMenu }: BtsStageProp
               data-nav-sample-ignore="true"
               className="relative block overflow-hidden rounded-xl bg-surface-mid"
               style={{ width: size.w || "100%", height: size.h || "100%", cursor: isHovered ? "none" : "pointer" }}
-              onMouseEnter={(e) => {
-                handleMouseEnter();
+              onPointerEnter={(e) => {
+                handlePointerEnter(e);
                 // seed the tracker on entry: without this the cursor position is still (0,0) until
-                // the first mousemove, and the bracket renders half outside the frame
-                handleMouseMove(e);
+                // the first pointer move, and the bracket renders half outside the frame
+                handlePointerMove(e);
               }}
-              onMouseLeave={handleMouseLeave}
-              onMouseMove={handleMouseMove}
+              onPointerLeave={handlePointerLeave}
+              onPointerMove={handlePointerMove}
             >
               {frames.map((frame, i) => (
                 <div

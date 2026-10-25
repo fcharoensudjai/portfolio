@@ -389,12 +389,20 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
               className="relative aspect-[1600/1151] w-full overflow-hidden rounded-2xl lg:max-w-[calc(var(--frame-h)*var(--frame-ratio))]"
               // the frame, not the grid cell, owns the cursor: the petal trail fades out over it
               data-petals-off
-              onMouseEnter={(e) => {
+              // hover only: a tap on a phone must open the piece, not raise an overlay it has no way
+              // to dismiss. touch synthesises mouseenter but never the matching leave, so the label
+              // used to latch on and stay there.
+              onPointerEnter={(e) => {
+                if (e.pointerType !== "mouse") return;
                 setHovering(true);
                 trackPointer(e);
               }}
-              onMouseLeave={() => setHovering(false)}
-              onMouseMove={trackPointer}
+              onPointerLeave={(e) => {
+                if (e.pointerType === "mouse") setHovering(false);
+              }}
+              onPointerMove={(e) => {
+                if (e.pointerType === "mouse") trackPointer(e);
+              }}
             >
               {items.map((item, k) => (
                 <div
@@ -422,7 +430,7 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
               <AnimatePresence>
                 {hovering && (
                   <motion.div
-                    className="absolute inset-0 z-10 flex items-center justify-center"
+                    className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -446,24 +454,27 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
                           initial={{ scale: 1.3 }}
                           animate={{ scale: 1 }}
                           exit={{ scale: 1.3 }}
-                          whileTap={{ scale: 0.9 }}
                           transition={{ duration: 0.2, ease: [0.65, 0, 0.35, 1] }}
                         >
-                          {/* `cursor-none` has to sit on the link, not on the overlay: the UA's
-                              `cursor: pointer` for links applies to the anchor itself, so it beats the
-                              `cursor: none` the overlay inherits down — the arrow disappeared over the
-                              whole image except on the label, which is exactly where the cursor is. */}
-                          <UnderlinedLink href={items[active].href} line={false} linkClassName="cursor-none">
-                            <Scramble interval={20} hover={true}>
-                              {" more detail "}
-                            </Scramble>
-                          </UnderlinedLink>
+                          <Scramble interval={20}>{" more detail "}</Scramble>
                         </motion.div>
                       </div>
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
+
+              {/* The frame itself is the link, not the label: the label is dragged to the cursor, so
+                  the only true pointer target was wherever the pointer already was. One link over the
+                  artwork gives touch a single tap straight to the piece, and `cursor-none` on it keeps
+                  the arrow hidden across the whole frame rather than only over the label. */}
+              <UnderlinedLink
+                href={items[active].href}
+                underline={false}
+                linkClassName="absolute inset-0 z-20 cursor-none"
+              >
+                <span className="sr-only">{`more detail: ${items[active].title}`}</span>
+              </UnderlinedLink>
             </div>
           </div>
         </div>

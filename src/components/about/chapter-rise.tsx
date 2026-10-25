@@ -133,9 +133,11 @@ export const ChapterRise = ({ basePath, eyebrow, title, statement, image, alt, p
             }}
           />
 
+          {/* cream base, same reason as 04: the title would otherwise inherit `text-ink` and go
+              charcoal in light mode, onto a dark photo and scrim */}
           <figcaption
             ref={copyRef}
-            className="absolute bottom-0 left-0 z-[2] max-w-[56rem] px-6 pb-[9vh] opacity-0 md:px-16 xl:px-20"
+            className="absolute bottom-0 left-0 z-[2] max-w-[56rem] px-6 pb-[9vh] text-[#E8E7E2] opacity-0 md:px-16 xl:px-20"
           >
             {/* the eyebrow sits a step clear of the title — `mb-1` read as one block with it */}
             <div className="mb-2 text-[rgba(232,231,226,0.7)]">

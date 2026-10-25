@@ -74,10 +74,12 @@ export const CarouselCard: React.FC<CarouselCardProps> = ({
       // the row dims as a whole while it is hovered: every tile drops back, the hovered one comes
       // back to full strength and lifts above its neighbours. data-petals-off hands the language of
       // the hover to the artwork itself, the same way the recents stage does for its frame.
+      // the lift is gated on a real hover capability: touch browsers keep `:hover` latched onto the
+      // last tapped element, which left the tile stuck scaled up after a tap-that-wasn't-a-tap.
       data-petals-off
       className={`group/card isolate relative flex-shrink-0 overflow-hidden rounded-xl aspect-square w-[min(clamp(220px,38vh,400px),78vw)] cursor-pointer ${
         dimmed ? "opacity-60" : "opacity-100"
-      } hover:z-10 hover:scale-[1.05] hover:opacity-100 ${className ?? ""}`}
+      } [@media(hover:hover)]:hover:z-10 [@media(hover:hover)]:hover:scale-[1.05] [@media(hover:hover)]:hover:opacity-100 ${className ?? ""}`}
       style={{ transition: "transform 500ms cubic-bezier(0.22, 1, 0.36, 1), opacity 400ms ease" }}
       aria-label={`${title} – ${ctaText}`}
     >

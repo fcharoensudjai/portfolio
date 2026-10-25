@@ -27,12 +27,19 @@ export const Card: React.FC<CardProps> = ({ src, alt, className, onClick }) => {
       // the card, not the grid cell, owns the cursor: the petal trail fades out over the artwork,
       // the same handover the recents stage makes for its frame
       data-petals-off
-      onMouseEnter={(e) => {
+      // hover only: a tap on the artwork must fall straight through to the viewer. touch synthesises
+      // mouseenter without ever firing the leave, which used to leave this overlay latched on.
+      onPointerEnter={(e) => {
+        if (e.pointerType !== "mouse") return;
         setShowOverlay(true);
         trackPointer(e);
       }}
-      onMouseLeave={() => setShowOverlay(false)}
-      onMouseMove={trackPointer}
+      onPointerLeave={(e) => {
+        if (e.pointerType === "mouse") setShowOverlay(false);
+      }}
+      onPointerMove={(e) => {
+        if (e.pointerType === "mouse") trackPointer(e);
+      }}
       onClick={onClick}
     >
       <Fader once={true} threshold={0.4}>

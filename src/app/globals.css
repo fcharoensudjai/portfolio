@@ -21,6 +21,9 @@
   body {
     overflow-x: clip;
     max-width: 100%;
+    /* Carried on the body as well as the root: Safari reads the ground from the rendered body, and a
+       transparent one leaves it sampling whatever the artwork happens to be. */
+    @apply bg-surface-mid;
   }
 }
 
@@ -298,6 +301,12 @@ body {
 /* semantic colour tokens — values per theme (next-themes toggles .dark/.light on <html>) */
 :root,
 .dark {
+  /* Safari tints the band it paints around the page — above the layout viewport, and around the
+     dynamic island — from this, and unlike a sampled colour it re-reads it the moment it changes.
+     That band is the only part of the theme a phone shows outside the app, so it has to be declared
+     next to the ground it matches rather than only in the meta tag. */
+  color-scheme: dark;
+
   /* #242424 charcoal */
   --c-surface-r: 36;
   --c-surface-g: 36;
@@ -340,6 +349,8 @@ body {
 }
 /* Only the channels change per theme — the triplets are assembled once above, from those channels. */
 .light {
+  color-scheme: light;
+
   /* #FEFBFB cream */
   --c-surface-r: 254;
   --c-surface-g: 251;
@@ -386,10 +397,11 @@ html {
   transition-timing-function: ease-in-out;
 }
 
-/* The first frame is not a flip. The provider only mounts on the client, so a light-theme visitor
-   paints the default (dark) ground for a beat and the stored class lands afterwards — that correction
-   has to stay a snap, or every load opens with a fade out of a theme the visitor never picked. The
-   class ships in the server markup and comes off once the themed frame has painted. */
+/* The first frame is not a flip. The stored class is on <html> before the document paints (the boot
+   script at the top of <body> in layout.tsx), so the normal path is already themed — but anything
+   that lands the class after the first frame instead, a blocked script or a browser that skipped it,
+   has to correct as a snap or every load opens with a fade out of a theme the visitor never picked.
+   The class ships in the server markup and comes off once the themed frame has painted. */
 html.theme-boot {
   transition-duration: 0ms;
 }
@@ -398,5 +410,39 @@ html.theme-boot {
 @media (prefers-reduced-motion: reduce) {
   html {
     transition-duration: 0ms;
+  }
+}
+
+/* Safari's Liquid Glass chrome (iOS 26) tints the strip it paints around the page — above the layout
+   viewport, and behind the dynamic island — from the pixels at the very top edge, and it ignores a
+   `theme-color` written at runtime. A class swap on <html> therefore recolours the app and leaves
+   that strip on the theme from the last load, which is why it only ever looked right after a
+   refresh. Repainting those few pixels with the new ground is what asks WebKit to sample again, so
+   the band is painted for the length of a flip and never sits over the page in normal use.
+
+   Above everything the page can lay over the top edge — the chrome's z-40, the nav drawer's z-50,
+   the preloader's z-50 — because whichever of those is on screen is what gets sampled instead, and a
+   flip started from inside the drawer would otherwise be invisible to Safari. Where it does overlap,
+   it is painted in the same ground as the surface beneath it, so only the translucency of the header
+   shows it at all.
+
+   Touch pointers only — the strip is a Safari artefact, and on a desktop flip a solid edge would be
+   the only thing that moved. */
+@media (pointer: coarse) {
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    z-index: 80;
+    pointer-events: none;
+    background-color: rgb(var(--c-surface-mid));
+    transition: height 160ms ease-in-out;
+  }
+
+  html[data-theme-flipping] body::before {
+    height: 6px;
   }
 }

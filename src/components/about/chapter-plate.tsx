@@ -88,9 +88,12 @@ export const ChapterPlate = ({ basePath, eyebrow, title, paragraphs, image, alt 
     // every pixel left over, which is what makes the chapter land as a single screen instead of a
     // screen-and-a-bit. The 46vh of top padding is desk-only — on a phone it pushed the chapter past
     // twice the viewport for a drift that no longer runs there.
+    //
+    // The prose→print gap is 02's 9vh, not a tight clamp: 01, 02 and 04 all put copy above a print,
+    // so the step has to be the same number or 03 reads cramped next to the chapter before it.
     <section
       ref={sectionRef}
-      className="relative flex min-h-[100dvh] flex-col justify-center gap-[clamp(18px,3vh,28px)] overflow-hidden pb-[5vh] pt-[var(--nav-clearance)] min-[900px]:grid min-[900px]:items-center min-[900px]:gap-0 min-[900px]:pb-[18vh] min-[900px]:pt-[46vh] min-[900px]:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]"
+      className="relative flex min-h-[100dvh] flex-col justify-center gap-[9vh] overflow-hidden pb-[5vh] pt-[var(--nav-clearance)] min-[900px]:grid min-[900px]:items-center min-[900px]:gap-0 min-[900px]:pb-[18vh] min-[900px]:pt-[46vh] min-[900px]:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]"
       aria-label={title}
     >
       <div

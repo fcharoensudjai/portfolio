@@ -1,18 +1,21 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { useTheme } from "next-themes";
 import { cva } from "class-variance-authority";
 import React from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useExitAnimation } from "@/app/contexts/exitcontext";
 import { useVisibility } from "@/app/contexts/recentsvisibilitycontext";
 import { useVisibility2 } from "@/app/contexts/introvisibilitycontext";
+import { BrandMark } from "@/components/brandmark";
 
 interface LogoButtonProps {
   size?: "small" | "medium";
   exitDuration?: number;
+  // The chrome's sampled tone, handed down like the theme switch's. Left alone (the ink token, fading
+  // with the page) when the lockup sits on a known surface, e.g. the mobile nav's panel.
+  inkColor?: string;
+  transitionDuration?: string;
 }
 
 const logoButtonVariants = cva("relative", {
@@ -34,9 +37,7 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export const LogoButton = ({ size = "small", exitDuration = 800 }: LogoButtonProps) => {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-  const { theme } = useTheme();
+export const LogoButton = ({ size = "small", exitDuration = 800, inkColor, transitionDuration }: LogoButtonProps) => {
   const path = usePathname();
   const router = useRouter();
   const { setIsExit } = useExitAnimation();
@@ -65,18 +66,9 @@ export const LogoButton = ({ size = "small", exitDuration = 800 }: LogoButtonPro
   };
 
   return (
-    <Link href="/#home" onClick={handleClick}>
+    <Link href="/#home" onClick={handleClick} aria-label="fuzzch — home">
       <div className={logoButtonVariants({ size })}>
-        <Image
-          src={theme === "dark" ? `${basePath}/icons/dark/fulllogodark.svg` : `${basePath}/icons/light/fulllogo.svg`}
-          alt="full logo"
-          width={500}
-          height={500}
-          priority={size === "small"}
-          style={{
-            objectFit: "contain",
-          }}
-        />
+        <BrandMark className="h-full w-full" inkColor={inkColor} transitionDuration={transitionDuration} />
       </div>
     </Link>
   );

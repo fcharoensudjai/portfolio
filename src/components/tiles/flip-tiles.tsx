@@ -49,6 +49,27 @@ export const FlipTiles = ({
     const el = elRef.current;
     if (!el) return;
 
+    // iOS collapses its toolbar mid-scroll and the wall's box grows to match. Build past the bottom
+    // so that growth is already covered and a toolbar never forces a rebuild of the grid
+    const ROWS_HEADROOM = 1.25;
+
+    let builtAcross = 0;
+    let builtSize = 0;
+    let builtH = 0;
+
+    // The wall is `pointer-events: none`, so the chrome cannot see it in a hit test — it reads the
+    // photo underneath and keeps painting light ink over a fold that is already surface. Declaring
+    // the colour only once every tile has turned means the declaration never claims to cover a photo
+    // that is still showing. It reads the tiles rather than the progress value: those are what is on
+    // screen, and they are the thing that has actually been painted.
+    const declareCoverage = () => {
+      const tiles = tilesRef.current;
+      const covered = tiles.length > 0 && tiles.every((tile) => tile.ry === "180deg");
+
+      if (covered) el.setAttribute("data-nav-sample", "surface");
+      else el.removeAttribute("data-nav-sample");
+    };
+
     const build = () => {
       const w = el.clientWidth;
       const h = el.clientHeight;
@@ -56,7 +77,8 @@ export const FlipTiles = ({
 
       const across = cols(w);
       const size = Math.ceil(w / across);
-      const rows = Math.ceil(h / size);
+      const rows = Math.ceil((h * ROWS_HEADROOM) / size);
+      const progress = clamp(getProgress(), 0, 1);
 
       el.innerHTML = "";
       const frag = document.createDocumentFragment();
@@ -83,12 +105,22 @@ export const FlipTiles = ({
           // the wave runs bottom to top, raked left-to-right and jittered per tile
           const wobble = jitter > 0 ? Math.abs(Math.sin((r + 1) * 12.9898 + (c + 1) * 78.233)) * jitter : 0;
           const pt = clamp((h - (y + size / 2)) / h + (c / across) * rake + wobble, 0, 1);
-          tiles.push({ flip, pt, ry: "" });
+
+          // seeded on the detached node: a rebuild lands in the state the page is already in
+          // instead of replaying the fold from nothing
+          const ry = progress >= pt ? "180deg" : "0deg";
+          flip.style.setProperty("--ry", ry);
+
+          tiles.push({ flip, pt, ry });
         }
       }
 
       el.appendChild(frag);
       tilesRef.current = tiles;
+      builtAcross = across;
+      builtSize = size;
+      builtH = h;
+      declareCoverage();
     };
 
     const apply = () => {
@@ -101,20 +133,30 @@ export const FlipTiles = ({
         t.ry = ry;
         t.flip.style.setProperty("--ry", ry);
       }
+
+      declareCoverage();
     };
 
-    const paint = () => {
-      build();
-      apply();
-    };
-
-    paint();
+    build();
 
     window.addEventListener("scroll", apply, { passive: true });
     let rt: ReturnType<typeof setTimeout>;
     const onResize = () => {
       clearTimeout(rt);
-      rt = setTimeout(paint, 150);
+      rt = setTimeout(() => {
+        const w = el.clientWidth;
+        const h = el.clientHeight;
+        if (!w || !h) return;
+
+        // only a real layout change needs a rebuild. same tile size and a wall still inside its
+        // headroom means the box moved for a reason that has nothing to do with the grid — an iOS
+        // toolbar — and rebuilding there would replay the fold in front of the user
+        const across = cols(w);
+        const size = Math.ceil(w / across);
+        if (across === builtAcross && size === builtSize && h <= builtH * ROWS_HEADROOM) return;
+
+        build();
+      }, 150);
     };
     window.addEventListener("resize", onResize);
 

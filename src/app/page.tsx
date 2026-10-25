@@ -70,8 +70,21 @@ export default function Home() {
                         top padding and the footer row, so the nav clearance is already in that box.
                         A margin here only pushes the lockup off-centre. */}
                     <div className="relative fixed-line-spacing">
-                      fasai <br /> charoensudjai{" "}
-                      <Petal positioning="left-[96.5%] bottom-[36.75%] sm:left-[96.75%] sm:bottom-[36.5%] 2xl:left-[97%]" />
+                      fasai <br />
+                      {/* The petal anchors to the last word, not to the lockup: the lockup is two
+                          lines tall, so a `bottom-%` of it moves against the glyph as the line box
+                          changes with the type size, and the petal drifts off the i on narrower
+                          screens. One line box scales with the font, so the offsets hold — the same
+                          thing the about page's statement does. */}
+                      <span className="relative inline-block">
+                        charoensudjai{" "}
+                        {/* Held by its BASE, not its top: what makes it read as the dot in "get in
+                            touch" is that the leaf's bottom lands ~0.43em below the glyph's ink top
+                            at every width. The hero's type is 8vw, so the offset has to cancel the
+                            petal's fixed px height (0.596em is the ink offset plus that 0.43em) —
+                            an em constant would drift as the type grows inside a breakpoint. */}
+                        <Petal positioning="left-[96.5%] top-[calc(0.596em_-_25px)] sm:left-[96.75%] sm:top-[calc(0.596em_-_37px)] lg:top-[calc(0.596em_-_44px)] 2xl:left-[97%] 2xl:top-[calc(0.596em_-_68px)]" />
+                      </span>
                     </div>
                   </Title>
                 </div>

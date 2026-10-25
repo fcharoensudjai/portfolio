@@ -118,9 +118,12 @@ export const ChapterOver = ({ basePath, eyebrow, title, paragraph, image, alt }:
         {/* the same bottom offset as 01's caption, at every width: both chapters are full-bleed with
             the copy sitting on the bottom edge, so they have to agree or the two read as different
             layouts. The old `md:pb-20` (8.4rem) sat 42px higher than 01's 9vh past 768. */}
+        {/* the copy sits on the print, not the page: without a cream base here the title inherits
+            `text-ink` from the page root and turns charcoal in light mode, straight onto the dark
+            scrim. The eyebrow and body keep their own alphas for hierarchy. */}
         <div
           ref={copyRef}
-          className="absolute bottom-0 left-0 z-[2] max-w-[56rem] px-6 pb-[9vh] opacity-0 md:px-16 xl:px-20"
+          className="absolute bottom-0 left-0 z-[2] max-w-[56rem] px-6 pb-[9vh] text-[#E8E7E2] opacity-0 md:px-16 xl:px-20"
         >
           <div className="mb-2 text-[rgba(232,231,226,0.7)]">
             <Textbox size="label" caret={false}>

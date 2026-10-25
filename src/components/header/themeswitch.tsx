@@ -1,15 +1,14 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
+import { FLIP_INK, useThemeFlip } from "@/components/header/usethemeflip";
 
 // The travel reads slower than a fade, so it gets the lab's 1.1× on the old 420ms swap.
 const ROLL_MS = 460;
 // The same lift as the swap's old spring, minus the overshoot: it settles into the window instead of
 // bouncing against its edge.
 const ROLL_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
-// Long enough to cover the roll, short enough that the sampled header tone takes over again promptly.
-const FLIP_MS = 700;
 // The two marks are drawn on artboards that disagree about the right edge: the moon's ink runs to
 // the edge of its 25×26 viewBox, while the sun's rays stop 2.75 of 30 units short (the stroke gives
 // one unit back). Painted into the same 30px window that leaves the sun ~2.5px further inside than
@@ -22,18 +21,8 @@ const MOON_INK_INSET = 0.58;
 export default function ThemeSwitch({ color, transitionDuration }: { color?: string; transitionDuration?: string }) {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const [mounted, setMounted] = useState<boolean>(false);
-  const { setTheme, resolvedTheme } = useTheme();
-
-  const [themeFlipping, setThemeFlipping] = useState(false);
-  const previousTheme = useRef(resolvedTheme);
-
-  useEffect(() => {
-    if (previousTheme.current === resolvedTheme) return;
-    previousTheme.current = resolvedTheme;
-    setThemeFlipping(true);
-    const id = setTimeout(() => setThemeFlipping(false), FLIP_MS);
-    return () => clearTimeout(id);
-  }, [resolvedTheme]);
+  const { setTheme } = useTheme();
+  const { isDark, isFlipping: themeFlipping } = useThemeFlip();
 
   useEffect(() => setMounted(true), []);
 
@@ -57,14 +46,11 @@ export default function ThemeSwitch({ color, transitionDuration }: { color?: str
       />
     );
 
-  const isDark = resolvedTheme === "dark";
   const defaultTint = isDark ? "#E8E7E2" : "#242424";
   // The header's sampled `color` trails the theme class by a couple of frames, so on a flip it would
   // still be the old ink painted over the new background — i.e. briefly invisible. The mark holds the
-  // theme's own ink while the swap plays, then hands back to the sampled tone. It holds the ink *token*
-  // rather than its hex so the glyph travels with the fading page instead of snapping to the new theme
-  // while the ground under it is still the old one.
-  const tint = themeFlipping ? "rgb(var(--c-ink))" : color || defaultTint;
+  // theme's own ink while the swap plays, then hands back to the sampled tone.
+  const tint = themeFlipping ? FLIP_INK : color || defaultTint;
 
   // The tint rides on `transitionDuration` so it can ease along with the header's tone as the page
   // scrolls. During a flip it drops that easing and follows the ink token frame by frame instead, so

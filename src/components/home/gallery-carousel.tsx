@@ -26,6 +26,7 @@ const SCROLL_VELOCITY_DECAY = 0.22; // seconds — how quickly the boost drains 
 const DRAG_FLICK_DECAY = 0.35; // seconds of momentum left over from a throw
 const DRAG_FLICK_MAX = 6000; // px/s
 const DRAG_THRESHOLD = 6; // px of travel before a press counts as a drag rather than a click
+const DIRECTION_FLIP_PX = 24; // px of travel the other way before the row reverses
 
 export const GalleryCarousel: React.FC<GalleryCarouselProps> = ({
   scrollDirection,
@@ -47,6 +48,7 @@ export const GalleryCarousel: React.FC<GalleryCarouselProps> = ({
   const directionRef = useRef<"up" | "down" | null>(activeScrollDirection);
   const isScrollingRef = useRef(Boolean(isScrolling));
   const previousScrollRef = useRef({ y: 0, t: 0 });
+  const directionTravelRef = useRef(0);
   const flickVelocityRef = useRef(0);
   const isDraggingRef = useRef(false);
   const suppressClickRef = useRef(false);
@@ -96,9 +98,15 @@ export const GalleryCarousel: React.FC<GalleryCarouselProps> = ({
       const deltaT = Math.max(1, now - prevT);
 
       if (scrollDirection === undefined) {
-        if (deltaY > 0) {
+        // Hysteresis, same reason as the intro's spin: the marquee used to reverse on any single
+        // negative delta, so the few pixels iOS hands over at the end of a fling (and rubber-band)
+        // flipped the row, then flipped it back. Only believe a direction once it has travelled.
+        directionTravelRef.current += deltaY;
+        if (directionTravelRef.current > DIRECTION_FLIP_PX) {
+          directionTravelRef.current = 0;
           setInternalScrollDirection("down");
-        } else if (deltaY < 0) {
+        } else if (directionTravelRef.current < -DIRECTION_FLIP_PX) {
+          directionTravelRef.current = 0;
           setInternalScrollDirection("up");
         }
       }
@@ -284,8 +292,14 @@ export const GalleryCarousel: React.FC<GalleryCarouselProps> = ({
         // stays on the gutter
         className="relative overflow-hidden py-4 -mx-6 md:-mx-16 xl:-mx-20 cursor-grab select-none active:cursor-grabbing"
         style={{ touchAction: "pan-y" }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        onPointerEnter={(event) => {
+          // touch taps synthesise mouse events too, and their hover never releases — the row would
+          // stay dimmed after a swipe. only a real cursor gets to dim the row.
+          if (event.pointerType === "mouse") setIsHovered(true);
+        }}
+        onPointerLeave={(event) => {
+          if (event.pointerType === "mouse") setIsHovered(false);
+        }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
