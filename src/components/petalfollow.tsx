@@ -91,12 +91,28 @@ export const PetalFollow = () => {
       }, 140);
     };
 
-    const onOver = (e: MouseEvent) => {
-      const t = e.target instanceof Element ? e.target : null;
+    const evaluate = (t: Element | null) => {
       orbitEl.current = resolveUnit(t);
-      // petals step aside where something else owns the language (the recents stage's frame, the
-      // gallery carousel's cards): anything marked [data-petals-off] fades the flock out while hovered.
+      // petals step aside where something else owns the language (the recents stage, the gallery
+      // carousel's cards): anything marked [data-petals-off] fades the flock out while hovered.
       setFlockHidden(!!t?.closest("[data-petals-off]"));
+    };
+
+    const onOver = (e: MouseEvent) => {
+      evaluate(e.target instanceof Element ? e.target : null);
+    };
+
+    // scrolling slides elements under a stationary pointer without firing mouseover, so the
+    // handover has to be re-checked per frame — the recents stage pins itself under a cursor that
+    // may not move at all while you scrub through it
+    let scrollFrame = 0;
+    const onScroll = () => {
+      if (scrollFrame) return;
+      scrollFrame = requestAnimationFrame(() => {
+        scrollFrame = 0;
+        if (mouse.current.x < 0) return;
+        evaluate(document.elementFromPoint(mouse.current.x, mouse.current.y));
+      });
     };
 
     let prev = performance.now();
@@ -156,12 +172,15 @@ export const PetalFollow = () => {
 
     window.addEventListener("mousemove", onMove, { passive: true });
     document.addEventListener("mouseover", onOver, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
       cancelAnimationFrame(raf);
+      cancelAnimationFrame(scrollFrame);
       if (revealTimer) clearTimeout(revealTimer);
       window.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseover", onOver);
+      window.removeEventListener("scroll", onScroll);
     };
   }, [enabled]);
 

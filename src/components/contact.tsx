@@ -42,7 +42,7 @@ export const Contact = ({ once = true }: ContactProps) => {
         <a
           href="mailto:fuzz.ch04@gmail.com"
           draggable={false}
-          className="mt-7 inline-block text-xs text-ink md:mt-9 md:text-sm"
+          className="mt-4 inline-block text-xs text-ink md:text-sm"
         >
           <Textbox size="caption">
             <Scramble delay={2000} interval={15} once={once}>

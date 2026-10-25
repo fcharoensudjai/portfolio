@@ -102,7 +102,7 @@ export default function Home() {
             </div>
           </div>
 
-          <CoverTiles coverRef={coverRef} />
+          <CoverTiles />
 
           <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav} />
         </section>

@@ -11,6 +11,10 @@ interface ScrambleProps {
   // ms per glyph, for the slow glyph-by-glyph decode the short hover labels want. Omit it and the
   // text runs at SCRAMBLE_RATE — the same pace as the recents stage's caption
   interval?: number;
+  // override the shared decode pace for one instance — same shape as SCRAMBLE_RATE. Only applies
+  // when `interval` is omitted; a slower pace means fewer glyphs per tick or a longer tick, never
+  // one glyph per tick (that's 1 render per glyph and the reason `interval` drops frames).
+  rate?: { perTick: number; ms: number };
   paragraphs?: boolean;
   navigate?: boolean;
   preScrambled?: boolean; // holds the text scrambled while out of view, then unscrambles it in view
@@ -23,6 +27,7 @@ export const Scramble: React.FC<ScrambleProps> = ({
   delay = 500,
   hover = false,
   interval,
+  rate,
   paragraphs = false,
   navigate = false,
   preScrambled = false,
@@ -33,8 +38,11 @@ export const Scramble: React.FC<ScrambleProps> = ({
 
   // omitting `interval` opts into the shared site pace: glyphs arrive in runs of SCRAMBLE_RATE.perTick
   // per tick. An explicit interval keeps the one-glyph-per-tick rhythm the hover labels are tuned to.
-  const perTick = interval === undefined ? SCRAMBLE_RATE.perTick : 1;
-  const tickMs = interval ?? SCRAMBLE_RATE.ms;
+  // `rate` is the third option: the same run-based rhythm as the site pace, dialled to a paragraph
+  // that wants longer to decode.
+  const pace = rate ?? SCRAMBLE_RATE;
+  const perTick = interval === undefined ? pace.perTick : 1;
+  const tickMs = interval ?? pace.ms;
 
   const letters = "กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮ";
 

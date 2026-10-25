@@ -171,7 +171,9 @@ export const BtsStage = ({ frames, href, basePath, onContextMenu }: BtsStageProp
           and translated children escape their parent's box. Without this they paint over whatever
           section comes next — the gallery carousel's heading was being covered by a surface panel
           that had no business still being on screen. */}
-      <div className="flex h-[100dvh] flex-col sticky top-0 isolate overflow-hidden">
+      {/* petals off for the whole stage, not just the frame: this section is the one that comes
+          apart as you scrub, so the flock drifting over the words and the curtain reads as a bug */}
+      <div data-petals-off className="flex h-[100dvh] flex-col sticky top-0 isolate overflow-hidden">
         <div className="min-h-0 flex-1 px-6 pb-6 pt-[var(--nav-clearance)] md:px-16 xl:px-20">
           <div ref={stageRef} className="relative flex h-full w-full items-center justify-center">
             <a

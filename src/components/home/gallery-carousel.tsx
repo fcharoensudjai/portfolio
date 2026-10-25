@@ -268,7 +268,10 @@ export const GalleryCarousel: React.FC<GalleryCarouselProps> = ({
         {captionText ? (
           <div className="lg:w-[65%] text-ink-secondary">
             <Textbox size="caption">
-              <Scramble once={false} preScrambled>
+              {/* the carousel caption is the longest prose on the page (~370 glyphs), so it gets a
+                  longer lead-in and half the site pace — 2 glyphs every 20ms instead of 5 every 12ms.
+                  Still one render per 20ms, i.e. fewer frames than the default, not more. */}
+              <Scramble once={false} preScrambled delay={1200} rate={{ perTick: 2, ms: 20 }}>
                 {captionText}
               </Scramble>
             </Textbox>

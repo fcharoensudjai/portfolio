@@ -212,7 +212,12 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
     const measure = () => {
       const rect = wrap.getBoundingClientRect();
       wrapTop = rect.top + window.scrollY;
-      band = Math.max(1, rect.height - window.innerHeight);
+      // The band is the distance the plate actually stays pinned for, so it has to come off the
+      // plate's own height rather than innerHeight. They match under `100vh`, but the plate is
+      // `100svh` — the *smallest* viewport — so the two part company by exactly the height of the
+      // browser chrome, and measuring against innerHeight would finish the scrub early.
+      const plateH = plateRef.current?.getBoundingClientRect().height ?? window.innerHeight;
+      band = Math.max(1, rect.height - plateH);
     };
 
     const update = () => {
@@ -302,9 +307,16 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
             gap. On a wide, short window the height is what binds, so this narrows the whole block and
             centres it — the surplus becomes equal margins instead of dead space beside the artwork.
             On a normal window the ratio of the two means it never engages at all. */}
+        {/* The copy column is pinned to the measure — but 46ch of copy is a fixed 441px, and on a
+            1024-wide tablet that left the print a 275px column. So from lg the measure is also capped
+            at 40% of the stage: it stays the measure wherever there's room (from ~1310 of viewport
+            width up), and gives the difference to the artwork where there isn't. The gap tightens at
+            the same breakpoint for the same reason; xl restores it. 40% costs the display title its
+            one-line fit ("raiden shogun" needs ~345px at 1024 and gets two lines) — that was the
+            trade for the print, and two lines is the better half of it. */}
         <div
           ref={plateRef}
-          className="sticky top-0 mx-auto grid h-[100dvh] max-w-[calc(var(--frame-h)*var(--frame-ratio)+46ch+6.4rem)] grid-cols-1 content-center items-center gap-6 pb-12 pt-[84px] lg:grid-cols-[minmax(280px,46ch)_1fr] lg:gap-x-16 xl:pt-28"
+          className="sticky top-0 mx-auto grid h-[100svh] max-w-[calc(var(--frame-h)*var(--frame-ratio)+46ch+6.4rem)] grid-cols-1 content-center items-center gap-6 pb-6 pt-[84px] md:pb-12 lg:grid-cols-[minmax(280px,min(46ch,40%))_1fr] lg:gap-x-12 xl:gap-x-16 xl:pt-28"
         >
           {/* copy — the slides share one grid cell (so the swap costs no layout) and each is
               top-aligned in it. that's what holds the breadcrumb and the title at the same y on
@@ -320,11 +332,12 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
                   k === active ? "visible opacity-100" : "invisible opacity-0"
                 }`}
               >
-                {/* secondary ink: the index is a wayfinding label for the piece, not the piece.
-                    Title and CTA below it stay ink, so the slide reads label → title → prose → action. */}
-                <div className="font-mono text-xs text-ink-secondary md:text-sm">[ {pad(k + 1)} ]</div>
+                {/* the index is wayfinding for the desk only: on a phone it cost 22px of the plate's
+                    fixed vertical budget for a label that repeats the order the scroll already tells
+                    you. Below lg the plate is stacked and every pixel belongs to the artwork. */}
+                <div className="hidden font-mono text-xs text-ink-secondary md:text-sm lg:block">[ {pad(k + 1)} ]</div>
 
-                <div className="mt-3">
+                <div className="lg:mt-3">
                   <Title size="display">{item.title}</Title>
                 </div>
 
@@ -352,9 +365,10 @@ export const RecentsStage = ({ items = recentItems }: { items?: RecentsStageItem
                   </Textbox>
                 </div>
 
-                {/* larger gap than the breadcrumb→title→prose rhythm (all mt-3) on purpose: the
-                    label, title and prose are one block, the action sits apart from them. */}
-                <div className="mt-8">
+                {/* the tighter gap on phones is load-bearing, not taste: the plate has a fixed
+                    height, so every pixel here comes straight out of the artwork's. From md the
+                    stage is stacked but roomy, and from lg the copy is a column beside the image. */}
+                <div className="mt-4 md:mt-8">
                   <Button size="sm" href={item.href}>
                     more detail
                   </Button>

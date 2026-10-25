@@ -18,8 +18,8 @@ export const aboutSequenceItems: AboutSequenceItem[] = [
       "I’ve always been into art in some form. Drawing, games, anything that just looked good and felt good, even if I didn’t really know why at the time.",
     ],
     image: {
-      src: "/images/about/about.png",
-      alt: "Portrait of Fasai",
+      src: "/images/about/about-5.png",
+      alt: "Fasai on the beach",
     },
   },
   {
@@ -54,8 +54,8 @@ export const aboutSequenceItems: AboutSequenceItem[] = [
       "I draw (all pieces on here are my illustrations!), play plenty of video games, and pay a bit too much attention to how things look and feel — whether that’s in a game, a UI, or something small that’s well put together.",
     ],
     image: {
-      src: "/images/about/about-3.png",
-      alt: "Personal interests visual",
+      src: "/images/ahri-gallery.png",
+      alt: "Illustration by Fasai",
     },
   },
   {
@@ -69,5 +69,6 @@ export const aboutSequenceItems: AboutSequenceItem[] = [
       src: "/images/about/about-5.png",
       alt: "Portfolio of Fasai",
     },
+    hideImage: true,
   },
 ];

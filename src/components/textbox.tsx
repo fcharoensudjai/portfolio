@@ -25,9 +25,24 @@ export const Textbox: React.FC<TextboxProps> = ({ children, caret = true, size =
     <div className={textboxSizes[size]}>
       {children}
       {caret && (
-        <span className="relative inline caret-wrapper">
-          <BlinkingCaret />
-        </span>
+        <>
+          {/* U+2060 WORD JOINER, and it has to sit between the text and the caret. Atomic inlines
+              (the scramble's per-word spans, and the caret wrapper) are treated as ideographic for
+              line breaking, so a break is allowed between two of them even with no whitespace — when
+              the last word happens to fill the measure, the caret alone wrapped onto the next line
+              (iPad mini was the tell). A word joiner forbids the break on both sides, so the last
+              word and the caret travel together and the caret always lands at the end of the sentence.
+              Zero-width, so nothing moves. */}
+          {"\u2060"}
+          {/* `-mr-[1.2em]` cancels the caret's own advance (0.7em block + 0.5em lead-in) so it
+              occupies no space in the line box. That's what stops it being pushed onto a line of its
+              own when the text already fills the measure: the last word stays where it was and the
+              caret simply hangs past the container's right edge (which is the one thing we'd rather
+              overflow than have a stray caret on the left margin). */}
+          <span className="relative inline caret-wrapper -mr-[1.2em]">
+            <BlinkingCaret />
+          </span>
+        </>
       )}
     </div>
   );

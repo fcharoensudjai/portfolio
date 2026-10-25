@@ -78,7 +78,10 @@ export default function Recent() {
               {/* caption + secondary ink + the intro's 65% measure: the same prose treatment the
                   recents intro and the gallery intro use. `body` (the default) was a step above the
                   unit the rest of the site reads at. */}
-              <div className={`w-full lg:w-[65%] text-ink-secondary`}>
+              {/* full width until xl. The 65% measure is a desk measure — at 1024 (iPad mini on its
+                  side) it was cutting the paragraph to ~700px while there was a whole gutter of empty
+                  space beside it. */}
+              <div className={`w-full xl:w-[65%] text-ink-secondary`}>
                 <Textbox caret={false} size="caption">
                   <Scramble delay={1500}>{String(artwork.description)}</Scramble>
                 </Textbox>
@@ -145,7 +148,10 @@ export default function Recent() {
           <BtsStage frames={btsFrames} href={youtubeLink} basePath={basePath} onContextMenu={handleContextMenu} />
         </div>
 
-        <div className="bg-surface px-6 md:px-16 xl:px-20 my-7">
+        {/* mt-14 + the block's own py-14 is ~146px above the carousel label at lg — the same step the
+            home page uses between its blocks (space-y-[10dvh] md:space-y-[14dvh]), instead of the
+            2.8rem that had the gallery tucked straight under the behind-the-scenes stage */}
+        <div className="bg-surface px-6 md:px-16 xl:px-20 mt-14 mb-7">
           <Fader enterDelay={0.6} threshold={0.2} once={true}>
             <div className="flex justify-center items-center py-10 md:py-12 lg:py-14">
               <GalleryCarousel labelText="see the gallery" />

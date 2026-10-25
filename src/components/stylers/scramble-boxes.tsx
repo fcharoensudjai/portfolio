@@ -50,12 +50,20 @@ const charStyle: React.CSSProperties = {
  * One word, rendered as fixed-width glyph cells. `gap` reserves the trailing space when this isn't
  * the last word on the line — the spaces themselves are lost when the text is split on " ".
  */
-export const ScrambleWord = ({ glyphs, gap }: { glyphs: string[]; gap?: boolean }) => (
-  <span style={{ ...wordStyle, marginRight: gap ? SCRAMBLE_WORD_GAP : undefined }}>
-    {glyphs.map((glyph, i) => (
-      <span key={i} style={charStyle}>
-        {glyph}
-      </span>
-    ))}
-  </span>
-);
+export const ScrambleWord = ({ glyphs, gap }: { glyphs: string[]; gap?: boolean }) => {
+  // A trailing space splits into an empty last word. Rendering it left a zero-width inline-block
+  // sitting where the line breaks, which is its own break opportunity — so the caret could still be
+  // pushed onto a line of its own even with the word joiner Textbox puts in front of it. An empty
+  // word that still carries a gap is a real space (double spaces), so that one keeps its spacer.
+  if (glyphs.length === 0 && !gap) return null;
+
+  return (
+    <span style={{ ...wordStyle, marginRight: gap ? SCRAMBLE_WORD_GAP : undefined }}>
+      {glyphs.map((glyph, i) => (
+        <span key={i} style={charStyle}>
+          {glyph}
+        </span>
+      ))}
+    </span>
+  );
+};

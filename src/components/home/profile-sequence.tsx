@@ -5,7 +5,6 @@ import { useTheme } from "next-themes";
 import { Button } from "@/components/button";
 import { Title } from "@/components/title";
 import { Scramble } from "@/components/stylers/scramblerthai";
-import Fader from "@/components/stylers/fader";
 import { useVisibility2 } from "@/app/contexts/introvisibilitycontext";
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
@@ -15,9 +14,6 @@ type PetalKey = "pl" | "pr" | "pu" | "pb";
 
 const A0: Record<PetalKey, number> = { pl: Math.PI + 0.25, pr: -0.25, pu: -Math.PI / 2 - 0.2, pb: Math.PI / 2 + 0.2 };
 const SWEEP: Record<PetalKey, number> = { pl: 4.6, pr: 5.3, pu: 4.9, pb: 5.6 };
-const GX: Record<PetalKey, number> = { pl: -0.3, pr: 0.25, pu: -0.15, pb: 0.3 };
-const GY: Record<PetalKey, number> = { pl: -1.2, pr: -0.9, pu: -1.6, pb: -1.1 };
-const K: Record<PetalKey, number> = { pl: 0.6, pr: 1, pu: 0.8, pb: 0.45 };
 const PETAL_KEYS: PetalKey[] = ["pl", "pr", "pu", "pb"];
 
 // mirrors cover-tiles' `cp`: the fold is fully flipped once the page has scrolled 0.85 viewport
@@ -29,9 +25,10 @@ const CHROME_AWAY_AT_FOLD = 0.88;
 
 /**
  * The landing intro, ported from home-preview-6.html (#profile): as the section
- * scrolls into view the flower spirals in from the top and settles, then the
- * petals break off on the wind while the manifesto line scrambles in beneath it.
- * No sticky pinning — the whole thing rides the page scroll so it stays visible.
+ * scrolls into view the flower spirals in from the top and settles, then keeps
+ * turning while the manifesto line scrambles in beneath it. The petals stay on
+ * the flower — the break-away sequence lives on the about page. No sticky
+ * pinning — the whole thing rides the page scroll so it stays visible.
  */
 export const ProfileSequence = () => {
   const { resolvedTheme } = useTheme();
@@ -133,32 +130,25 @@ export const ProfileSequence = () => {
       const fScale = 0.6 + 0.45 * ease(run);
       flower.style.transform = `translate(${fDriftX.toFixed(1)}px, ${fDriftY.toFixed(1)}px) rotate(${st.angle.toFixed(2)}deg) scale(${fScale.toFixed(3)})`;
 
-      // once settled, the wind lifts the petals away — only after the section has
-      // scrolled a good way past the top, so the flower stays intact through the
-      // middle of the screen and breaks late
-      const winds = clamp((-vh * 0.1 - sTop) / (vh * 0.6), 0, 1);
+      // the flower forms and stays whole — the petals no longer break off on the wind (that
+      // sequence lives on the about page now), so the only petal motion left is the separation
+      // closing as it spirals in
       PETAL_KEYS.forEach((cls) => {
         const pt = petalsRef.current[cls];
         if (!pt) return;
         const ang = A0[cls] + SWEEP[cls] * run;
         const sep = 1 - clamp((run - 0.45) / 0.55, 0, 1);
-        const rx = sep * 250;
-        const ry = sep * 180;
-        const ox = Math.cos(ang) * rx;
-        const oy = Math.sin(ang) * ry;
+        const tx = Math.cos(ang) * sep * 250;
+        const ty = Math.sin(ang) * sep * 180;
         const rot = SWEEP[cls] * (1 - run) * 40;
-        const w = clamp(winds * K[cls], 0, 1);
-        const tx = ox + GX[cls] * w * 230;
-        const ty = oy + GY[cls] * w * 230;
-        pt.style.transform = `translate(${tx.toFixed(1)}px, ${ty.toFixed(1)}px) rotate(${(rot + GY[cls] * w * 90).toFixed(1)}deg)`;
-        pt.style.opacity = clamp((1 - w) * enter, 0, 1).toFixed(3);
+        pt.style.transform = `translate(${tx.toFixed(1)}px, ${ty.toFixed(1)}px) rotate(${rot.toFixed(1)}deg)`;
+        pt.style.opacity = enter.toFixed(3);
       });
-      if (dmRef.current) dmRef.current.style.opacity = clamp(run * (1 - winds), 0, 1).toFixed(3);
+      if (dmRef.current) dmRef.current.style.opacity = run.toFixed(3);
       // the chrome steps out as the fold nearly closes and comes back the moment the flower has
-      // FORMED — run = 1, i.e. it has landed with its petals still on it. The wind that follows is
-      // the quiet part, so the header is welcome back for it. Tied to run rather than a threshold so
-      // it can't drift out of sync with the landing maths above. keyed off position, not scroll
-      // direction, so scrolling back up hides it over exactly the same stretch
+      // FORMED — run = 1, i.e. it has landed and is holding its shape. Tied to run rather than a
+      // threshold so it can't drift out of sync with the landing maths above. keyed off position,
+      // not scroll direction, so scrolling back up hides it over exactly the same stretch
       const coverFold = window.scrollY / (vh * COVER_FOLD_VH);
       const chromeAway = coverFold >= CHROME_AWAY_AT_FOLD && run < 1;
       if (chromeAway !== chromeAwayRef.current) {
@@ -250,19 +240,23 @@ export const ProfileSequence = () => {
             stays on the wrapper because it's the escape hatch from globals.css's
             `* { line-height: 1.75em }` — without it the h2's own strut leads at 1.75 and the two
             lines drift apart even though the span is `leading-none`. */}
-        <h2 className="story-head mb-[clamp(14px,2.5vh,24px)] lowercase">
+        <h2 className="story-head mb-3 md:mb-4 lowercase">
           <Title size="display">
             from bangkok
             <br />
             to london
           </Title>
         </h2>
-        {/* secondary ink — one of the four supporting texts that carries the tier */}
+        {/* secondary ink — one of the four supporting texts that carries the tier. The size is the
+            caption step, spelled the way every other paragraph on the site spells it
+            (`text-xs md:text-sm`, which is what `Textbox size="caption"` compiles to): 0.8rem on a
+            phone, the body unit from md up — so it holds the 4.4:1 ratio with the display headline
+            where the headline is at full size, and matches the recents copy at every width.
+            Hard-coding `var(--type-body)` made this the one paragraph that stayed 16px on mobile,
+            reading a full step larger than the prose around it. */}
         <div
-          className="text-ink-secondary"
+          className="text-ink-secondary text-xs md:text-sm"
           style={{
-            // the body unit, which is what makes the ratio with the display headline exactly 4.4:1
-            fontSize: "var(--type-body)",
             lineHeight: 1.6,
             maxWidth: "36em",
             marginLeft: "auto",
@@ -286,15 +280,21 @@ export const ProfileSequence = () => {
         </div>
       </div>
 
-      <div className="mt-[clamp(26px,5vh,48px)]">
-        <Fader enterDelay={0.8} once={true}>
-          {/* sm so it matches the recents stage's "more detail" buttons — one button size for
-              in-page actions, and it belongs to the intro's type scale rather than towering over it. */}
-          <Button size="sm" href="/about">
-            {" "}
-            more about me{" "}
-          </Button>
-        </Fader>
+      {/* the same two steps the recents block uses: `space-y-3 md:space-y-4` between the headline and
+          the manifesto, and `mt-6 lg:mt-7 xl:mt-10` down to the action. Both were viewport clamps of
+          their own here (2.5vh / 5vh, capped at 24 and 48), which is why the pair never quite lined
+          up with the rest of the page. */}
+      <div className="mt-6 lg:mt-7 xl:mt-10">
+        {/* no fade: every other in-page CTA fades in as part of its whole block (recent works, the
+            gallery hero), but here the headline and manifesto above are static — so a Fader on the
+            button alone landed 0.8s after everything else and read as a stray. It arrives with the
+            rest of the intro instead. */}
+        {/* sm so it matches the recents stage's "more detail" buttons — one button size for
+            in-page actions, and it belongs to the intro's type scale rather than towering over it. */}
+        <Button size="sm" href="/about">
+          {" "}
+          more about me{" "}
+        </Button>
       </div>
     </section>
   );
