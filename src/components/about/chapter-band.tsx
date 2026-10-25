@@ -36,7 +36,7 @@ export const ChapterBand = ({ basePath, eyebrow, title, paragraph, image, alt }:
 
         <div className="max-w-[52rem] text-ink-secondary">
           <Textbox size="caption" caret={false}>
-            <Scramble once={false} preScrambled>
+            <Scramble delay={400} once={false} preScrambled>
               {paragraph}
             </Scramble>
           </Textbox>

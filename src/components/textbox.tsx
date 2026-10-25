@@ -4,23 +4,24 @@ import React from "react";
 interface TextboxProps {
   children: React.ReactNode;
   caret?: boolean;
-  /** KNOWN NAMING WART, worth a rename pass:
+  /** Two rungs, and a known naming wart worth a rename pass:
    *  - "caption" is really BODY — 1rem from md up. It is the unit the whole type ladder is built on
-   *    (display is 4.4 x this), and it's what a piece caption uses in the recents stage.
-   *  - "body" (the default) is a step ABOVE that — 1.25rem at xl. So the two names are inverted.
+   *    (display is 4.4 x this), and it is what every paragraph on the site uses.
    *  - "label" is the genuine small tier: 0.8rem, the caption rung, for prompts and tags.
+   *  There used to be a third, "body", a step ABOVE caption (1.25rem at xl) — which made the two
+   *  names read inverted. Nothing used it, and it was the last thing on the site reaching `text-md`,
+   *  so it's gone rather than fixed twice.
    *  The leading only reaches the text if the content is inline — a block child (e.g. a `<p>`) needs
    *  its own leading, because globals.css's `* { line-height: 1.75em }` matches it directly. */
-  size?: "body" | "caption" | "label";
+  size?: "caption" | "label";
 }
 
 const textboxSizes = {
-  body: "md:text-sm xl:text-md text-xs",
   caption: "text-xs md:text-sm leading-[1.6]",
   label: "text-xs leading-[1.6]",
 };
 
-export const Textbox: React.FC<TextboxProps> = ({ children, caret = true, size = "body" }) => {
+export const Textbox: React.FC<TextboxProps> = ({ children, caret = true, size = "caption" }) => {
   return (
     <div className={textboxSizes[size]}>
       {children}

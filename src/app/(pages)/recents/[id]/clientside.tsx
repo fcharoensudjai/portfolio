@@ -75,15 +75,16 @@ export default function Recent() {
         <div className="content-cap">
           <Fader enterDelay={1.2} once={true}>
             <div className={`flex flex-col px-6 md:px-16 xl:px-20`}>
-              {/* caption + secondary ink + the intro's 65% measure: the same prose treatment the
-                  recents intro and the gallery intro use. `body` (the default) was a step above the
-                  unit the rest of the site reads at. */}
-              {/* full width until xl. The 65% measure is a desk measure — at 1024 (iPad mini on its
-                  side) it was cutting the paragraph to ~700px while there was a whole gutter of empty
-                  space beside it. */}
+              {/* caption + secondary ink: the same prose treatment the recents intro and the gallery
+                  intro use. Full width until xl — the 65% measure is a desk measure, and at 1024
+                  (iPad mini on its side) it was cutting the paragraph to ~700px with a whole gutter of
+                  empty space beside it. The length is the one place this page runs long, so it keeps
+                  a narrower measure at xl than the rest of the site's prose. */}
               <div className={`w-full xl:w-[65%] text-ink-secondary`}>
                 <Textbox caret={false} size="caption">
-                  <Scramble delay={1500}>{String(artwork.description)}</Scramble>
+                  <Scramble once={false} preScrambled>
+                    {String(artwork.description)}
+                  </Scramble>
                 </Textbox>
               </div>
 
@@ -91,7 +92,7 @@ export default function Recent() {
                   of element, so it sits apart from the title+prose block rather than inside it */}
               <div className="mt-6 lg:mt-7 xl:mt-10">
                 <Textbox size="caption">
-                  <Scramble delay={3750} hover={true} interval={20}>
+                  <Scramble delay={2000} hover={true} interval={20} once={false}>
                     {"[ scroll for more ] "}
                   </Scramble>
                 </Textbox>

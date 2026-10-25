@@ -60,8 +60,11 @@ export const Preloader: React.FC<PreloaderProps> = ({
 
   return (
     <AnimatePresence>
+      {/* marks the panel while it covers the page: `Scramble` holds a decode whose delay would land
+          underneath it, so no page has to guess the loader's duration in its own delay */}
       {loading && (
         <motion.div
+          data-preloader=""
           className="fixed inset-0 z-50 bg-surface-mid text-ink flex justify-center text-2xl md:text-3xl xl:text-4xl items-center"
           initial={{ y: 0 }}
           animate={{ y: 0 }}

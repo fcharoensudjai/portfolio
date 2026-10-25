@@ -113,7 +113,7 @@ export const ChapterPlate = ({ basePath, eyebrow, title, paragraphs, image, alt 
         {/* the same header→body step the home recents block uses (space-y-3 / md:space-y-4) */}
         <div className="mt-3 md:mt-4 max-w-[52rem] text-ink-secondary">
           <Textbox size="caption" caret={false}>
-            <Scramble once={false} preScrambled>
+            <Scramble delay={400} once={false} preScrambled>
               {paragraphs.join(" ")}
             </Scramble>
           </Textbox>

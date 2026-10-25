@@ -123,17 +123,48 @@ export const Scramble: React.FC<ScrambleProps> = ({
   }
 
   useEffect(() => {
-    if (inView && !navigate) {
-      const delayTimer = setTimeout(
-        () => {
-          hasPlayedRef.current = true;
-          handleScramble();
-        },
-        hasPlayedRef.current ? 0 : delay
-      );
+    if (!inView || navigate) return;
 
-      return () => clearTimeout(delayTimer);
-    }
+    let started = false;
+    let poll: ReturnType<typeof setTimeout> | undefined;
+    let ceiling: ReturnType<typeof setTimeout> | undefined;
+    const fire = () => {
+      if (started) return;
+      started = true;
+      hasPlayedRef.current = true;
+      handleScramble();
+    };
+
+    // The page loader is an opaque full-screen panel, so a decode that lands while it still covers the
+    // page is spent before anyone sees it. That was the only reason the gallery and the piece pages
+    // carried hand-tuned 3250ms/3750ms delays — guesses at the loader's own duration (its hold plus a
+    // 900ms slide-out), which then went stale whenever the loader changed. So the delay still runs
+    // from in-view as before, and only if the loader is still covering the page when it expires does
+    // the decode hold, until the loader has left the DOM. With no loader there is no wait at all, so
+    // pages and elements that decode on scroll behave exactly as they did.
+    const waitForLoader = () => {
+      if (!document.querySelector("[data-preloader]")) {
+        fire();
+        return;
+      }
+
+      poll = setTimeout(waitForLoader, 50);
+    };
+
+    const delayTimer = setTimeout(
+      () => {
+        waitForLoader();
+        // ceiling, so a loader that somehow never leaves can't park the text as glyphs
+        ceiling = setTimeout(fire, 5000);
+      },
+      hasPlayedRef.current ? 0 : delay
+    );
+
+    return () => {
+      clearTimeout(delayTimer);
+      if (poll) clearTimeout(poll);
+      if (ceiling) clearTimeout(ceiling);
+    };
   }, [inView, delay]);
 
   // while out of view, park the text back in its scrambled state so it decodes again on re-entry

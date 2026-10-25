@@ -41,7 +41,7 @@ export default function Gallery() {
                 <Title size="large">gallery</Title>
                 <div className={`min-h-200px sm:min-h-0 text-ink-secondary`}>
                   <Textbox caret={false} size="caption">
-                    <Scramble delay={1500}>
+                    <Scramble once={false} preScrambled>
                       {
                         "Welcome to my gallery! Here, you’ll find a collection of pieces that have been a part of my journey in learning and growing as an artist. I mostly work in Procreate, but you'll see some studies in other mediums from my pieces in school. Click on the pieces to view them in detail, and feel free to see the progress I've made along the way."
                       }
@@ -54,7 +54,7 @@ export default function Gallery() {
                   it's a different kind of element (the stage gives its button the same treatment) */}
               <div className="mt-6 lg:mt-7 xl:mt-10 text-ink">
                 <Textbox size="caption">
-                  <Scramble delay={3250} hover={true} interval={20}>
+                  <Scramble delay={2000} hover={true} interval={20} once={false}>
                     {"[ scroll to explore ] "}
                   </Scramble>
                 </Textbox>

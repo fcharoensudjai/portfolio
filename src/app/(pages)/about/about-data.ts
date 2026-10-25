@@ -6,7 +6,6 @@ export interface AboutSequenceItem {
     src: string;
     alt: string;
   };
-  hideImage?: boolean;
 }
 
 export const aboutSequenceItems: AboutSequenceItem[] = [
@@ -38,8 +37,7 @@ export const aboutSequenceItems: AboutSequenceItem[] = [
     id: "03",
     title: "what i'm up to",
     paragraphs: [
-      "I now work across finance and tech as a finance strategy consultant in London, helping CFOs reimagine their finance functions.",
-      "Most of my time is spent working with data, building internal tools as a UX and front-end engineer, and figuring out how things actually get used.",
+      "I now work in Finance Strategy consulting in London, somewhere between finance, technology, and building things. That means everything from client-facing dashboards and prototypes to experimenting with agentic tools that make our work easier. I enjoy the process of taking an idea and turning it into something people can actually use.",
     ],
     image: {
       src: "/images/about/about-4.png",
@@ -69,6 +67,5 @@ export const aboutSequenceItems: AboutSequenceItem[] = [
       src: "/images/about/about-5.png",
       alt: "Portfolio of Fasai",
     },
-    hideImage: true,
   },
 ];

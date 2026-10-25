@@ -201,7 +201,7 @@ export const ChapterClosing = ({ eyebrow, title, paragraphs }: ChapterClosingPro
           </div>
           <div className="text-ink-secondary">
             <Textbox size="caption" caret={false}>
-              <Scramble once={false} preScrambled>
+              <Scramble delay={400} once={false} preScrambled>
                 {paragraphs.join(" ")}
               </Scramble>
             </Textbox>

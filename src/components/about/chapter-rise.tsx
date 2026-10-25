@@ -149,7 +149,7 @@ export const ChapterRise = ({ basePath, eyebrow, title, statement, image, alt, p
             <div className="max-w-[52rem] text-[rgba(232,231,226,0.82)]">
               <Textbox size="caption" caret={false}>
                 {isLate ? (
-                  <Scramble once={false} preScrambled>
+                  <Scramble delay={400} once={false} preScrambled>
                     {paragraph}
                   </Scramble>
                 ) : (
