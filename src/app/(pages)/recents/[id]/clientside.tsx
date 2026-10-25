@@ -37,7 +37,7 @@ export default function Recent() {
   if (!artwork) {
     return (
       <div className="h-[100dvh] inset-0 flex flex-col space-y-3 md:space-y-5 justify-center items-center bg-surface text-ink">
-        <div> artwork not found! </div>
+        <div>artwork not found</div>
         <Button href="/#home"> return home </Button>
       </div>
     );

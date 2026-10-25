@@ -79,7 +79,7 @@ export const CarouselCard: React.FC<CarouselCardProps> = ({
         dimmed ? "opacity-60" : "opacity-100"
       } hover:z-10 hover:scale-[1.05] hover:opacity-100 ${className ?? ""}`}
       style={{ transition: "transform 500ms cubic-bezier(0.22, 1, 0.36, 1), opacity 400ms ease" }}
-      aria-label={`${title} — ${ctaText}`}
+      aria-label={`${title} – ${ctaText}`}
     >
       <ImageFrame
         src={src}

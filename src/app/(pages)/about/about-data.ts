@@ -14,7 +14,7 @@ export const aboutSequenceItems: AboutSequenceItem[] = [
     title: "hi, i'm fasai",
     paragraphs: [
       "Born and raised in Bangkok, Thailand, I grew up around a very diverse mix of people and perspectives.",
-      "I’ve always been into art in some form. Drawing, games, anything that just looked good and felt good, even if I didn’t really know why at the time.",
+      "I've always been into art in some form. Drawing, games, anything that just looked good and felt good, even if I didn't really know why at the time.",
     ],
     image: {
       src: "/images/about/about-5.png",
@@ -49,7 +49,7 @@ export const aboutSequenceItems: AboutSequenceItem[] = [
     title: "outside of work",
     paragraphs: [
       "Outside of that, I still spend a lot of time around art.",
-      "I draw (all pieces on here are my illustrations!), play plenty of video games, and pay a bit too much attention to how things look and feel — whether that’s in a game, a UI, or something small that’s well put together.",
+      "I draw (all pieces on here are my illustrations!), play plenty of video games, and pay a bit too much attention to how things look and feel – whether that's in a game, a UI, or something small that's well put together.",
     ],
     image: {
       src: "/images/ahri-gallery.png",
@@ -60,7 +60,7 @@ export const aboutSequenceItems: AboutSequenceItem[] = [
     id: "05",
     title: "this site",
     paragraphs: [
-      "This site is my creative outlet. It’s where I can experiment, try things out, and build in a way that feels more personal, without overthinking it too much.",
+      "This site is my creative outlet. It's where I can experiment, try things out, and build in a way that feels more personal, without overthinking it too much.",
       "It also gives me a space to bring art, design, and the technical side of things together in a way that feels true to myself.",
     ],
     image: {

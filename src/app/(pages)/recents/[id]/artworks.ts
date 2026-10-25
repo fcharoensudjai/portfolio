@@ -15,7 +15,7 @@ export const artworks: artworkData[] = [
     title: "raiden shogun",
     url: "https://youtu.be/fEZeP-P9QjU?si=dh78BOyTF2mZrMuk",
     description:
-      "Raiden Shogun has long been my favourite character in Genshin Impact, and I wanted to capture her energy as an Archon. I did this using a composition that was inspired by the League of Legends splash art styles, as they are often dynamic, atmospheric and incredibly epic. Taking on one of the biggest digital canvases I've ever worked on was both exciting and challenging - the compressed PNG in the end ended up being 81MB and my iPad crashed a couple times! I aimed for a high level of detail, but this had to be balanced with maintaining a good overall composition and keeping a solid bigger picture.",
+      "Raiden Shogun has long been my favourite character in Genshin Impact, and I wanted to capture her energy as an Archon. I did this using a composition that was inspired by the League of Legends splash art styles, as they are often dynamic, atmospheric and incredibly epic. Taking on one of the biggest digital canvases I've ever worked on was both exciting and challenging – the compressed PNG in the end ended up being 81MB and my iPad crashed a couple of times! I aimed for a high level of detail, but this had to be balanced with maintaining a good overall composition and keeping a solid bigger picture.",
   },
 
   {

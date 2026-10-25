@@ -18,6 +18,20 @@ Descriptions, captions, intros, bios — anything that reads as a sentence.
 - Proper nouns get their real capitalisation here: `Raiden Shogun`, `Genshin Impact`, `League of Legends`, `Procreate`.
 - Examples: the about statement, the gallery intro, the recents section intro, artwork descriptions, the gallery carousel caption.
 
+## Alt text → label
+
+Screen-reader descriptions of artwork (`drawing of raiden shogun`, `a closeup shot of a drawing of raven`).
+
+- Lowercase, no terminal punctuation.
+- Proper nouns stay lowercase here. It is a label, not prose — the surrounding page already carries the capitalised name.
+
+## Punctuation
+
+- **Apostrophes are straight** (`'`), not typographic (`’`). The whole codebase is straight; curly ones render inconsistently with the mono display face.
+- **Dashes are spaced en dashes** (`challenging – the compressed PNG`). Not em dashes, not a spaced hyphen.
+- **The serial comma is optional.** Leave it out where the list reads cleaner (`dynamic, atmospheric and incredibly epic`). Keep it where it aids the read. Consistency is per paragraph, not per site.
+- **`finance` is the discipline, `Finance Strategy` is the job.** Lowercase the field, capitalise the role — both can appear in one sentence.
+
 ## Exception
 
 `get in touch!` keeps its exclamation mark. It is the only emotional beat on the contact CTA — deliberate, don't "fix" it.
@@ -36,8 +50,14 @@ So: the same two words can legitimately appear in both cases on one screen — `
 | About paragraphs              | `src/app/(pages)/about/about-data.ts`            |
 | Artwork titles / descriptions | `src/app/(pages)/recents/[id]/artworks.ts`       |
 | Home recents teasers          | `src/components/home/recents-stage.tsx`          |
+| Home manifesto                | `src/components/home/profile-sequence.tsx`       |
 | Gallery card names            | `src/components/card/imageData.ts`               |
+| Alt text                      | `src/components/card/imageData.ts`, `src/app/(pages)/recents/[id]/artworks.ts` |
 | Carousel label / caption      | `src/components/home/gallery-carousel.tsx`       |
+| Hover CTAs (`see full image`) | `src/components/card/card.tsx`                   |
+| BTS labels                    | `src/components/recents/bts-stage.tsx`           |
+| Not-found state               | `src/app/(pages)/recents/[id]/clientside.tsx`    |
+| Preloader lines               | `src/components/stylers/page-loading/preloader.tsx` |
 | Contact CTA                   | `src/components/contact.tsx`                     |
 
 Spelling is British throughout: favourite, colour, organised, recognise.

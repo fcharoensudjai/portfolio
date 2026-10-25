@@ -45,8 +45,8 @@ export const imageData: CustomImageData[] = [
   {
     src: "/images/yor-gallery.png",
     alt: "drawing of yor",
-    date: "2022-06-08",
     name: "yor forger",
+    date: "2022-06-08",
     tall: true,
     wide: true,
   },
@@ -54,15 +54,15 @@ export const imageData: CustomImageData[] = [
   {
     src: "/images/leksa-gallery.png",
     alt: "drawing of leksa's character",
-    date: "2021-05-24",
     name: "elf",
+    date: "2021-05-24",
   },
 
   {
     src: "/images/mermaid-gallery.png",
     alt: "drawing of a mermaid",
-    date: "2021-05-15",
     name: "mermaid",
+    date: "2021-05-15",
     tall: true,
     wide: true,
   },

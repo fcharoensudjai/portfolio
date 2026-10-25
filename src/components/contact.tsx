@@ -64,7 +64,7 @@ export const Contact = ({ once = true }: ContactProps) => {
             usable width at 768, so it wrapped. `lg` is the first breakpoint that genuinely holds it. */}
         <div className="text-ink">
           <span className="lg:hidden">© 2026</span>
-          <span className="hidden lg:inline">© 2026 — all rights reserved</span>
+          <span className="hidden lg:inline">© 2026 – all rights reserved</span>
         </div>
 
         <div className="shrink-0">

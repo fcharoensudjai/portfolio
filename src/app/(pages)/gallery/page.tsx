@@ -22,7 +22,7 @@ export default function Gallery() {
     setIsViewerOpen(index ?? null);
   };
 
-  const sortedImageData: CustomImageData[] = imageData.sort(
+  const sortedImageData: CustomImageData[] = [...imageData].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 
@@ -43,7 +43,7 @@ export default function Gallery() {
                   <Textbox caret={false} size="caption">
                     <Scramble once={false} preScrambled>
                       {
-                        "Welcome to my gallery! Here, you’ll find a collection of pieces that have been a part of my journey in learning and growing as an artist. I mostly work in Procreate, but you'll see some studies in other mediums from my pieces in school. Click on the pieces to view them in detail, and feel free to see the progress I've made along the way."
+                        "Welcome to my gallery! Here, you'll find a collection of pieces that have been a part of my journey in learning and growing as an artist. I mostly work in Procreate, but you'll see some studies in other mediums from my pieces in school. Click on the pieces to view them in detail, and feel free to see the progress I've made along the way."
                       }
                     </Scramble>
                   </Textbox>

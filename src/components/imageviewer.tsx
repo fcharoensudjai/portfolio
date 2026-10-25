@@ -36,7 +36,7 @@ export const ImageViewer: React.FC<ViewerProps> = ({ src, alt, name, toggleViewe
       >
         <Image
           src={theme === "dark" ? `${basePath}/icons/dark/closedark.svg` : `${basePath}/icons/light/close.svg`}
-          alt="close navigation"
+          alt="close viewer"
           width={30}
           height={30}
         />
