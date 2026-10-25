@@ -9,17 +9,31 @@ const poppins = Poppins({
 
 interface TitleProps {
   children: React.ReactNode;
-  size?: "small" | "medium" | "large" | "about" | "carousel";
+  /** Roles, not locations. Each ceiling comes from the type ladder in globals.css, so a size is
+   *  changed in one place for the whole site. `large` and `medium` still carry their old names — they
+   *  are on the rename list; `subhead`/`about`/`carousel` keep theirs because they're genuinely
+   *  scoped (item titles, the about page, gallery cards). */
+  size?: "small" | "medium" | "display" | "large" | "close" | "about" | "carousel";
 }
 
 const titleVariants = cva("font-sans", {
   variants: {
     size: {
-      small: "text-[clamp(1.125rem,2.5vw,1.875rem)]",
-      medium: "text-[clamp(1.25rem,3.5vw,2.5rem)]",
-      large: "text-[clamp(1.5rem,8vw,13vh)]",
+      small: "text-[clamp(1.125rem,2.5vw,var(--type-subhead))]",
+      medium: "text-[clamp(1.25rem,3.5vw,var(--type-title))]",
+      // the editorial size: piece titles AND section headings, so a heading reads 4.4x the body
+      // beneath it wherever it appears. Also what the profile manifesto headline uses.
+      display: "text-[clamp(2rem,5vw,var(--type-display))] leading-none tracking-[-0.02em]",
+      // two ceilings: never taller than the viewport allows (so it can't overflow a short window)
+      // and never past its rem ceiling (so it stops when the frame it sits in does). 1.2 matches
+      // what `display` actually renders at (leading-none inside a fixed-line-spacing wrapper) —
+      // without it this size inherited the global 1.75 and every gap below it read ~38px too big
+      large: "text-[clamp(1.5rem,8vw,var(--type-name))] leading-[1.2]",
+      // the same ceiling as `large` with a lower viewport coefficient: this one shares its row
+      // with the contact links, so it has to leave them enough width to stay on one line
+      close: "text-[clamp(2rem,6.5vw,var(--type-name))]",
       about: "text-lg md:text-2xl lg:text-3xl 2xl:text-5xl",
-      carousel: "text-xs sm:text-sm lg:text-md",
+      carousel: "text-[clamp(1.2rem,2vw,1.7rem)] leading-[1.05] tracking-[-0.02em]",
     },
   },
   defaultVariants: {

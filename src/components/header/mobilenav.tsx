@@ -9,9 +9,6 @@ import { SocialIcons } from "@/components/footer/socialicons";
 import { Poppins } from "next/font/google";
 import { Scrollbar } from "@/components/header/scrollbar";
 import { UnderlinedLink } from "@/components/underlinedlink";
-import { useVisibility } from "@/app/contexts/recentsvisibilitycontext";
-import { useVisibility2 } from "@/app/contexts/introvisibilitycontext";
-import { useVisibility3 } from "@/app/contexts/contactvisibilitycontext";
 import { usePathname } from "next/navigation";
 
 const poppins = Poppins({
@@ -35,16 +32,12 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
     }
   }, [pathname]);
 
-  const { isRecentsInView } = useVisibility();
-  const { isIntroInView } = useVisibility2();
-  const { isContactInView } = useVisibility3();
-
   return (
     <motion.div
       initial={{ x: "100%" }}
       animate={{ x: isNavOpen ? 0 : "100%" }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className={`fixed inset-0 z-50 ${theme === "dark" ? "bg-middle-colour" : "bg-text-dark"} ${poppins.className}`}
+      className={`fixed inset-0 z-50 bg-surface-mid ${poppins.className}`}
     >
       <Scrollbar />
 
@@ -65,16 +58,17 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
           </div>
         </div>
 
-        <div className="flex flex-grow justify-end items-center pe-8 pb-[68.38px]">
+        <div className="flex flex-grow justify-end items-center pe-8 pb-[4.27375rem]">
           <ul className="flex flex-col space-y-3 text-xl text-right">
             <li>
-              <UnderlinedLink href="/#home" onClick={toggleNav}>
+              <UnderlinedLink
+                href="/#home"
+                scroll={pathname === "/"}
+                isVisible={pathname === "/"}
+                onClick={toggleNav}
+                toggleNav={toggleNav}
+              >
                 home
-              </UnderlinedLink>
-            </li>
-            <li>
-              <UnderlinedLink href={`/#recents`} onClick={toggleNav} isVisible={isRecentsInView}>
-                recents
               </UnderlinedLink>
             </li>
             <li>
@@ -83,30 +77,14 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isNavOpen, toggleNav }) =>
               </UnderlinedLink>
             </li>
             <li>
-              <UnderlinedLink href={`/#intro`} onClick={toggleNav} isVisible={isIntroInView}>
-                intro
-              </UnderlinedLink>
-            </li>
-            <li>
               <UnderlinedLink href="/about" onClick={toggleNav}>
                 about
-              </UnderlinedLink>
-            </li>
-            <li>
-              <UnderlinedLink
-                href="/#contact"
-                scroll={true}
-                isVisible={isContactInView}
-                onClick={toggleNav}
-                toggleNav={toggleNav}
-              >
-                contact
               </UnderlinedLink>
             </li>
           </ul>
         </div>
 
-        <div className="fixed bottom-0 left-0 right-0 flex justify-between items-center px-5 py-3 bg-transparent">
+        <div className="fixed bottom-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-transparent">
           <div className="flex-grow flex justify-start">
             <LocalTime />
           </div>

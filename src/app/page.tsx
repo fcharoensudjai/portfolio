@@ -2,30 +2,24 @@
 
 import React, { useState, useEffect } from "react";
 import { Title } from "@/components/title";
-import { useTheme } from "next-themes";
 import { MobileNav } from "@/components/header/mobilenav";
 import { LocalTime } from "@/components/footer/localtime";
 import { SocialIcons } from "@/components/footer/socialicons";
-import { Footer } from "@/components/footer/footer";
 import { Textbox } from "@/components/textbox";
 import { Contact } from "@/components/contact";
-import Image from "next/image";
-import { DottedLineSeparator } from "@/components/dottedlineseparator";
 import { Button } from "@/components/button";
 import { Scramble } from "@/components/stylers/scramblerthai";
 import Fader from "@/components/stylers/fader";
 import { Preloader } from "@/components/stylers/page-loading/preloader";
 import { useInView } from "react-intersection-observer";
 import { useVisibility } from "@/app/contexts/recentsvisibilitycontext";
-import { useVisibility2 } from "@/app/contexts/introvisibilitycontext";
-import { motion, useMotionValue, AnimatePresence } from "framer-motion";
 import { Petal } from "@/components/petal";
-import { UnderlinedLink } from "@/components/underlinedlink";
 import { GalleryCarousel } from "@/components/home/gallery-carousel";
+import { ProfileSequence } from "@/components/home/profile-sequence";
+import { CoverTiles } from "@/components/home/cover-tiles";
+import { RecentsStage } from "@/components/home/recents-stage";
 
 export default function Home() {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-  const { theme } = useTheme();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const toggleNav = () => setIsNavOpen(!isNavOpen);
 
@@ -42,29 +36,6 @@ export default function Home() {
     setIsRecentsInView(isRecentsInView);
   }, [isRecentsInView, setIsRecentsInView]);
 
-  // controlling the underlining for the intro section
-
-  const { setIsIntroInView } = useVisibility2();
-
-  const { ref: introRef, inView: isIntroInView } = useInView({
-    threshold: 0.5,
-    triggerOnce: false,
-  });
-
-  // used to update the intro context with visibility state
-  React.useEffect(() => {
-    setIsIntroInView(isIntroInView);
-  }, [isIntroInView, setIsIntroInView]);
-
-  // flower rotating speed (mirrors carousel motion profile)
-  const rotateValue = useMotionValue(0);
-  const [isIntroFlowerHovered, setIsIntroFlowerHovered] = useState(false);
-  const flowerDirectionRef = React.useRef<"up" | "down" | null>(null);
-  const flowerScrollingRef = React.useRef(false);
-  const flowerHoverRef = React.useRef(false);
-  const flowerSpeedMultiplierRef = React.useRef(1);
-  const flowerScrollBoostRef = React.useRef(1);
-
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
     if (hash) {
@@ -80,457 +51,115 @@ export default function Home() {
     }
   }, []);
 
-  const previousScrollRef = React.useRef({ y: 0, t: 0 });
-  const speedDecayTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    previousScrollRef.current = { y: window.scrollY, t: performance.now() };
-
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const now = performance.now();
-      const { y: prevY, t: prevT } = previousScrollRef.current;
-      const deltaY = currentScrollY - prevY;
-      const deltaT = Math.max(1, now - prevT);
-
-      if (deltaY > 0) {
-        flowerDirectionRef.current = "down";
-      } else if (deltaY < 0) {
-        flowerDirectionRef.current = "up";
-      }
-
-      const pxPerSecond = (Math.abs(deltaY) / deltaT) * 1000;
-      const hasMeaningfulScroll = Math.abs(deltaY) > 8 && pxPerSecond > 260;
-      if (hasMeaningfulScroll) {
-        flowerScrollingRef.current = true;
-      }
-
-      previousScrollRef.current = { y: currentScrollY, t: now };
-
-      if (speedDecayTimeoutRef.current) {
-        clearTimeout(speedDecayTimeoutRef.current);
-      }
-
-      speedDecayTimeoutRef.current = setTimeout(() => {
-        flowerScrollingRef.current = false;
-      }, 120);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-
-      if (speedDecayTimeoutRef.current) {
-        clearTimeout(speedDecayTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    flowerHoverRef.current = isIntroFlowerHovered;
-  }, [isIntroFlowerHovered]);
-
-  useEffect(() => {
-    let rafId: number;
-    let lastTime = performance.now();
-
-    const frame = (now: number) => {
-      const dt = (now - lastTime) / 1000;
-      lastTime = now;
-
-      const baseSpeed = 45;
-      const targetHoverMultiplier = flowerHoverRef.current ? 0.45 : 1;
-      const targetScrollBoost = flowerScrollingRef.current ? 1.65 : 1;
-
-      flowerSpeedMultiplierRef.current +=
-        (targetHoverMultiplier - flowerSpeedMultiplierRef.current) * Math.min(1, dt * 7);
-      flowerScrollBoostRef.current += (targetScrollBoost - flowerScrollBoostRef.current) * Math.min(1, dt * 4.5);
-
-      const speed = baseSpeed * flowerSpeedMultiplierRef.current * flowerScrollBoostRef.current;
-      const direction = flowerDirectionRef.current === "up" ? -1 : 1;
-
-      let nextRotation = rotateValue.get() + direction * speed * dt;
-
-      if (nextRotation >= 360) {
-        nextRotation -= 360;
-      }
-
-      if (nextRotation <= -360) {
-        nextRotation += 360;
-      }
-
-      rotateValue.set(nextRotation);
-      rafId = requestAnimationFrame(frame);
-    };
-
-    rafId = requestAnimationFrame(frame);
-
-    return () => {
-      cancelAnimationFrame(rafId);
-    };
-  }, [rotateValue]);
-
-  const [showOverlay, setShowOverlay] = useState(false);
-  const toggleOverlay = () => setShowOverlay(!showOverlay);
-
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  const textBoxWidth = 150;
-  const textBoxHeight = 50;
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    const clampedX = Math.min(Math.max(mouseX, textBoxWidth / 2), rect.width - textBoxWidth / 1.6);
-    const clampedY = Math.min(Math.max(mouseY, textBoxHeight / 2), rect.height - textBoxHeight);
-
-    setMousePosition({ x: clampedX, y: clampedY });
-  };
+  const coverRef = React.useRef<HTMLElement | null>(null);
 
   return (
-    <div className={`${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}>
+    <div className="bg-surface text-ink">
       <Preloader duration={1100} texts={["hello", "สวัสดี"]} delay={500} />
 
-      <div
-        id="home"
-        className={`flex flex-col min-h-dvh ${theme === "dark" ? "bg-text-light text-text-dark" : "bg-main-light text-text-light"}`}
-      >
-        <main className="content-cap flex flex-col flex-grow items-start justify-center text-left text-xs sm:text-md px-6 md:px-16 xl:px-20">
-          <Fader enterDelay={1.5} once={true}>
-            <Title size="large">
-              <div className="relative fixed-line-spacing mt-[75.58px] xl:mt-[103.22px]">
-                fasai <br /> charoensudjai{" "}
-                <Petal positioning="left-[96.5%] bottom-[36.75%] sm:left-[96.75%] sm:bottom-[36.5%] 2xl:left-[97%]" />
+      <div className="relative h-[320vh]">
+        <section id="home" ref={coverRef} className="sticky top-0 h-[100dvh] overflow-hidden bg-surface text-ink">
+          {/* no content-cap here: the hero's footer row is edge-anchored to match the nav, so the cap
+              has to sit on the sections, not on this wrapper. At 2560 both land at the same gutter */}
+          <div className="relative z-[1] flex h-full flex-col justify-between px-6 pb-[1.375rem] pt-[4.625rem] md:px-16 md:pb-4 xl:px-20 xl:pb-6">
+            <main className="flex flex-1 flex-col items-start justify-center text-left text-xs sm:text-md">
+              <Fader enterDelay={1.5} once={true}>
+                <div>
+                  <Title size="large">
+                    {/* no nav offset here: <main> centres this lockup between the container's
+                        top padding and the footer row, so the nav clearance is already in that box.
+                        A margin here only pushes the lockup off-centre. */}
+                    <div className="relative fixed-line-spacing">
+                      fasai <br /> charoensudjai{" "}
+                      <Petal positioning="left-[96.5%] bottom-[36.75%] sm:left-[96.75%] sm:bottom-[36.5%] 2xl:left-[97%]" />
+                    </div>
+                  </Title>
+                </div>
+
+                <div className="my-4 text-ink">
+                  {/* ink, not secondary: the cue is chrome (an affordance), not copy. secondary is the
+                      supporting-content tier, and once a page puts prose in it the cue stops reading as
+                      a prompt and starts reading as the paragraph's last line */}
+                  <Textbox size="caption">
+                    <Scramble delay={2000} hover={true} interval={20} once={false}>
+                      {"[ scroll to explore ] "}
+                    </Scramble>
+                  </Textbox>
+                </div>
+              </Fader>
+            </main>
+
+            {/* ink, not secondary: the landing page footer is chrome and reads as part of the nav */}
+            <div className="-mx-6 flex items-center justify-between gap-5 bg-transparent px-4 text-xs md:-mx-16 md:px-6 md:text-sm xl:-mx-20">
+              <LocalTime />
+
+              {/* both chrome rows sit on the same 38.4px inset, straight off the row padding — no
+                  compensation here, since an asset's own internal padding is not something this
+                  row can know about. It was nudged 6px for a while to line up with the theme mark; */}
+              <div>
+                <SocialIcons />
               </div>
-            </Title>
-
-            <div className="my-4">
-              <Textbox>
-                <Scramble delay={2000} hover={true} interval={20}>
-                  {"[ scroll to explore ] "}
-                </Scramble>
-              </Textbox>
             </div>
-          </Fader>
-        </main>
+          </div>
 
-        <div className="flex justify-between items-center px-3 md:px-6 pt-3 pb-3 xl:pb-7 bg-transparent">
-          <LocalTime />
-          <SocialIcons />
-        </div>
+          <CoverTiles />
 
-        <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav} />
+          <MobileNav isNavOpen={isNavOpen} toggleNav={toggleNav} />
+        </section>
       </div>
+
+      <ProfileSequence />
 
       <div className="content-cap">
         <div id="recents" className="px-6 md:px-16 xl:px-20 space-y-[10dvh] md:space-y-[14dvh] lg:space-y-16 my-7">
           <div ref={recentsRef}>
             <Fader>
               <div className="flex justify-center items-center py-[10dvh] md:py-[12dvh] h-[100dvh]">
-                <div className="flex flex-col space-y-6 lg:space-y-7 xl:space-y-10">
-                  <Title size="medium">
-                    <div className="fixed-line-spacing scroll-mt-[120.28px] lg:scroll-mt-[148.02px]"> recent works</div>
-                  </Title>
+                <div className="flex flex-col">
+                  {/* the heading and the line under it are one pair, so they take the tight pair step
+                      (12/16) — the same one the stage pieces and the gallery carousel use. The button
+                      below keeps the looser step, since it's a different kind of element. */}
+                  <div className="flex flex-col space-y-3 md:space-y-4">
+                    {/* the section heading takes the display step, so it reads 4.4x the body beneath
+                        it — the same relationship as a piece title and its caption in the stage */}
+                    <Title size="display">
+                      <div className="fixed-line-spacing scroll-mt-[7.5175rem] lg:scroll-mt-[9.25125rem]">
+                        {" "}
+                        recent works
+                      </div>
+                    </Title>
 
-                  <div className="lg:w-[65%]">
-                    <Textbox>
-                      <Scramble>
-                        {
-                          "Here are the previews for some of the pieces I've been working on lately. Feel free to click on them to see the full image, view some more details, or click on the gallery button to view all of them!"
-                        }
-                      </Scramble>
-                    </Textbox>
+                    <div className="lg:w-[65%] text-ink-secondary">
+                      {/* the body unit (1rem), so this sits at exactly 4.4x below the display heading
+                          above it — same relationship as a piece caption under its title, secondary ink
+                          in both cases */}
+                      <Textbox size="caption">
+                        <Scramble once={false} preScrambled>
+                          {
+                            "Here are the previews for some of the pieces I've been working on lately. Feel free to click on them to see the full image, view some more details, or click on the gallery button to view all of them!"
+                          }
+                        </Scramble>
+                      </Textbox>
+                    </div>
                   </div>
 
-                  <div>
-                    <Button href="/gallery"> view my gallery </Button>{" "}
+                  <div className="mt-6 lg:mt-7 xl:mt-10">
+                    {/* sm, matching the stage's "more detail" buttons and the intro's "more about
+                        me" — one button size for in-page actions */}
+                    <Button href="/gallery" size="sm">
+                      {" "}
+                      view my gallery{" "}
+                    </Button>{" "}
                   </div>
                 </div>
               </div>
             </Fader>
           </div>
 
-          <div className={`${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
-            <Fader>
-              <div className="flex justify-center items-center py-[10dvh] md:py-[12dvh]">
-                <div className="space-y-3 lg:space-y-5">
-                  <div className="lg:hidden">
-                    <DottedLineSeparator align="left"> [ 01 ] </DottedLineSeparator>
-                  </div>
-
-                  <div className="lg:hidden">
-                    <Title size="small"> raiden shogun </Title>
-                  </div>
-
-                  <div className="flex flex-col lg:flex-row lg:justify-between justify-center lg:space-x-16 space-y-3 md:space-y-7 lg:space-y-0 lg:py-12">
-                    <motion.div
-                      className="relative lg:w-[65%] md:min-h-[35dvh] max-h-full rounded-xl"
-                      onHoverStart={toggleOverlay}
-                      onHoverEnd={toggleOverlay}
-                      onMouseMove={handleMouseMove}
-                    >
-                      <AnimatePresence>
-                        {showOverlay && (
-                          <motion.div
-                            className="inset-0 z-10 absolute flex justify-center items-center rounded-xl"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.2, ease: [0.65, 0, 0.35, 1] }}
-                            style={{ cursor: showOverlay ? "none" : "default" }}
-                          >
-                            <div
-                              className={`absolute inset-0 backdrop-blur-[2px] rounded-xl ${theme === "dark" ? "bg-middle-colour" : "bg-text-dark"} bg-opacity-60`}
-                            >
-                              <motion.div
-                                className="absolute border-corner z-20 flex justify-center items-center"
-                                style={{
-                                  top: mousePosition.y - textBoxHeight / 2 + 10,
-                                  left: mousePosition.x - textBoxWidth / 2 + 10,
-                                  width: textBoxWidth,
-                                  height: textBoxHeight,
-                                }}
-                                initial={{ scale: 1.3 }}
-                                animate={{ scale: 1 }}
-                                exit={{ scale: 1.3 }}
-                                transition={{ duration: 0.2, ease: [0.65, 0, 0.35, 1] }}
-                                whileTap={{ scale: 0.9 }}
-                              >
-                                <UnderlinedLink href="/recents/1" line={false}>
-                                  <Scramble interval={20} hover={true}>
-                                    {" more detail "}
-                                  </Scramble>
-                                </UnderlinedLink>
-                              </motion.div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-
-                      <Image
-                        src={`${basePath}/images/raiden-shogun/raiden-home.png`}
-                        alt="snippet of raiden shogun"
-                        width={1183}
-                        height={851}
-                        style={{ objectFit: "cover" }}
-                        quality={60}
-                        className="w-full h-auto lg:h-full lg:w-full rounded-xl"
-                      />
-                    </motion.div>
-
-                    <div className="lg:min-w-[45%] lg:max-w-[45%] flex flex-col lg:space-y-5">
-                      <div className="hidden lg:block">
-                        <DottedLineSeparator align="left"> [ 01 ] </DottedLineSeparator>
-                      </div>
-
-                      <div className="hidden lg:block">
-                        <Title size="small"> raiden shogun </Title>{" "}
-                      </div>
-
-                      <div className="flex flex-col justify-evenly lg:space-y-5">
-                        <div className={`flex flex-grow w-full`}>
-                          <div
-                            className={`flex flex-grow items-center justify-center min-h-[100px] md:min-h-[150px] lg:min-h-[250px]`}
-                          >
-                            <Textbox>
-                              <Scramble>
-                                {
-                                  "Raiden Shogun has been my favourite character from Genshin Impact for the longest time, and so I wanted to capture her energy. Inspired by the League of Legends splash art styles, this is one of the biggest digital canvases I've ever worked on, and I'm really happy with how it turned out."
-                                }
-                              </Scramble>
-                            </Textbox>
-                          </div>
-                        </div>
-
-                        <div className="hidden lg:block justify-start">
-                          <Button href="/recents/1"> more detail </Button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="lg:hidden flex justify-center items-center">
-                      <Button href="/recents/1"> more detail </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Fader>
-          </div>
-
-          <div className={`${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
-            <Fader>
-              <div className="flex justify-center items-center py-[10dvh] md:py-[12dvh]">
-                <div className="space-y-3 lg:space-y-5">
-                  <div className="lg:hidden">
-                    <DottedLineSeparator align="left"> [ 02 ] </DottedLineSeparator>
-                  </div>
-
-                  <div className="lg:hidden">
-                    <Title size="small"> raven </Title>
-                  </div>
-
-                  <div className="flex flex-col lg:flex-row-reverse lg:space-x-reverse lg:justify-between justify-center lg:space-x-16 space-y-4 md:space-y-7 lg:space-y-0 lg:py-12">
-                    <motion.div
-                      className="relative lg:w-[65%] md:min-h-[35dvh] max-h-full rounded-xl"
-                      onHoverStart={toggleOverlay}
-                      onHoverEnd={toggleOverlay}
-                      onMouseMove={handleMouseMove}
-                    >
-                      <AnimatePresence>
-                        {showOverlay && (
-                          <motion.div
-                            className="inset-0 z-10 absolute flex justify-center items-center rounded-xl"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.2, ease: [0.65, 0, 0.35, 1] }}
-                            style={{ cursor: showOverlay ? "none" : "default" }}
-                          >
-                            <div
-                              className={`absolute inset-0 backdrop-blur-[2px] rounded-xl ${theme === "dark" ? "bg-middle-colour" : "bg-text-dark"} bg-opacity-60`}
-                            >
-                              <motion.div
-                                className="absolute border-corner z-20 flex justify-center items-center"
-                                style={{
-                                  top: mousePosition.y - textBoxHeight / 2 + 10,
-                                  left: mousePosition.x - textBoxWidth / 2 + 10,
-                                  width: textBoxWidth,
-                                  height: textBoxHeight,
-                                }}
-                                initial={{ scale: 1.3 }}
-                                animate={{ scale: 1 }}
-                                exit={{ scale: 1.3 }}
-                                transition={{ duration: 0.2, ease: [0.65, 0, 0.35, 1] }}
-                                whileTap={{ scale: 0.9 }}
-                              >
-                                <UnderlinedLink href="/recents/2" line={false}>
-                                  <Scramble interval={20} hover={true}>
-                                    {" more detail "}
-                                  </Scramble>
-                                </UnderlinedLink>
-                              </motion.div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-
-                      <Image
-                        src={`${basePath}/images/raven/raven-home.png`}
-                        alt="snippet of raven"
-                        width={1183}
-                        height={851}
-                        style={{
-                          objectFit: "cover",
-                          objectPosition: "80% 50%",
-                        }}
-                        quality={80}
-                        className="w-full h-auto lg:h-full lg:w-full rounded-xl"
-                      />
-                    </motion.div>
-
-                    <div className="lg:min-w-[45%] lg:max-w-[45%] flex flex-col lg:space-y-5">
-                      <div className="hidden lg:block">
-                        <DottedLineSeparator align="right"> [ 02 ] </DottedLineSeparator>
-                      </div>
-
-                      <div className="hidden lg:block text-end">
-                        <Title size="small"> raven </Title>
-                      </div>
-
-                      <div className="flex flex-col lg:space-y-7">
-                        <div className={`flex flex-grow w-full`}>
-                          <div
-                            className={`flex flex-grow items-center justify-center min-h-[195px] lg:min-h-[250px] lg:text-end`}
-                          >
-                            <Textbox>
-                              <Scramble>
-                                {
-                                  'I joined a "Draw This In Your Style Challenge" for Raven, a character by another artist. It was a great learning experience, especially for drawing metal and improving on backgrounds. This project helped me grow as an artist, and I was very happy to be featured on the front of the artist\'s post!'
-                                }
-                              </Scramble>
-                            </Textbox>
-                          </div>
-                        </div>
-
-                        <div className="hidden lg:flex justify-end">
-                          <Button href="/recents/2"> more detail </Button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="lg:hidden flex justify-center items-center">
-                      <Button href="/recents/2"> more detail </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Fader>
-          </div>
+          <RecentsStage />
         </div>
 
-        <div
-          id="intro"
-          className=" px-6 md:px-16 xl:px-20 space-y-5 lg:space-y-12 my-7 min-h-[100dvh] flex flex-col justify-center items-start"
-        >
-          <Fader>
-            <div
-              ref={introRef}
-              className={`py-[75.48px] flex flex-col justify-center md:flex-row md:justify-between space-y-5 sm:space-y-0`}
-            >
-              <div id="" className="md:hidden fixed-line-spacing">
-                <Title size="medium">a brief intro</Title>
-              </div>
-
-              <div className="flex flex-col justify-center lg:justify-between space-y-5 sm:flex-row-reverse sm:space-x-reverse lg:space-x-reverse xl:space-x-reverse sm:space-y-0 ">
-                <motion.div
-                  className="flex justify-center items-center"
-                  style={{ rotate: rotateValue }}
-                  onHoverStart={() => setIsIntroFlowerHovered(true)}
-                  onHoverEnd={() => setIsIntroFlowerHovered(false)}
-                >
-                  <Image
-                    src={theme === "dark" ? `${basePath}/icons/dark/logodark.svg` : `${basePath}/icons/light/logo.svg`}
-                    alt="logo"
-                    width={1000}
-                    height={1000}
-                    style={{
-                      objectFit: "contain",
-                    }}
-                    className="xl:p-2 2xl:p-10 max-w-[75%] h-full"
-                  />
-                </motion.div>
-
-                <div className="sm:max-w-[55%] sm:space-y-5 lg:space-y-7 xl:space-y-10 flex flex-col justify-center items-start">
-                  <div className="hidden md:block fixed-line-spacing">
-                    <Title size="medium">a brief intro</Title>
-                  </div>
-
-                  <div className="flex flex-col justify-center items-center min-h-[200px]">
-                    <Textbox>
-                      <Scramble>
-                        {
-                          "Hi, I'm Fasai, an artist from Thailand and an Economics student at the University of Warwick! I created this website to showcase my passion for illustration, concept art and fanart, combining my love for art with web design in a way that's true to my style. Click the button below to learn more about my journey!"
-                        }
-                      </Scramble>
-                    </Textbox>
-                  </div>
-
-                  <div className={"justify-start hidden sm:block"}>
-                    <Button href="/about"> read my story </Button>
-                  </div>
-                </div>
-
-                <div className="sm:hidden flex justify-center items-center">
-                  <Button href="/about"> read my story </Button>
-                </div>
-              </div>
-            </div>
-          </Fader>
-        </div>
-
-        <div className={`${theme === "dark" ? "bg-text-light" : "bg-main-light"} px-6 md:px-16 xl:px-20`}>
+        <div className="bg-surface px-6 md:px-16 xl:px-20">
           <Fader once={true}>
             <div className="flex justify-center items-center py-10 md:py-12 lg:py-14">
               <GalleryCarousel />
@@ -539,18 +168,10 @@ export default function Home() {
         </div>
       </div>
 
-      <section className={`relative ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
-        <div className="md:h-[130vh]">
-          <div className="sticky top-0 z-10">
-            <Fader>
-              <Contact />
-            </Fader>
-          </div>
-        </div>
-      </section>
-
-      <section className={`relative z-20 ${theme === "dark" ? "bg-text-light" : "bg-main-light"}`}>
-        <Footer />
+      <section className="relative z-20 bg-surface">
+        <Fader>
+          <Contact once={false} />
+        </Fader>
       </section>
     </div>
   );

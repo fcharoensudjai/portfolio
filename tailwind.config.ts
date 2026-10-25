@@ -11,7 +11,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ["Poppins", "sans-serif"],
-        mono: ["Roboto Mono", "monospace"],
+        mono: ["var(--font-mono)", "Roboto Mono", "monospace"],
       },
       fontSize: {
         xxs: "0.64rem", // extra extra small (10.24px)
@@ -29,15 +29,14 @@ const config: Config = {
       },
       colors: {
         transparent: "transparent",
-        "main-light": "#FEFBFB",
-        "text-dark": "#E8E7E2",
-        "secondary-light": "#7A736F",
-        "middle-colour": "#403B3B",
-        "text-light": "#242424",
         black: "#000000",
-        "secondary-dark": "#BFAF9C",
-        "accent-light": "#DDA6A6",
-        "accent-dark": "#CD7A7A",
+        // semantic tokens — theme values live in globals.css (--c-*)
+        surface: "rgb(var(--c-surface) / <alpha-value>)",
+        "surface-mid": "rgb(var(--c-surface-mid) / <alpha-value>)",
+        ink: "rgb(var(--c-ink) / <alpha-value>)",
+        "ink-secondary": "rgb(var(--c-ink-secondary) / <alpha-value>)",
+        rose: "rgb(var(--c-rose) / <alpha-value>)",
+        sand: "rgb(var(--c-sand) / <alpha-value>)",
       },
       spacing: {
         0: "0",

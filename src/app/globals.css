@@ -4,9 +4,18 @@
 
 @layer base {
   html {
-    @apply font-mono bg-middle-colour;
+    @apply font-mono bg-surface-mid;
     overflow-x: clip;
     max-width: 100%;
+
+    /* The growth dial. Every spacing token in the design is rem-based and the measure is in `ch`,
+       so one number scales the whole page — gutters, gaps, display type — and the character count
+       per line stays identical because `ch` is font-relative.
+
+       16px up to 1600, 22px at 2560. It starts at 1600 because that is where the design's own
+       breakpoints stop (`2xl` is 1536), so nothing below 1600 moves at all. The 22px ceiling is the
+       one that matters: past 2560 a wider window would start showing five or six words a line. */
+    font-size: clamp(16px, calc(0.625vw + 6px), 22px);
   }
 
   body {
@@ -73,9 +82,321 @@ body {
   border-left-width: 0;
 }
 
+/* Max width on the CONTENT only — the header, footer and nav are deliberately not inside this, so
+   they stay anchored to the window while the sections stop growing. At 2560 it doesn't engage at
+   all (2560 = the window), which is why the content still runs full width; it's the stop above that,
+   and the number to tighten if the content should sit narrower than the window. If it is tightened,
+   the hero needs the same treatment or its left edge will jump against the sections below it. */
 .content-cap {
   width: 100%;
   max-width: 2560px;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* The hero banner's fade-out. The end stop sits at 90%, not 100%, on purpose: at 100% the last
+   rows of the image still show through a ~5%-transparent overlay, which draws a hard line exactly
+   where the banner ends and the page colour begins. Finishing early means the bottom tenth is
+   already solid surface, so that boundary is surface on surface and disappears. */
+.banner-fade {
+  background-image: linear-gradient(to bottom, rgb(var(--c-surface) / 0) 45%, rgb(var(--c-surface)) 90%);
+}
+
+/* tight leading for the landing manifesto headline (overrides the global 1.75em line-height) */
+.story-head,
+.story-head * {
+  line-height: 1;
+}
+
+/* cover tile flip (landing) */
+.cover-tiles {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+.cover-tile {
+  position: absolute;
+  perspective: 800px;
+}
+.cover-tile .flip {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: rotateY(var(--ry, 0deg));
+  transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--d, 0ms);
+}
+.cover-tile .back {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Layout tokens — not theme-dependent, so they sit outside the colour blocks. */
+:root {
+  /* ---- The type ladder ----
+     Body (1rem) is the unit and every step is a multiple of it, so because the root font-size is
+     fluid the whole ladder scales together and these ratios hold at every window size.
+
+        name       viewport-driven   the hero name / "get in touch!" — deliberately off-ladder
+        display    4.4  x body       piece titles + section headings: raven, "from bangkok to
+                                     london", "recent works". THIS is the editorial ratio.
+        title      2.5  x body       secondary headings
+        subhead    1.875 x body      item titles
+        body       1    x body       paragraphs — the unit
+        caption    0.8  x body       captions, tags, chrome. Exactly one 1.25 step below body.
+
+     `display`, `title` and `subhead` sit deliberately off the 1.25 body ladder. That's the same
+     precedent tailwind.config.ts already sets for the titles at the top of its scale (6xl / 7xl,
+     noted there as "adjusted from 4.688rem"). The body ladder itself stays pure 1.25 — 0.8, 1, 1.25,
+     1.563, 1.953, 2.441 … — which is what `caption` follows.
+
+     Everything below the display steps is still a plain tailwind token (text-xs = caption,
+     text-sm = body, text-md = 1.25) — those never left the system, so they don't need a variable. */
+  --type-name: min(13vh, 8rem);
+  --type-display: 4.4rem;
+  --type-title: 2.5rem;
+  --type-subhead: 1.875rem;
+  --type-body: 1rem;
+  --type-caption: 0.8rem;
+  /* The fixed nav's OWN HEIGHT, used as clearance: anything that has to start below the nav uses
+     this rather than its own magic number (it was repeated in the hero, the contact, the image
+     viewer and the about page — four copies of the same value with no explanation).
+     In rem, not px, because the nav's height is a rem logo width plus a rem py-2, so the nav grows
+     with the root: 103px at a 1570 window, 123px at 2560. A px offset would leave the content ~19px
+     underneath the nav at the top of the range. */
+  --nav-clearance: 4.72375rem; /* 75.58px — the nav at md */
+
+  /* How tall the artwork frame is allowed to get, as the smaller of two things:
+       - what the sticky stage can hold (its content box: the viewport less its own 7rem/4.8rem
+         padding, less a little breathing room), and
+       - an explicit ceiling in viewport units.
+     The first stops the frame overflowing a short window; the second is the "the artwork is too big"
+     dial. Without the second there was no ceiling at all — it landed around 80vh at a 1440-tall
+     window, i.e. implicitly "fill the screen minus the padding".
+
+     Everything that has to agree about the frame's height derives from this ONE number: the frame's
+     width cap, and the stage's width cap. That's what stops a capped frame leaving dead space beside
+     the artwork — the block narrows to match instead, and the surplus becomes equal margins. */
+  --frame-h: max(0px, min(calc(100dvh - 13rem), 65dvh));
+  --frame-ratio: 1.3901; /* 1600 / 1151 — keep in step with aspect-[1600/1151] */
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --nav-clearance: 6.45125rem; /* 103.22px — the nav at xl */
+  }
+}
+
+/* ---- The theme cross-fade ----
+   A token is a space-separated RGB triplet so tailwind can append alpha (`rgb(var(--c-ink) / 0.5)`),
+   and a bare string like `36 36 36` is not a value the browser can interpolate — so the whole page
+   used to snap between themes. Registering each channel as a typed number gives it something to
+   animate: the triplet recomposes from the in-flight numbers every frame, and everything that reads a
+   token — the ground, the ink, borders, the accents — fades with it. (Unregistered custom properties
+   change discretely, so `transition` on its own would do nothing here; hence `@property`.)
+
+   `initial-value` is the dark theme's channel, which is also the default theme. Browsers without
+   `@property` ignore this block and land exactly where they were: the values below still compose
+   normally, they just change in one step instead of over the fade. */
+@property --c-surface-r {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 36;
+}
+@property --c-surface-g {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 36;
+}
+@property --c-surface-b {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 36;
+}
+@property --c-surface-mid-r {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 64;
+}
+@property --c-surface-mid-g {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 59;
+}
+@property --c-surface-mid-b {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 59;
+}
+@property --c-ink-r {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 232;
+}
+@property --c-ink-g {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 231;
+}
+@property --c-ink-b {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 226;
+}
+@property --c-ink-secondary-r {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 176;
+}
+@property --c-ink-secondary-g {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 173;
+}
+@property --c-ink-secondary-b {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 166;
+}
+@property --c-rose-r {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 205;
+}
+@property --c-rose-g {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 122;
+}
+@property --c-rose-b {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 122;
+}
+@property --c-sand-r {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 191;
+}
+@property --c-sand-g {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 175;
+}
+@property --c-sand-b {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 156;
+}
+
+/* semantic colour tokens — values per theme (next-themes toggles .dark/.light on <html>) */
+:root,
+.dark {
+  /* #242424 charcoal */
+  --c-surface-r: 36;
+  --c-surface-g: 36;
+  --c-surface-b: 36;
+  --c-surface: var(--c-surface-r) var(--c-surface-g) var(--c-surface-b);
+
+  /* #403B3B mid charcoal (overlays) */
+  --c-surface-mid-r: 64;
+  --c-surface-mid-g: 59;
+  --c-surface-mid-b: 59;
+  --c-surface-mid: var(--c-surface-mid-r) var(--c-surface-mid-g) var(--c-surface-mid-b);
+
+  /* #E8E7E2 cream */
+  --c-ink-r: 232;
+  --c-ink-g: 231;
+  --c-ink-b: 226;
+  --c-ink: var(--c-ink-r) var(--c-ink-g) var(--c-ink-b);
+
+  /* #B0ADA6 — the supporting tier at 6.9:1. Dark's motivation is
+     glare (cream at 12.5:1 blooms); light's is hierarchy. Same ratio
+     in both so the tier is reproducible. (9:1 would be #C6C4BC here —
+     visible in dark, but #474747 in light is invisible, so the token
+     became a no-op in one theme.) */
+  --c-ink-secondary-r: 176;
+  --c-ink-secondary-g: 173;
+  --c-ink-secondary-b: 166;
+  --c-ink-secondary: var(--c-ink-secondary-r) var(--c-ink-secondary-g) var(--c-ink-secondary-b);
+
+  /* #CD7A7A */
+  --c-rose-r: 205;
+  --c-rose-g: 122;
+  --c-rose-b: 122;
+  --c-rose: var(--c-rose-r) var(--c-rose-g) var(--c-rose-b);
+
+  /* #BFAF9C */
+  --c-sand-r: 191;
+  --c-sand-g: 175;
+  --c-sand-b: 156;
+  --c-sand: var(--c-sand-r) var(--c-sand-g) var(--c-sand-b);
+}
+/* Only the channels change per theme — the triplets are assembled once above, from those channels. */
+.light {
+  /* #FEFBFB cream */
+  --c-surface-r: 254;
+  --c-surface-g: 251;
+  --c-surface-b: 251;
+
+  /* #E8E7E2 */
+  --c-surface-mid-r: 232;
+  --c-surface-mid-g: 231;
+  --c-surface-mid-b: 226;
+
+  /* #242424 charcoal */
+  --c-ink-r: 36;
+  --c-ink-g: 36;
+  --c-ink-b: 36;
+
+  /* #585858 — the ink at 6.9:1 on the cream, matching the dark tier. No
+     bloom to damp here, so this step is purely hierarchy: a caption that
+     reads a step below the title. */
+  --c-ink-secondary-r: 88;
+  --c-ink-secondary-g: 88;
+  --c-ink-secondary-b: 88;
+
+  /* #DDA6A6 */
+  --c-rose-r: 221;
+  --c-rose-g: 166;
+  --c-rose-b: 166;
+
+  /* #7A736F */
+  --c-sand-r: 122;
+  --c-sand-g: 115;
+  --c-sand-b: 111;
+}
+
+/* Only the channels are listed: the triplets above are unregistered, so they follow their channels
+   rather than needing a transition of their own. 400ms is a touch quicker than the nav labels' own
+   500ms tone swap (header.tsx) — those start late anyway, since they wait on a sampled reading, so
+   this keeps the page from feeling like it is waiting on the chrome. */
+html {
+  transition-property:
+    --c-surface-r, --c-surface-g, --c-surface-b, --c-surface-mid-r, --c-surface-mid-g, --c-surface-mid-b, --c-ink-r,
+    --c-ink-g, --c-ink-b, --c-ink-secondary-r, --c-ink-secondary-g, --c-ink-secondary-b, --c-rose-r, --c-rose-g,
+    --c-rose-b, --c-sand-r, --c-sand-g, --c-sand-b;
+  transition-duration: 400ms;
+  transition-timing-function: ease-in-out;
+}
+
+/* The first frame is not a flip. The provider only mounts on the client, so a light-theme visitor
+   paints the default (dark) ground for a beat and the stored class lands afterwards — that correction
+   has to stay a snap, or every load opens with a fade out of a theme the visitor never picked. The
+   class ships in the server markup and comes off once the themed frame has painted. */
+html.theme-boot {
+  transition-duration: 0ms;
+}
+
+/* A theme flip is a large area changing at once, so honour the opt-out: swap in one step instead. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    transition-duration: 0ms;
+  }
 }

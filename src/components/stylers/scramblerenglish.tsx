@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { ScrambleWord } from "@/components/stylers/scramble-boxes";
 
 interface ScrambleProps {
   children: string;
@@ -74,29 +75,15 @@ export const ScrambleEnglish: React.FC<ScrambleProps> = ({ children }) => {
   }, [inView]);
 
   return (
-    <motion.span onHoverStart={handleScramble} onClick={handleScramble} ref={ref}>
+    <motion.span onHoverStart={handleScramble} onClick={handleScramble} ref={ref} style={{ lineHeight: "inherit" }}>
       {[...scrambled.split(" ")].map((word, wi) => (
         <React.Fragment key={wi}>
-          <span
-            style={{
-              display: "inline-block",
-              whiteSpace: "nowrap",
-              marginRight: wi < scrambled.split(" ").length - 1 ? "1.25ch" : undefined,
-            }}
-          >
-            {[...new Intl.Segmenter(undefined, { granularity: "grapheme" }).segment(word)].map(({ segment }, ci) => (
-              <span
-                key={ci}
-                style={{
-                  display: "inline-block",
-                  width: "1ch",
-                  textAlign: "center",
-                }}
-              >
-                {segment}
-              </span>
-            ))}
-          </span>
+          <ScrambleWord
+            glyphs={[...new Intl.Segmenter(undefined, { granularity: "grapheme" }).segment(word)].map(
+              ({ segment }) => segment
+            )}
+            gap={wi < scrambled.split(" ").length - 1}
+          />
         </React.Fragment>
       ))}
     </motion.span>

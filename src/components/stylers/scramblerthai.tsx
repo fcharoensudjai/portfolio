@@ -1,15 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { ScrambleWord } from "@/components/stylers/scramble-boxes";
+import { SCRAMBLE_RATE } from "@/components/stylers/scramble-rate";
 
 interface ScrambleProps {
   children: string;
   delay?: number; // delay before starting the scramble effect
   hover?: boolean; // choose whether I want it to have an onHover effect
-  interval?: number; // how quickly stuff scrambles
+  // ms per glyph, for the slow glyph-by-glyph decode the short hover labels want. Omit it and the
+  // text runs at SCRAMBLE_RATE — the same pace as the recents stage's caption
+  interval?: number;
+  // override the shared decode pace for one instance — same shape as SCRAMBLE_RATE. Only applies
+  // when `interval` is omitted; a slower pace means fewer glyphs per tick or a longer tick, never
+  // one glyph per tick (that's 1 render per glyph and the reason `interval` drops frames).
+  rate?: { perTick: number; ms: number };
   paragraphs?: boolean;
   navigate?: boolean;
-  preScrambled?: boolean; // keeps the text completely scrambled from frame 0 until delay is met
+  preScrambled?: boolean; // holds the text scrambled while out of view, then unscrambles it in view
+  once?: boolean; // scramble only the first time the text comes into view
   renderCustom?: (scrambledNodes: React.ReactNode[]) => React.ReactNode; // custom render callback
 }
 
@@ -17,29 +26,54 @@ export const Scramble: React.FC<ScrambleProps> = ({
   children,
   delay = 500,
   hover = false,
-  interval = 2,
+  interval,
+  rate,
   paragraphs = false,
   navigate = false,
   preScrambled = false,
+  once = true,
   renderCustom,
 }) => {
   // default delay is 500ms
 
+  // omitting `interval` opts into the shared site pace: glyphs arrive in runs of SCRAMBLE_RATE.perTick
+  // per tick. An explicit interval keeps the one-glyph-per-tick rhythm the hover labels are tuned to.
+  // `rate` is the third option: the same run-based rhythm as the site pace, dialled to a paragraph
+  // that wants longer to decode.
+  const pace = rate ?? SCRAMBLE_RATE;
+  const perTick = interval === undefined ? pace.perTick : 1;
+  const tickMs = interval ?? pace.ms;
+
   const letters = "กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤลฦวศษสหฬอฮ";
 
-  const [scrambled, setScrambled] = useState<string>(() => {
-    if (preScrambled) {
-      return children
-        .split("")
-        .map((char) =>
-          char === " " || char === "\n" || char === "|" ? char : letters[Math.floor(Math.random() * letters.length)]
-        )
-        .join("");
-    }
-    return children;
-  });
+  function fullyScrambled(text: string) {
+    return text
+      .split("")
+      .map((char) =>
+        char === " " || char === "\n" || char === "|" ? char : letters[Math.floor(Math.random() * letters.length)]
+      )
+      .join("");
+  }
+
+  const [scrambled, setScrambled] = useState<string>(() => (preScrambled ? fullyScrambled(children) : children));
   const [intervalCount, setIntervalCount] = useState<number>(0);
-  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // the first pass keeps its `delay` so entrance choreography still staggers; later passes
+  // unscramble the moment the text is back in view
+  const hasPlayedRef = useRef(false);
+
+  function stopScramble() {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  }
 
   function shuffleArray<T>(array: T[]): T[] {
     for (let i = array.length - 1; i > 0; i--) {
@@ -50,7 +84,7 @@ export const Scramble: React.FC<ScrambleProps> = ({
   }
 
   const [ref, inView] = useInView({
-    triggerOnce: true,
+    triggerOnce: once,
     threshold: 0.1, // small threshold to detect when in view
   });
 
@@ -71,35 +105,76 @@ export const Scramble: React.FC<ScrambleProps> = ({
 
   function handleScramble() {
     const textLength = children.length;
+    stopScramble();
     setIntervalCount(0);
 
-    const id = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       setIntervalCount((prevCount) => {
-        const newCount = prevCount + 1;
+        const newCount = prevCount + perTick;
         setScrambled(scrambleText(children, newCount));
         return newCount;
       });
-    }, interval);
+    }, tickMs);
 
-    setIntervalId(id);
-
-    setTimeout(() => {
-      if (id) {
-        clearInterval(id);
-        setScrambled(children);
-      }
+    timeoutRef.current = setTimeout(() => {
+      stopScramble();
+      setScrambled(children);
     }, textLength * 50);
   }
 
   useEffect(() => {
-    if (inView && !navigate) {
-      const delayTimer = setTimeout(() => {
-        handleScramble();
-      }, delay);
+    if (!inView || navigate) return;
 
-      return () => clearTimeout(delayTimer);
-    }
+    let started = false;
+    let poll: ReturnType<typeof setTimeout> | undefined;
+    let ceiling: ReturnType<typeof setTimeout> | undefined;
+    const fire = () => {
+      if (started) return;
+      started = true;
+      hasPlayedRef.current = true;
+      handleScramble();
+    };
+
+    // The page loader is an opaque full-screen panel, so a decode that lands while it still covers the
+    // page is spent before anyone sees it. That was the only reason the gallery and the piece pages
+    // carried hand-tuned 3250ms/3750ms delays — guesses at the loader's own duration (its hold plus a
+    // 900ms slide-out), which then went stale whenever the loader changed. So the delay still runs
+    // from in-view as before, and only if the loader is still covering the page when it expires does
+    // the decode hold, until the loader has left the DOM. With no loader there is no wait at all, so
+    // pages and elements that decode on scroll behave exactly as they did.
+    const waitForLoader = () => {
+      if (!document.querySelector("[data-preloader]")) {
+        fire();
+        return;
+      }
+
+      poll = setTimeout(waitForLoader, 50);
+    };
+
+    const delayTimer = setTimeout(
+      () => {
+        waitForLoader();
+        // ceiling, so a loader that somehow never leaves can't park the text as glyphs
+        ceiling = setTimeout(fire, 5000);
+      },
+      hasPlayedRef.current ? 0 : delay
+    );
+
+    return () => {
+      clearTimeout(delayTimer);
+      if (poll) clearTimeout(poll);
+      if (ceiling) clearTimeout(ceiling);
+    };
   }, [inView, delay]);
+
+  // while out of view, park the text back in its scrambled state so it decodes again on re-entry
+  useEffect(() => {
+    if (!preScrambled || inView) return;
+
+    stopScramble();
+    setIntervalCount(0);
+    setScrambled(fullyScrambled(children));
+  }, [inView, preScrambled, children]);
 
   useEffect(() => {
     if (navigate) {
@@ -113,45 +188,23 @@ export const Scramble: React.FC<ScrambleProps> = ({
 
   useEffect(() => {
     return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
+      stopScramble();
     };
-  }, [intervalId]);
+  }, []);
 
   const rawParagraphs = scrambled.split("|||");
 
   const paragraphNodes = rawParagraphs.map((paraText, pIndex) => (
     <React.Fragment key={pIndex}>
       {paraText.split(" ").map((word, wi) => (
-        <span
-          key={wi}
-          style={{
-            display: "inline-block",
-            whiteSpace: "nowrap",
-            marginRight: wi < paraText.split(" ").length - 1 ? "1.25ch" : undefined,
-          }}
-        >
-          {word.split("").map((char, ci) => (
-            <span
-              key={ci}
-              style={{
-                display: "inline-block",
-                width: "1ch",
-                textAlign: "center",
-              }}
-            >
-              {char}
-            </span>
-          ))}
-        </span>
+        <ScrambleWord key={wi} glyphs={word.split("")} gap={wi < paraText.split(" ").length - 1} />
       ))}
     </React.Fragment>
   ));
 
   if (renderCustom) {
     return (
-      <span ref={ref} className="w-full">
+      <span ref={ref} className="w-full" style={{ lineHeight: "inherit" }}>
         {renderCustom(paragraphNodes)}
       </span>
     );
@@ -159,7 +212,7 @@ export const Scramble: React.FC<ScrambleProps> = ({
 
   return (
     <motion.span
-      style={{ whiteSpace: paragraphs ? "pre-wrap" : "normal" }}
+      style={{ whiteSpace: paragraphs ? "pre-wrap" : "normal", lineHeight: "inherit" }}
       ref={ref}
       onHoverStart={() => {
         if (hover) {
@@ -174,26 +227,7 @@ export const Scramble: React.FC<ScrambleProps> = ({
     >
       {scrambled.split(" ").map((word, wi) => (
         <React.Fragment key={wi}>
-          <span
-            style={{
-              display: "inline-block",
-              whiteSpace: "nowrap",
-              marginRight: wi < scrambled.split(" ").length - 1 ? "1.25ch" : undefined,
-            }}
-          >
-            {word.split("").map((char, ci) => (
-              <span
-                key={ci}
-                style={{
-                  display: "inline-block",
-                  width: "1ch",
-                  textAlign: "center",
-                }}
-              >
-                {char}
-              </span>
-            ))}
-          </span>
+          <ScrambleWord glyphs={word.split("")} gap={wi < scrambled.split(" ").length - 1} />
         </React.Fragment>
       ))}
     </motion.span>

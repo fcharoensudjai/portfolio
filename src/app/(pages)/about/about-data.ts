@@ -6,7 +6,6 @@ export interface AboutSequenceItem {
     src: string;
     alt: string;
   };
-  hideImage?: boolean;
 }
 
 export const aboutSequenceItems: AboutSequenceItem[] = [
@@ -15,11 +14,11 @@ export const aboutSequenceItems: AboutSequenceItem[] = [
     title: "hi, i'm fasai",
     paragraphs: [
       "Born and raised in Bangkok, Thailand, I grew up around a very diverse mix of people and perspectives.",
-      "I’ve always been into art in some form. Drawing, games, anything that just looked good and felt good, even if I didn’t really know why at the time.",
+      "I've always been into art in some form. Drawing, games, anything that just looked good and felt good, even if I didn't really know why at the time.",
     ],
     image: {
-      src: "/images/about/about.png",
-      alt: "Portrait of Fasai",
+      src: "/images/about/about-5.png",
+      alt: "Fasai on the beach",
     },
   },
   {
@@ -38,8 +37,7 @@ export const aboutSequenceItems: AboutSequenceItem[] = [
     id: "03",
     title: "what i'm up to",
     paragraphs: [
-      "I now work across finance and tech as a finance strategy consultant in London, helping CFOs reimagine their finance functions.",
-      "Most of my time is spent working with data, building internal tools as a UX and front-end engineer, and figuring out how things actually get used.",
+      "I now work in Finance Strategy consulting in London, somewhere between finance, technology, and building things. That means everything from client-facing dashboards and prototypes to experimenting with agentic tools that make our work easier. I enjoy the process of taking an idea and turning it into something people can actually use.",
     ],
     image: {
       src: "/images/about/about-4.png",
@@ -51,18 +49,18 @@ export const aboutSequenceItems: AboutSequenceItem[] = [
     title: "outside of work",
     paragraphs: [
       "Outside of that, I still spend a lot of time around art.",
-      "I draw (all pieces on here are my illustrations!), play plenty of video games, and pay a bit too much attention to how things look and feel — whether that’s in a game, a UI, or something small that’s well put together.",
+      "I draw (all pieces on here are my illustrations!), play plenty of video games, and pay a bit too much attention to how things look and feel – whether that's in a game, a UI, or something small that's well put together.",
     ],
     image: {
-      src: "/images/about/about-3.png",
-      alt: "Personal interests visual",
+      src: "/images/ahri-gallery.png",
+      alt: "Illustration by Fasai",
     },
   },
   {
     id: "05",
     title: "this site",
     paragraphs: [
-      "This site is my creative outlet. It’s where I can experiment, try things out, and build in a way that feels more personal, without overthinking it too much.",
+      "This site is my creative outlet. It's where I can experiment, try things out, and build in a way that feels more personal, without overthinking it too much.",
       "It also gives me a space to bring art, design, and the technical side of things together in a way that feels true to myself.",
     ],
     image: {

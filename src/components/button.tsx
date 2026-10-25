@@ -1,4 +1,3 @@
-import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
 import React from "react";
 import { UnderlinedLink } from "@/components/underlinedlink";
@@ -7,32 +6,25 @@ interface ButtonProps {
   children: React.ReactNode;
   href: string;
   isExternal?: boolean;
+  size?: "sm" | "md";
 }
 
-export const Button = ({ children, href, isExternal = false }: ButtonProps) => {
-  const { theme } = useTheme();
-
+// The pill's colours are the tokens, not a per-theme hex trio, so it fades with the page on a theme
+// flip (see the token block in globals.css) instead of snapping halfway through it. Hover and press
+// pair the same three tokens the other way round — ink ground, surface type — and the rose press
+// tint is the accent token. Framer keeps the scale; the colours are CSS so they can sit on the same
+// transition as the fade.
+export const Button = ({ children, href, isExternal = false, size = "md" }: ButtonProps) => {
   return (
     <motion.div>
       <motion.button
-        style={{
-          color: theme === "dark" ? "#E8E7E2" : "#242424",
-          borderColor: theme === "dark" ? "#E8E7E2" : "#242424",
-          backgroundColor: theme === "dark" ? "#242424" : "#FEFBFB",
-        }}
-        whileTap={{
-          scale: 0.95,
-          color: theme === "dark" ? "#CD7A7A" : "#DDA6A6",
-          backgroundColor: theme === "dark" ? "#E8E7E2" : "#242424",
-          borderColor: theme === "dark" ? "#E8E7E2" : "#242424",
-        }}
-        whileHover={{
-          scale: 1.0,
-          color: theme === "dark" ? "#242424" : "#FEFBFB",
-          backgroundColor: theme === "dark" ? "#E8E7E2" : "#242424",
-          borderColor: theme === "dark" ? "#E8E7E2" : "#242424",
-        }}
-        className={`rounded-full border-[2px] py-1 md:py-[0.5rem] px-3 lg:px-5 lg:py-2.5 md:text-sm lg:text-md text-xs`}
+        whileTap={{ scale: 0.95 }}
+        whileHover={{ scale: 1.0 }}
+        className={`rounded-full border-[2px] border-ink bg-surface text-ink transition-colors duration-300 ease-out hover:bg-ink hover:text-surface active:text-rose ${
+          size === "sm"
+            ? "px-4 py-[0.5rem] text-xs md:text-sm"
+            : "py-1 md:py-[0.5rem] px-3 lg:px-5 lg:py-2.5 md:text-sm lg:text-md text-xs"
+        }`}
       >
         <UnderlinedLink underline={false} href={href} isExternal={isExternal}>
           {children}
