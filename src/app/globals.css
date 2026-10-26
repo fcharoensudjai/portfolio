@@ -140,6 +140,17 @@ body {
   -webkit-backface-visibility: hidden;
 }
 
+/* The fully-flipped wall (see FlipTiles' declareCoverage): every tile has turned, so the grid is
+   only a surface-coloured rectangle. Those few hundred flip nodes parked behind an animated layer
+   cost a compositing pass per frame — the landing flower ran at ~4fps behind a settled wall. One
+   painted surface reads identically, and the grid returns before any tile would need to un-flip. */
+[data-flip-settled] {
+  background: rgb(var(--c-surface));
+}
+[data-flip-settled] .cover-tile {
+  display: none;
+}
+
 /* Layout tokens — not theme-dependent, so they sit outside the colour blocks. */
 :root {
   /* ---- The type ladder ----

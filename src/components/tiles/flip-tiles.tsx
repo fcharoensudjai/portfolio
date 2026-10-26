@@ -62,12 +62,23 @@ export const FlipTiles = ({
     // the colour only once every tile has turned means the declaration never claims to cover a photo
     // that is still showing. It reads the tiles rather than the progress value: those are what is on
     // screen, and they are the thing that has actually been painted.
-    const declareCoverage = () => {
+    const declareCoverage = (progress: number) => {
       const tiles = tilesRef.current;
       const covered = tiles.length > 0 && tiles.every((tile) => tile.ry === "180deg");
 
       if (covered) el.setAttribute("data-nav-sample", "surface");
       else el.removeAttribute("data-nav-sample");
+
+      // Once every tile has turned, the wall is only a surface-coloured rectangle. Left as a grid,
+      // those few hundred 3D flip nodes parked behind whatever animates on top of them cost a full
+      // compositing pass per frame — the landing flower measured ~4fps behind a settled wall and 60
+      // once the grid was collapsed. A single painted surface is pixel-identical, and the grid comes
+      // back the instant progress drops below 1, long before any tile needs to un-flip.
+      const settled = covered && progress >= 1;
+      if (settled !== el.hasAttribute("data-flip-settled")) {
+        if (settled) el.setAttribute("data-flip-settled", "");
+        else el.removeAttribute("data-flip-settled");
+      }
     };
 
     const build = () => {
@@ -120,7 +131,7 @@ export const FlipTiles = ({
       builtAcross = across;
       builtSize = size;
       builtH = h;
-      declareCoverage();
+      declareCoverage(progress);
     };
 
     const apply = () => {
@@ -134,7 +145,7 @@ export const FlipTiles = ({
         t.flip.style.setProperty("--ry", ry);
       }
 
-      declareCoverage();
+      declareCoverage(progress);
     };
 
     build();
